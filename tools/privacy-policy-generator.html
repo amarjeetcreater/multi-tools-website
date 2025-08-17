@@ -1,0 +1,154 @@
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container my-4">
+        <h1 class="text-center mb-4">Privacy Policy Generator</h1>
+        <div class="ad-section">
+            <!-- Ad Space -->
+            <p>Advertisement</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Privacy Policy Generator Functionality</h5>
+                <p class="card-text">This is a placeholder for the Privacy Policy Generator tool. Its functionality will be implemented here.</p>
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Company Name</label>
+                    <input type="text" class="form-control" id="companyName" placeholder="Your Company Name">
+                </div>
+                <div class="mb-3">
+                    <label for="websiteUrl" class="form-label">Website URL</label>
+                    <input type="url" class="form-control" id="websiteUrl" placeholder="https://www.yourwebsite.com">
+                </div>
+                <div class="mb-3">
+                    <label for="contactEmail" class="form-label">Contact Email</label>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="contact@yourwebsite.com">
+                </div>
+                <div class="d-grid gap-2 mb-3">
+                    <button class="btn btn-primary" id="generateBtn">Generate Privacy Policy</button>
+                    <button class="btn btn-secondary" id="clearBtn">Clear</button>
+                </div>
+                <div id="policyResult" class="mt-4">
+                    <h5>Generated Privacy Policy:</h5>
+                    <pre id="policyDisplay" class="bg-light p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;">Fill in the details above and click 'Generate' to create your privacy policy.</pre>
+                    <button class="btn btn-info btn-sm mt-2" id="copyBtn">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loadComponents.js"></script>
+    <script>
+        // JavaScript for Privacy Policy Generator tool
+        document.addEventListener('DOMContentLoaded', function() {
+            const companyNameInput = document.getElementById('companyName');
+            const websiteUrlInput = document.getElementById('websiteUrl');
+            const contactEmailInput = document.getElementById('contactEmail');
+            const generateBtn = document.getElementById('generateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const policyDisplay = document.getElementById('policyDisplay');
+            const copyBtn = document.getElementById('copyBtn');
+
+            generateBtn.addEventListener('click', generatePrivacyPolicy);
+            clearBtn.addEventListener('click', clearFields);
+            copyBtn.addEventListener('click', copyPolicyToClipboard);
+
+            function generatePrivacyPolicy() {
+                const companyName = companyNameInput.value.trim();
+                const websiteUrl = websiteUrlInput.value.trim();
+                const contactEmail = contactEmailInput.value.trim();
+
+                if (!companyName || !websiteUrl || !contactEmail) {
+                    policyDisplay.textContent = 'Please fill in all fields to generate the privacy policy.';
+                    return;
+                }
+
+                const policy = `
+Privacy Policy for ${companyName}
+
+At ${companyName}, accessible from ${websiteUrl}, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by ${companyName} and how we use it.
+
+If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at ${contactEmail}.
+
+Log Files
+
+${companyName} follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.
+
+Cookies and Web Beacons
+
+Like any other website, ${companyName} uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
+
+Privacy Policies
+
+You may consult this list to find the Privacy Policy for each of the advertising partners of ${companyName}.
+
+Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on ${companyName}, which are sent directly to users' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
+
+Note that ${companyName} has no access to or control over these cookies that are used by third-party advertisers.
+
+Third Party Privacy Policies
+
+${companyName}'s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
+
+You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers' respective websites.
+
+Children's Information
+
+Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
+
+${companyName} does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
+
+Online Privacy Policy Only
+
+This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in ${companyName}. This policy is not applicable to any information collected offline or via channels other than this website.
+
+Consent
+
+By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.
+                `;
+                policyDisplay.textContent = policy;
+            }
+
+            function clearFields() {
+                companyNameInput.value = '';
+                websiteUrlInput.value = '';
+                contactEmailInput.value = '';
+                policyDisplay.textContent = 'Fill in the details above and click \'Generate\' to create your privacy policy.';
+            }
+
+            function copyPolicyToClipboard() {
+                navigator.clipboard.writeText(policyDisplay.textContent).then(() => {
+                    alert('Privacy Policy copied to clipboard!');
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

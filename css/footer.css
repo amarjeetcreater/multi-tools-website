@@ -1,0 +1,128 @@
+/* Footer Styles */
+.footer {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer a {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer a:hover {
+    color: #ffffff;
+}
+
+.footer h5 {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
+.footer p {
+    color: #9ca3af;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links .social-link {
+    color: #9ca3af;
+    transition: all 0.3s ease;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-links .social-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.footer-links li a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.footer-links li a i {
+    color: #4f46e5;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.footer-links li a:hover i {
+    opacity: 1;
+}
+
+.footer hr {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer .form-control {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.footer .form-control:focus {
+    background-color: #374151;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+    color: #ffffff;
+}
+
+.footer .form-control::placeholder {
+    color: #9ca3af;
+}
+
+.footer .btn-primary {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+}
+
+.footer .btn-primary:hover {
+    background-color: #4338ca;
+    border-color: #4338ca;
+}
+
+.pre-footer {
+    background-color: #2d3748;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-badges img {
+    filter: brightness(0.9);
+    transition: filter 0.3s ease;
+}
+
+.app-badges img:hover {
+    filter: brightness(1);
+}
+
+.quick-stats {
+    color: #9ca3af;
+}
+
+.footer .text-muted {
+    color: #9ca3af !important;
+}
+
+.footer-link {
+    color: #9ca3af;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #9ca3af;
+}

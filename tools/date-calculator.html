@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate date differences, add or subtract days from dates, and find specific dates. Free online date calculator tool.">
+    <meta name="keywords" content="date calculator, date difference, add days, subtract days, date math">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-calendar-alt"></i> Date Calculator</h1>
+                <p>Calculate date differences, add or subtract days from dates, and find specific dates.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="tool-content">
+                        <ul class="nav nav-tabs" id="dateTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="difference-tab" data-bs-toggle="tab" data-bs-target="#difference" type="button" role="tab">
+                                    <i class="fas fa-minus"></i> Date Difference
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="add-subtract-tab" data-bs-toggle="tab" data-bs-target="#add-subtract" type="button" role="tab">
+                                    <i class="fas fa-plus-minus"></i> Add/Subtract Days
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="weekday-tab" data-bs-toggle="tab" data-bs-target="#weekday" type="button" role="tab">
+                                    <i class="fas fa-calendar-week"></i> Weekday Calculator
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content mt-3" id="dateTabContent">
+                            <!-- Date Difference Tab -->
+                            <div class="tab-pane fade show active" id="difference" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="date1" class="form-label">First Date</label>
+                                        <input type="date" class="form-control" id="date1">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="date2" class="form-label">Second Date</label>
+                                        <input type="date" class="form-control" id="date2">
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" onclick="calculateDifference()">
+                                            <i class="fas fa-calculator"></i> Calculate Difference
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add/Subtract Days Tab -->
+                            <div class="tab-pane fade" id="add-subtract" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="startDate" class="form-label">Start Date</label>
+                                        <input type="date" class="form-control" id="startDate">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="daysToAdd" class="form-label">Days</label>
+                                        <input type="number" class="form-control" id="daysToAdd" placeholder="Enter days" value="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Operation</label>
+                                        <div class="btn-group w-100" role="group">
+                                            <input type="radio" class="btn-check" name="operation" id="add" value="add" checked>
+                                            <label class="btn btn-outline-primary" for="add">Add</label>
+                                            <input type="radio" class="btn-check" name="operation" id="subtract" value="subtract">
+                                            <label class="btn btn-outline-primary" for="subtract">Subtract</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" onclick="calculateDateOperation()">
+                                            <i class="fas fa-calculator"></i> Calculate
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Weekday Calculator Tab -->
+                            <div class="tab-pane fade" id="weekday" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="weekdayDate" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="weekdayDate">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="weekdayName" class="form-label">Weekday</label>
+                                        <input type="text" class="form-control" id="weekdayName" readonly>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary" onclick="calculateWeekday()">
+                                            <i class="fas fa-calendar-week"></i> Get Weekday
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                            <h4><i class="fas fa-calculator"></i> Calculation Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="resultText"></strong>
+                            </div>
+                            
+                            <div class="row mt-3" id="additionalInfo">
+                                <!-- Additional information will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="date-tips mt-4">
+                            <h4><i class="fas fa-lightbulb"></i> Date Tips</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6>Common Date Calculations</h6>
+                                            <ul class="list-unstyled">
+                                                <li>• Project deadlines</li>
+                                                <li>• Vacation planning</li>
+                                                <li>• Age calculations</li>
+                                                <li>• Business days</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6>Date Formats</h6>
+                                            <ul class="list-unstyled">
+                                                <li>• YYYY-MM-DD (ISO)</li>
+                                                <li>• MM/DD/YYYY (US)</li>
+                                                <li>• DD/MM/YYYY (EU)</li>
+                                                <li>• Relative dates</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="tool-sidebar">
+                        <div class="date-functions">
+                            <h4><i class="fas fa-info-circle"></i> Date Functions</h4>
+                            <div class="accordion" id="functionAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                            Date Difference
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#functionAccordion">
+                                        <div class="accordion-body">
+                                            Calculate the number of days, weeks, months, or years between two dates.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                            Add/Subtract Days
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#functionAccordion">
+                                        <div class="accordion-body">
+                                            Add or subtract a specified number of days from a given date.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                            Weekday Calculator
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#functionAccordion">
+                                        <div class="accordion-body">
+                                            Find the day of the week for any given date.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="date-tips mt-4">
+                            <h4><i class="fas fa-lightbulb"></i> Date Tips</h4>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Use ISO format for consistency</li>
+                                <li><i class="fas fa-check text-success"></i> Account for leap years</li>
+                                <li><i class="fas fa-check text-success"></i> Consider time zones</li>
+                                <li><i class="fas fa-check text-success"></i> Business days exclude weekends</li>
+                            </ul>
+                        </div>
+
+                        <div class="ad-space mt-4">
+                            <div class="ad-placeholder">
+                                <i class="fas fa-ad"></i>
+                                <p>Advertisement Space</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        function calculateDifference() {
+            const date1 = new Date(document.getElementById('date1').value);
+            const date2 = new Date(document.getElementById('date2').value);
+
+            if (!document.getElementById('date1').value || !document.getElementById('date2').value) {
+                MultiTools.showError('Please select both dates.');
+                return;
+            }
+
+            const diffTime = Math.abs(date2 - date1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffWeeks = Math.floor(diffDays / 7);
+            const diffMonths = Math.floor(diffDays / 30.44);
+            const diffYears = Math.floor(diffDays / 365.25);
+
+            const resultText = `${diffDays} days between the two dates`;
+            document.getElementById('resultText').textContent = resultText;
+
+            const additionalInfo = document.getElementById('additionalInfo');
+            additionalInfo.innerHTML = `
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Days</h6>
+                            <p class="mb-0">${diffDays}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Weeks</h6>
+                            <p class="mb-0">${diffWeeks}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Months</h6>
+                            <p class="mb-0">${diffMonths}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Years</h6>
+                            <p class="mb-0">${diffYears}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function calculateDateOperation() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const daysToAdd = parseInt(document.getElementById('daysToAdd').value);
+            const operation = document.querySelector('input[name="operation"]:checked').value;
+
+            if (!document.getElementById('startDate').value) {
+                MultiTools.showError('Please select a start date.');
+                return;
+            }
+
+            if (isNaN(daysToAdd)) {
+                MultiTools.showError('Please enter a valid number of days.');
+                return;
+            }
+
+            const resultDate = new Date(startDate);
+            if (operation === 'add') {
+                resultDate.setDate(resultDate.getDate() + daysToAdd);
+            } else {
+                resultDate.setDate(resultDate.getDate() - daysToAdd);
+            }
+
+            const operationText = operation === 'add' ? 'added to' : 'subtracted from';
+            const resultText = `${daysToAdd} days ${operationText} ${startDate.toDateString()} = ${resultDate.toDateString()}`;
+            document.getElementById('resultText').textContent = resultText;
+
+            const additionalInfo = document.getElementById('additionalInfo');
+            additionalInfo.innerHTML = `
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>Start Date</h6>
+                            <p class="mb-0">${startDate.toDateString()}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>Result Date</h6>
+                            <p class="mb-0">${resultDate.toDateString()}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function calculateWeekday() {
+            const date = new Date(document.getElementById('weekdayDate').value);
+
+            if (!document.getElementById('weekdayDate').value) {
+                MultiTools.showError('Please select a date.');
+                return;
+            }
+
+            const weekday = weekdays[date.getDay()];
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const year = date.getFullYear();
+
+            document.getElementById('weekdayName').value = weekday;
+
+            const resultText = `${month} ${day}, ${year} is a ${weekday}`;
+            document.getElementById('resultText').textContent = resultText;
+
+            const additionalInfo = document.getElementById('additionalInfo');
+            additionalInfo.innerHTML = `
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>Full Date</h6>
+                            <p class="mb-0">${date.toDateString()}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>Day of Week</h6>
+                            <p class="mb-0">${weekday}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        // Set default dates
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date1').value = today;
+            document.getElementById('date2').value = today;
+            document.getElementById('startDate').value = today;
+            document.getElementById('weekdayDate').value = today;
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,386 @@
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown to HTML Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+    <style>
+        .markdown-input, .html-output {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 300px;
+        }
+        .conversion-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .preview-output {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            min-height: 200px;
+            overflow-y: auto;
+        }
+        .ad-space {
+            margin: 2rem 0;
+        }
+        .ad-banner {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ad-placeholder {
+            color: #6c757d;
+        }
+        .ad-placeholder i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .ad-placeholder p {
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+        .ad-placeholder small {
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="tool-header">
+                    <h1><i class="fas fa-file-code"></i> Markdown to HTML Converter</h1>
+                    <p>Convert Markdown text to clean HTML format with proper formatting and styling</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-edit"></i> Markdown Input</h5>
+                                <textarea id="markdownInput" class="form-control markdown-input" placeholder="Paste your Markdown text here..."></textarea>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="convertToHTML()">
+                                        <i class="fas fa-exchange-alt"></i> Convert to HTML
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="clearInput()">
+                                        <i class="fas fa-trash"></i> Clear
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="loadSample()">
+                                        <i class="fas fa-file-text"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-eye"></i> HTML Output</h5>
+                                <textarea id="htmlOutput" class="form-control html-output" readonly></textarea>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-primary" onclick="copyOutput()">
+                                        <i class="fas fa-copy"></i> Copy HTML
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="downloadOutput()">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="togglePreview()">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4" id="previewSection" style="display: none;">
+                            <div class="col-12">
+                                <h5><i class="fas fa-eye"></i> HTML Preview</h5>
+                                <div id="htmlPreview" class="preview-output"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="conversion-stats">
+                                    <h6><i class="fas fa-chart-bar"></i> Conversion Statistics</h6>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <small>Markdown Elements:</small><br>
+                                            <span id="markdownElements">0</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small>HTML Tags:</small><br>
+                                            <span id="htmlTags">0</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small>Characters:</small><br>
+                                            <span id="characterCount">0</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small>Lines:</small><br>
+                                            <span id="lineCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Space -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="ad-space">
+                    <div class="ad-banner">
+                        <div class="ad-placeholder">
+                            <i class="fas fa-ad"></i>
+                            <p>Advertisement Space</p>
+                            <small>Perfect for Google AdSense</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-lightbulb"></i> Supported Markdown Features</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Headers (# ## ###)</li>
+                                    <li><i class="fas fa-check text-success"></i> Bold (**text**) and Italic (*text*)</li>
+                                    <li><i class="fas fa-check text-success"></i> Links [text](url)</li>
+                                    <li><i class="fas fa-check text-success"></i> Images ![alt](src)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Lists (- * 1. 2.)</li>
+                                    <li><i class="fas fa-check text-success"></i> Code blocks (```code```)</li>
+                                    <li><i class="fas fa-check text-success"></i> Blockquotes (> quote)</li>
+                                    <li><i class="fas fa-check text-success"></i> Tables (| column |)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Markdown to HTML Converter functionality
+        function convertToHTML() {
+            const markdownInput = document.getElementById('markdownInput').value.trim();
+            const output = document.getElementById('htmlOutput');
+            
+            if (!markdownInput) {
+                MultiTools.showError('Please enter Markdown text to convert.');
+                return;
+            }
+
+            try {
+                const html = markdownToHTML(markdownInput);
+                output.value = html;
+                updateStats(markdownInput, html);
+                updatePreview(html);
+            } catch (error) {
+                MultiTools.showError('Error converting Markdown: ' + error.message);
+            }
+        }
+
+        function markdownToHTML(markdown) {
+            let html = markdown;
+            
+            // Headers
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            
+            // Bold and Italic
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Code blocks
+            html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+            
+            // Images
+            html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+            
+            // Blockquotes
+            html = html.replace(/^> (.*$)/gim, '<blockquote><p>$1</p></blockquote>');
+            
+            // Lists
+            html = html.replace(/^\d+\. (.*$)/gim, '<ol><li>$1</li></ol>');
+            html = html.replace(/^[-*] (.*$)/gim, '<ul><li>$1</li></ul>');
+            
+            // Fix consecutive list items
+            html = html.replace(/<\/ol>\s*<ol>/g, '');
+            html = html.replace(/<\/ul>\s*<ul>/g, '');
+            
+            // Paragraphs
+            html = html.replace(/^(?!<[h|o|u|b|p|d|i|s|t|c|a])(.*$)/gim, '<p>$1</p>');
+            
+            // Remove empty paragraphs
+            html = html.replace(/<p><\/p>/g, '');
+            
+            // Horizontal rules
+            html = html.replace(/^---$/gim, '<hr>');
+            
+            // Line breaks
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = html.replace(/\n/g, '<br>');
+            
+            return html;
+        }
+
+        function updateStats(markdown, html) {
+            const markdownElements = (markdown.match(/#{1,6}|\*\*|\*|`|>|-|\||\[|\]|\(|\)/g) || []).length;
+            const htmlTags = (html.match(/<[^>]+>/g) || []).length;
+            const characters = markdown.length;
+            const lines = markdown.split('\n').length;
+            
+            document.getElementById('markdownElements').textContent = markdownElements;
+            document.getElementById('htmlTags').textContent = htmlTags;
+            document.getElementById('characterCount').textContent = characters;
+            document.getElementById('lineCount').textContent = lines;
+        }
+
+        function updatePreview(html) {
+            const preview = document.getElementById('htmlPreview');
+            preview.innerHTML = html;
+        }
+
+        function togglePreview() {
+            const previewSection = document.getElementById('previewSection');
+            const isVisible = previewSection.style.display !== 'none';
+            previewSection.style.display = isVisible ? 'none' : 'block';
+            
+            if (!isVisible) {
+                const htmlOutput = document.getElementById('htmlOutput').value;
+                if (htmlOutput.trim()) {
+                    updatePreview(htmlOutput);
+                }
+            }
+        }
+
+        function clearInput() {
+            document.getElementById('markdownInput').value = '';
+            document.getElementById('htmlOutput').value = '';
+            document.getElementById('htmlPreview').innerHTML = '';
+            updateStats('', '');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('htmlOutput').value;
+            if (output.trim()) {
+                MultiTools.copyToClipboard(output);
+            } else {
+                MultiTools.showError('No output to copy. Please convert Markdown first.');
+            }
+        }
+
+        function downloadOutput() {
+            const output = document.getElementById('htmlOutput').value;
+            if (output.trim()) {
+                MultiTools.downloadFile(output, 'converted.html', 'text/html');
+            } else {
+                MultiTools.showError('No output to download. Please convert Markdown first.');
+            }
+        }
+
+        function loadSample() {
+            const sampleMarkdown = `# Welcome to Our Website
+
+This is a **sample** Markdown document with various elements.
+
+## Features
+
+- *Bold text* and **italic text**
+- [Links](https://example.com) and \`code snippets\`
+- Lists and > blockquotes
+
+### Code Example
+
+\`\`\`
+function hello() {
+    console.log("Hello, World!");
+}
+\`\`\`
+
+This demonstrates the conversion from Markdown to HTML format.
+
+---
+
+### Contact Information
+
+| Name | Email |
+|------|-------|
+| John Doe | john@example.com |
+| Jane Smith | jane@example.com |
+
+> This is a blockquote that demonstrates the conversion process.
+            `;
+            
+            document.getElementById('markdownInput').value = sampleMarkdown.trim();
+            convertToHTML();
+        }
+
+        // Auto-convert on input change
+        document.getElementById('markdownInput').addEventListener('input', function() {
+            if (this.value.trim()) {
+                convertToHTML();
+            } else {
+                document.getElementById('htmlOutput').value = '';
+                document.getElementById('htmlPreview').innerHTML = '';
+                updateStats('', '');
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder & Decoder - Multi-Tools</title>
+    <meta name="description" content="Encode and decode URLs for web compatibility">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <!-- Top Ad Unit -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7389985631571522"
+             data-ad-slot="3374471779"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-link"></i> URL Encoder & Decoder</h1>
+                <p>Encode and decode URLs for web compatibility</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="inputText" class="form-label">Enter URL or Text</label>
+                                <textarea class="form-control" id="inputText" rows="6" placeholder="Enter URL or text to encode/decode..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="encodingType" class="form-label">Encoding Type</label>
+                                <select class="form-select" id="encodingType">
+                                    <option value="url">URL Encoding</option>
+                                    <option value="component">URL Component Encoding</option>
+                                    <option value="base64">Base64 Encoding</option>
+                                    <option value="html">HTML Entity Encoding</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary" id="encodeBtn">
+                                        <i class="fas fa-lock"></i> Encode
+                                    </button>
+                                    <button type="button" class="btn btn-success" id="decodeBtn">
+                                        <i class="fas fa-unlock"></i> Decode
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="clearBtn">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="outputText" class="form-label">Result</label>
+                                <textarea class="form-control" id="outputText" rows="6" placeholder="Encoded/decoded result will appear here..." readonly></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary" id="copyBtn">
+                                        <i class="fas fa-copy"></i> Copy Result
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success" id="downloadBtn">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About URL Encoding</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">This tool handles different types of encoding:</p>
+                            <ul class="list-unstyled small">
+                                <li><strong>URL Encoding:</strong> Converts special characters to %XX format</li>
+                                <li><strong>Component Encoding:</strong> Encodes URL components</li>
+                                <li><strong>Base64:</strong> Converts to Base64 format</li>
+                                <li><strong>HTML Entities:</strong> Converts to HTML entities</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Examples</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <small><strong>URL:</strong> https://example.com/path with spaces</small>
+                                <br>
+                                <small class="text-muted">→ https%3A%2F%2Fexample.com%2Fpath%20with%20spaces</small>
+                            </div>
+                            <div class="mb-2">
+                                <small><strong>HTML:</strong> &lt;script&gt;alert('test')&lt;/script&gt;</small>
+                                <br>
+                                <small class="text-muted">→ &amp;lt;script&amp;gt;alert('test')&amp;lt;/script&amp;gt;</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Ad Unit -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-7389985631571522"
+                                 data-ad-slot="1701935776"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('encodeBtn').addEventListener('click', function() {
+                encodeText();
+            });
+
+            document.getElementById('decodeBtn').addEventListener('click', function() {
+                decodeText();
+            });
+
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                clearText();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const text = document.getElementById('outputText').value;
+                if (text) {
+                    MultiTools.copyToClipboard(text);
+                }
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const text = document.getElementById('outputText').value;
+                if (text) {
+                    MultiTools.downloadFile(text, 'url-encoded.txt', 'text/plain');
+                }
+            });
+        });
+
+        function encodeText() {
+            const input = document.getElementById('inputText').value.trim();
+            const encodingType = document.getElementById('encodingType').value;
+
+            if (!input) {
+                MultiTools.showError('Please enter some text to encode.');
+                return;
+            }
+
+            let result = '';
+            
+            switch (encodingType) {
+                case 'url':
+                    result = encodeURI(input);
+                    break;
+                case 'component':
+                    result = encodeURIComponent(input);
+                    break;
+                case 'base64':
+                    result = btoa(input);
+                    break;
+                case 'html':
+                    result = escapeHtml(input);
+                    break;
+                default:
+                    result = encodeURI(input);
+            }
+
+            document.getElementById('outputText').value = result;
+        }
+
+        function decodeText() {
+            const input = document.getElementById('inputText').value.trim();
+            const encodingType = document.getElementById('encodingType').value;
+
+            if (!input) {
+                MultiTools.showError('Please enter some text to decode.');
+                return;
+            }
+
+            let result = '';
+            
+            try {
+                switch (encodingType) {
+                    case 'url':
+                        result = decodeURI(input);
+                        break;
+                    case 'component':
+                        result = decodeURIComponent(input);
+                        break;
+                    case 'base64':
+                        result = atob(input);
+                        break;
+                    case 'html':
+                        result = unescapeHtml(input);
+                        break;
+                    default:
+                        result = decodeURI(input);
+                }
+            } catch (error) {
+                MultiTools.showError('Error decoding: ' + error.message);
+                return;
+            }
+
+            document.getElementById('outputText').value = result;
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function unescapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerHTML = text;
+            return div.textContent;
+        }
+
+        (function() {
+          function getTheme() {
+            try {
+              var t = localStorage.getItem('theme');
+              if (t === 'dark' || t === 'light') return t;
+            } catch(e) {}
+            return 'light';
+          }
+          document.documentElement.setAttribute('data-theme', getTheme());
+        })();
+    </script>
+</body>
+</html>

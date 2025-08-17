@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Character Counter - Free Online Tools</title>
+    <meta name="description" content="Count characters for your tweets. Real-time counter with visual feedback for Twitter's character limits.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+    <style>
+        .character-count {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            transition: color 0.3s;
+        }
+        .progress {
+            height: 10px;
+            margin: 15px 0;
+        }
+        .tweet-preview {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .tweet-preview-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .tweet-preview-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            margin-right: 10px;
+        }
+        .tweet-preview-name {
+            font-weight: bold;
+        }
+        .tweet-preview-handle {
+            color: #6c757d;
+        }
+        .limit-warning {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="3374471779" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Twitter Character Counter</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="tweetText" class="form-label">Enter your tweet:</label>
+                            <textarea class="form-control" id="tweetText" rows="4" placeholder="Type your tweet here..." maxlength="280" oninput="updateCounter()"></textarea>
+                        </div>
+
+                        <div class="character-count" id="charCount">280</div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                        <div id="limitWarning" class="limit-warning">
+                            <i class="fas fa-exclamation-triangle"></i> You've exceeded Twitter's character limit!
+                        </div>
+
+                        <div class="tweet-preview">
+                            <div class="tweet-preview-header">
+                                <div class="tweet-preview-avatar"></div>
+                                <div>
+                                    <div class="tweet-preview-name">Preview</div>
+                                    <div class="tweet-preview-handle">@username</div>
+                                </div>
+                            </div>
+                            <div id="previewText" class="mt-2"></div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button class="btn btn-primary" onclick="copyText()">
+                                <i class="fas fa-copy"></i> Copy Tweet
+                            </button>
+                            <button class="btn btn-danger" onclick="clearText()">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Twitter Character Limits</h5>
+                        <ul class="mb-0">
+                            <li>Regular tweets: 280 characters</li>
+                            <li>Direct messages: 10,000 characters</li>
+                            <li>Display name: 50 characters</li>
+                            <li>Bio: 160 characters</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="1701935776" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        const tweetText = document.getElementById('tweetText');
+        const charCount = document.getElementById('charCount');
+        const progressBar = document.getElementById('progressBar');
+        const limitWarning = document.getElementById('limitWarning');
+        const previewText = document.getElementById('previewText');
+        const maxChars = 280;
+
+        function updateCounter() {
+            const text = tweetText.value;
+            const remaining = maxChars - text.length;
+            const percentage = (text.length / maxChars) * 100;
+
+            // Update character count
+            charCount.textContent = remaining;
+            charCount.style.color = remaining < 20 ? '#dc3545' : 
+                                  remaining < 50 ? '#ffc107' : '#198754';
+
+            // Update progress bar
+            progressBar.style.width = `${percentage}%`;
+            progressBar.className = `progress-bar ${
+                remaining < 0 ? 'bg-danger' :
+                remaining < 20 ? 'bg-warning' : 'bg-success'
+            }`;
+
+            // Show/hide warning
+            limitWarning.style.display = remaining < 0 ? 'block' : 'none';
+
+            // Update preview
+            previewText.textContent = text;
+        }
+
+        function copyText() {
+            const text = tweetText.value;
+            if (!text) {
+                alert('Please enter some text to copy!');
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                // Show feedback
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success position-fixed';
+                toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+                toast.innerHTML = `<i class="fas fa-check"></i> Tweet copied to clipboard!`;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text:', err);
+                alert('Failed to copy text. Please try again.');
+            });
+        }
+
+        function clearText() {
+            tweetText.value = '';
+            updateCounter();
+        }
+
+        // Initialize ads
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

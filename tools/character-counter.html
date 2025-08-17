@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter - Multi-Tools</title>
+    <meta name="description" content="Count characters with and without spaces">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-text-width"></i> Character Counter</h1>
+                <p>Count characters with and without spaces</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter Text</label>
+                                <textarea class="form-control" id="textInput" rows="10" placeholder="Enter your text here..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includeSpaces" checked>
+                                    <label class="form-check-label" for="includeSpaces">
+                                        Include spaces in count
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includePunctuation" checked>
+                                    <label class="form-check-label" for="includePunctuation">
+                                        Include punctuation
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="countBtn">
+                                <i class="fas fa-calculator"></i> Count Characters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About Character Counter</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success"></i> Total characters</li>
+                                <li><i class="fas fa-check text-success"></i> Characters without spaces</li>
+                                <li><i class="fas fa-check text-success"></i> Word count</li>
+                                <li><i class="fas fa-check text-success"></i> Line count</li>
+                                <li><i class="fas fa-check text-success"></i> Real-time counting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-bar"></i> Character Count Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="counterResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('textInput').addEventListener('input', function() {
+                if (this.value.trim()) {
+                    analyzeText();
+                }
+            });
+
+            document.getElementById('countBtn').addEventListener('click', function() {
+                analyzeText();
+            });
+        });
+
+        function analyzeText() {
+            const text = document.getElementById('textInput').value;
+            const includeSpaces = document.getElementById('includeSpaces').checked;
+            const includePunctuation = document.getElementById('includePunctuation').checked;
+
+            if (!text.trim()) {
+                MultiTools.showError('Please enter some text to analyze.');
+                return;
+            }
+
+            const cleanText = text.trim();
+            const charsWithSpaces = cleanText.length;
+            const charsWithoutSpaces = cleanText.replace(/\s/g, '').length;
+            const words = cleanText.split(/\s+/).filter(word => word.length > 0);
+            const wordCount = words.length;
+            const lines = cleanText.split('\n').filter(line => line.trim().length > 0);
+            const lineCount = lines.length;
+            const sentences = cleanText.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+            const sentenceCount = sentences.length;
+
+            let charsWithoutPunctuation = charsWithoutSpaces;
+            if (!includePunctuation) {
+                charsWithoutPunctuation = cleanText.replace(/[^\w\s]/g, '').replace(/\s/g, '').length;
+            }
+
+            displayResults({
+                charsWithSpaces: charsWithSpaces,
+                charsWithoutSpaces: charsWithoutSpaces,
+                charsWithoutPunctuation: charsWithoutPunctuation,
+                wordCount: wordCount,
+                lineCount: lineCount,
+                sentenceCount: sentenceCount,
+                includeSpaces: includeSpaces,
+                includePunctuation: includePunctuation
+            });
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('counterResults');
+
+            let html = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="text-primary">${data.charsWithSpaces}</h5>
+                                <small>Characters (with spaces)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="text-success">${data.charsWithoutSpaces}</h5>
+                                <small>Characters (no spaces)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="text-info">${data.charsWithoutPunctuation}</h5>
+                                <small>Characters (no punctuation)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="text-warning">${data.wordCount}</h5>
+                                <small>Words</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="text-secondary">${data.lineCount}</h5>
+                                <small>Lines</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="text-dark">${data.sentenceCount}</h5>
+                                <small>Sentences</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            resultsDiv.innerHTML = html;
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+    </script>
+</body>
+</html> 

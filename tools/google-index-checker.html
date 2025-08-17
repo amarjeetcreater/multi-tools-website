@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Index Checker - Multi-Tools</title>
+    <meta name="description" content="Check if your pages are indexed by Google">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fab fa-google"></i> Google Index Checker</h1>
+                <p>Check if your pages are indexed by Google</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="indexForm">
+                                <div class="mb-3">
+                                    <label for="urls" class="form-label">URLs to Check</label>
+                                    <textarea class="form-control" id="urls" rows="5" placeholder="Enter URLs (one per line)&#10;https://example.com/page1&#10;https://example.com/page2"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="searchQuery" class="form-label">Search Query</label>
+                                    <input type="text" class="form-control" id="searchQuery" placeholder="site:example.com">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Check Index Status
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> How it Works</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">This tool simulates checking if your pages are indexed by Google.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list"></i> Index Check Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="copyBtn">
+                                    <i class="fas fa-copy"></i> Copy Results
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm" id="downloadBtn">
+                                    <i class="fas fa-download"></i> Download Report
+                                </button>
+                            </div>
+                        </div>
+                        <div id="resultsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let checkResults = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('indexForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                checkIndexStatus();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForCopy();
+                MultiTools.copyToClipboard(resultsText);
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForDownload();
+                MultiTools.downloadFile(resultsText, 'google-index-check-results.txt', 'text/plain');
+            });
+        });
+
+        function checkIndexStatus() {
+            const urls = document.getElementById('urls').value.trim();
+            const searchQuery = document.getElementById('searchQuery').value.trim();
+
+            if (!urls) {
+                MultiTools.showError('Please enter at least one URL to check.');
+                return;
+            }
+
+            const urlList = urls.split('\n').filter(url => url.trim());
+            checkResults = [];
+
+            urlList.forEach((url, index) => {
+                setTimeout(() => {
+                    const result = simulateIndexCheck(url);
+                    checkResults.push(result);
+                    
+                    if (checkResults.length === urlList.length) {
+                        displayResults();
+                    }
+                }, index * 300);
+            });
+
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Checking...</div>';
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function simulateIndexCheck(url) {
+            const isIndexed = Math.random() > 0.3;
+            const lastCrawled = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
+            
+            return {
+                url: url,
+                indexed: isIndexed,
+                lastCrawled: lastCrawled,
+                searchQuery: `site:${new URL(url).hostname}`
+            };
+        }
+
+        function displayResults() {
+            const resultsList = document.getElementById('resultsList');
+
+            let html = '';
+            checkResults.forEach(result => {
+                const statusClass = result.indexed ? 'success' : 'danger';
+                const statusIcon = result.indexed ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                const statusText = result.indexed ? 'Indexed' : 'Not Indexed';
+
+                html += `
+                    <div class="card mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="text-truncate">${result.url}</span>
+                            <span class="badge bg-${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Status:</strong> <i class="${statusIcon} text-${statusClass}"></i> ${statusText}</p>
+                            <p><strong>Last Crawled:</strong> ${result.lastCrawled.toLocaleDateString()}</p>
+                            <p><strong>Search Query:</strong> <code>${result.searchQuery}</code></p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsList.innerHTML = html;
+        }
+
+        function formatResultsForCopy() {
+            let text = 'Google Index Check Results\n';
+            text += '========================\n\n';
+            
+            checkResults.forEach(result => {
+                text += `URL: ${result.url}\n`;
+                text += `Status: ${result.indexed ? 'Indexed' : 'Not Indexed'}\n`;
+                text += `Last Crawled: ${result.lastCrawled.toLocaleDateString()}\n`;
+                text += `Search Query: ${result.searchQuery}\n\n`;
+            });
+
+            return text;
+        }
+
+        function formatResultsForDownload() {
+            return formatResultsForCopy();
+        }
+    </script>
+</body>
+</html> 

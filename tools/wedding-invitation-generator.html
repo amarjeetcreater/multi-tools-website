@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation Generator - Multi-Tools</title>
+    <meta name="description" content="Create beautiful wedding invitations online. Design custom invitations with templates and personal details.">
+    <meta name="keywords" content="wedding invitation generator, wedding invitation, invitation maker, wedding card">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-heart"></i> Wedding Invitation Generator
+                    </h1>
+                    <p class="tool-description">
+                        Create beautiful wedding invitations online. Design custom invitations with templates 
+                        and personal details. Perfect for your special day.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="templateStyle" class="form-label">Template Style</label>
+                                        <select class="form-select" id="templateStyle">
+                                            <option value="elegant">Elegant</option>
+                                            <option value="modern">Modern</option>
+                                            <option value="romantic">Romantic</option>
+                                            <option value="vintage">Vintage</option>
+                                            <option value="minimalist">Minimalist</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="colorScheme" class="form-label">Color Scheme</label>
+                                        <select class="form-select" id="colorScheme">
+                                            <option value="gold">Gold & White</option>
+                                            <option value="rose">Rose Gold</option>
+                                            <option value="navy">Navy & Gold</option>
+                                            <option value="blush">Blush Pink</option>
+                                            <option value="sage">Sage Green</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="groomName" class="form-label">Groom's Name</label>
+                                        <input type="text" class="form-control" id="groomName" 
+                                               placeholder="Enter groom's name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="brideName" class="form-label">Bride's Name</label>
+                                        <input type="text" class="form-control" id="brideName" 
+                                               placeholder="Enter bride's name">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="weddingDate" class="form-label">Wedding Date</label>
+                                        <input type="date" class="form-control" id="weddingDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="weddingTime" class="form-label">Wedding Time</label>
+                                        <input type="time" class="form-control" id="weddingTime" 
+                                               value="14:00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="venueName" class="form-label">Venue Name</label>
+                                        <input type="text" class="form-control" id="venueName" 
+                                               placeholder="Enter venue name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="venueAddress" class="form-label">Venue Address</label>
+                                        <input type="text" class="form-control" id="venueAddress" 
+                                               placeholder="Enter venue address">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="rsvpInfo" class="form-label">RSVP Information</label>
+                                <textarea class="form-control" id="rsvpInfo" rows="3" 
+                                          placeholder="Enter RSVP details (phone, email, etc.)"></textarea>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary" onclick="generateInvitation()">
+                                    <i class="fas fa-magic"></i> Generate Invitation
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadSampleData()">
+                                    <i class="fas fa-file-alt"></i> Load Sample
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="clearForm()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="invitationContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Wedding Invitation</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="invitationOutput"></div>
+                                
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadInvitation()">
+                                        <i class="fas fa-download"></i> Download Invitation
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyInvitation()">
+                                        <i class="fas fa-copy"></i> Copy Text
+                                    </button>
+                                    <button class="btn btn-warning" onclick="printInvitation()">
+                                        <i class="fas fa-print"></i> Print Invitation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Template Styles</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Elegant:</strong> Classic and sophisticated</li>
+                                <li><strong>Modern:</strong> Clean and contemporary</li>
+                                <li><strong>Romantic:</strong> Soft and dreamy</li>
+                                <li><strong>Vintage:</strong> Timeless and charming</li>
+                                <li><strong>Minimalist:</strong> Simple and elegant</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Include all essential details</li>
+                                <li>• Choose appropriate colors</li>
+                                <li>• Proofread carefully</li>
+                                <li>• Consider your theme</li>
+                                <li>• Include RSVP info</li>
+                                <li>• Test print quality</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        let invitationData = {};
+
+        function generateInvitation() {
+            const templateStyle = document.getElementById('templateStyle').value;
+            const colorScheme = document.getElementById('colorScheme').value;
+            const groomName = document.getElementById('groomName').value;
+            const brideName = document.getElementById('brideName').value;
+            const weddingDate = document.getElementById('weddingDate').value;
+            const weddingTime = document.getElementById('weddingTime').value;
+            const venueName = document.getElementById('venueName').value;
+            const venueAddress = document.getElementById('venueAddress').value;
+            const rsvpInfo = document.getElementById('rsvpInfo').value;
+            
+            if (!groomName || !brideName || !weddingDate || !venueName) {
+                MultiTools.showError('Please fill in all required fields');
+                return;
+            }
+            
+            invitationData = {
+                templateStyle: templateStyle,
+                colorScheme: colorScheme,
+                groomName: groomName,
+                brideName: brideName,
+                weddingDate: weddingDate,
+                weddingTime: weddingTime,
+                venueName: venueName,
+                venueAddress: venueAddress,
+                rsvpInfo: rsvpInfo
+            };
+            
+            displayInvitation(invitationData);
+            document.getElementById('invitationContainer').style.display = 'block';
+            MultiTools.showSuccess('Wedding invitation generated!');
+        }
+
+        function displayInvitation(data) {
+            const output = document.getElementById('invitationOutput');
+            const dateObj = new Date(data.weddingDate);
+            const dateStr = dateObj.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const timeStr = new Date(`2000-01-01T${data.weddingTime}`).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            
+            const colorClasses = {
+                'gold': 'text-warning',
+                'rose': 'text-danger',
+                'navy': 'text-primary',
+                'blush': 'text-pink',
+                'sage': 'text-success'
+            };
+            
+            output.innerHTML = `
+                <div class="text-center invitation-display ${colorClasses[data.colorScheme] || 'text-dark'}">
+                    <div class="invitation-header mb-4">
+                        <h2 class="display-4 fw-bold">Wedding Invitation</h2>
+                        <div class="decorative-line"></div>
+                    </div>
+                    
+                    <div class="couple-names mb-4">
+                        <h3 class="h2">${data.groomName}</h3>
+                        <h4 class="h3">&</h4>
+                        <h3 class="h2">${data.brideName}</h3>
+                    </div>
+                    
+                    <div class="wedding-details mb-4">
+                        <p class="h5">Request the pleasure of your company</p>
+                        <p class="h5">as we celebrate our wedding</p>
+                        <div class="decorative-line"></div>
+                        <p class="h4 fw-bold">${dateStr}</p>
+                        <p class="h5">at ${timeStr}</p>
+                    </div>
+                    
+                    <div class="venue-details mb-4">
+                        <p class="h5 fw-bold">${data.venueName}</p>
+                        ${data.venueAddress ? `<p class="h6">${data.venueAddress}</p>` : ''}
+                    </div>
+                    
+                    ${data.rsvpInfo ? `
+                        <div class="rsvp-info mb-4">
+                            <div class="decorative-line"></div>
+                            <p class="h6">RSVP</p>
+                            <p class="small">${data.rsvpInfo}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="invitation-footer">
+                        <div class="decorative-line"></div>
+                        <p class="small">We look forward to celebrating with you!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadSampleData() {
+            document.getElementById('templateStyle').value = 'elegant';
+            document.getElementById('colorScheme').value = 'gold';
+            document.getElementById('groomName').value = 'John Smith';
+            document.getElementById('brideName').value = 'Sarah Johnson';
+            document.getElementById('weddingDate').value = '2024-06-15';
+            document.getElementById('weddingTime').value = '14:00';
+            document.getElementById('venueName').value = 'Grand Plaza Hotel';
+            document.getElementById('venueAddress').value = '123 Main Street, City, State 12345';
+            document.getElementById('rsvpInfo').value = 'Please RSVP by May 15th\nPhone: (555) 123-4567\nEmail: rsvp@wedding.com';
+            generateInvitation();
+        }
+
+        function clearForm() {
+            document.getElementById('groomName').value = '';
+            document.getElementById('brideName').value = '';
+            document.getElementById('weddingDate').value = '';
+            document.getElementById('weddingTime').value = '14:00';
+            document.getElementById('venueName').value = '';
+            document.getElementById('venueAddress').value = '';
+            document.getElementById('rsvpInfo').value = '';
+            document.getElementById('invitationContainer').style.display = 'none';
+            invitationData = {};
+            MultiTools.showSuccess('Form cleared');
+        }
+
+        function downloadInvitation() {
+            if (!invitationData.groomName) {
+                MultiTools.showError('No invitation to download');
+                return;
+            }
+
+            let content = `WEDDING INVITATION\n`;
+            content += `==================\n\n`;
+            content += `${invitationData.groomName} & ${invitationData.brideName}\n\n`;
+            content += `Request the pleasure of your company\n`;
+            content += `as we celebrate our wedding\n\n`;
+            content += `${new Date(invitationData.weddingDate).toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            })}\n`;
+            content += `at ${new Date(`2000-01-01T${invitationData.weddingTime}`).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            })}\n\n`;
+            content += `${invitationData.venueName}\n`;
+            if (invitationData.venueAddress) {
+                content += `${invitationData.venueAddress}\n`;
+            }
+            if (invitationData.rsvpInfo) {
+                content += `\nRSVP:\n${invitationData.rsvpInfo}\n`;
+            }
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wedding-invitation-${invitationData.weddingDate}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            MultiTools.showSuccess('Invitation downloaded!');
+        }
+
+        function copyInvitation() {
+            if (!invitationData.groomName) {
+                MultiTools.showError('No invitation to copy');
+                return;
+            }
+
+            const content = `${invitationData.groomName} & ${invitationData.brideName} - Wedding Invitation`;
+            
+            navigator.clipboard.writeText(content).then(() => {
+                MultiTools.showSuccess('Invitation text copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy invitation');
+            });
+        }
+
+        function printInvitation() {
+            if (!invitationData.groomName) {
+                MultiTools.showError('No invitation to print');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Wedding Invitation</title>
+                    <style>
+                        body { 
+                            font-family: 'Times New Roman', serif; 
+                            margin: 40px; 
+                            text-align: center;
+                            background-color: #fefefe;
+                        }
+                        .invitation { 
+                            max-width: 600px; 
+                            margin: 0 auto; 
+                            padding: 40px;
+                            border: 2px solid #gold;
+                            background-color: white;
+                        }
+                        .decorative-line { 
+                            border-top: 1px solid #gold; 
+                            margin: 20px 0; 
+                        }
+                        .couple-names { margin: 30px 0; }
+                        .wedding-details { margin: 30px 0; }
+                        .venue-details { margin: 30px 0; }
+                        .rsvp-info { margin: 30px 0; }
+                        h1, h2, h3 { color: #gold; }
+                        @media print {
+                            body { margin: 0; }
+                            .invitation { border: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="invitation">
+                        <h1>Wedding Invitation</h1>
+                        <div class="decorative-line"></div>
+                        
+                        <div class="couple-names">
+                            <h2>${invitationData.groomName}</h2>
+                            <h3>&</h3>
+                            <h2>${invitationData.brideName}</h2>
+                        </div>
+                        
+                        <div class="wedding-details">
+                            <p>Request the pleasure of your company</p>
+                            <p>as we celebrate our wedding</p>
+                            <div class="decorative-line"></div>
+                            <h3>${new Date(invitationData.weddingDate).toLocaleDateString('en-US', { 
+                                weekday: 'long',
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}</h3>
+                            <p>at ${new Date(`2000-01-01T${invitationData.weddingTime}`).toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            })}</p>
+                        </div>
+                        
+                        <div class="venue-details">
+                            <h3>${invitationData.venueName}</h3>
+                            ${invitationData.venueAddress ? `<p>${invitationData.venueAddress}</p>` : ''}
+                        </div>
+                        
+                        ${invitationData.rsvpInfo ? `
+                            <div class="rsvp-info">
+                                <div class="decorative-line"></div>
+                                <h4>RSVP</h4>
+                                <p>${invitationData.rsvpInfo}</p>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="decorative-line"></div>
+                        <p>We look forward to celebrating with you!</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

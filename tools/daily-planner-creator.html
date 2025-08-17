@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Planner Creator - Multi-Tools</title>
+    <meta name="description" content="Create organized daily schedules and planners. Plan your day with time blocks, tasks, and priorities.">
+    <meta name="keywords" content="daily planner, schedule creator, time management, daily schedule, planner tool">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-calendar-day"></i> Daily Planner Creator
+                    </h1>
+                    <p class="tool-description">
+                        Create organized daily schedules and planners. Plan your day with time blocks, 
+                        tasks, and priorities. Stay productive and organized.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="plannerDate" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="plannerDate" 
+                                               value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="plannerTitle" class="form-label">Planner Title</label>
+                                        <input type="text" class="form-control" id="plannerTitle" 
+                                               placeholder="e.g., My Daily Schedule">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="startTime" class="form-label">Start Time</label>
+                                        <input type="time" class="form-control" id="startTime" 
+                                               value="06:00">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="endTime" class="form-label">End Time</label>
+                                        <input type="time" class="form-control" id="endTime" 
+                                               value="22:00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary" onclick="createPlanner()">
+                                    <i class="fas fa-magic"></i> Create Planner
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadSampleData()">
+                                    <i class="fas fa-file-alt"></i> Load Sample
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="clearPlanner()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="plannerContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Daily Planner</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="plannerOutput"></div>
+                                
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadPlanner()">
+                                        <i class="fas fa-download"></i> Download Planner
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyPlanner()">
+                                        <i class="fas fa-copy"></i> Copy Planner
+                                    </button>
+                                    <button class="btn btn-warning" onclick="printPlanner()">
+                                        <i class="fas fa-print"></i> Print Planner
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Planner Features</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Custom time blocks</li>
+                                <li>• Priority levels</li>
+                                <li>• Task categories</li>
+                                <li>• Time tracking</li>
+                                <li>• Goal setting</li>
+                                <li>• Progress tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Planning Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Start with priorities</li>
+                                <li>• Include breaks</li>
+                                <li>• Be realistic</li>
+                                <li>• Review daily</li>
+                                <li>• Stay flexible</li>
+                                <li>• Track progress</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        let plannerData = {};
+
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('plannerDate').value = today;
+        });
+
+        function createPlanner() {
+            const date = document.getElementById('plannerDate').value;
+            const title = document.getElementById('plannerTitle').value || 'Daily Planner';
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            if (!date) {
+                MultiTools.showError('Please select a date');
+                return;
+            }
+            
+            plannerData = {
+                date: date,
+                title: title,
+                startTime: startTime,
+                endTime: endTime,
+                timeBlocks: generateTimeBlocks(startTime, endTime)
+            };
+            
+            displayPlanner(plannerData);
+            document.getElementById('plannerContainer').style.display = 'block';
+            MultiTools.showSuccess('Daily planner created!');
+        }
+
+        function generateTimeBlocks(startTime, endTime) {
+            const blocks = [];
+            const start = new Date(`2000-01-01T${startTime}`);
+            const end = new Date(`2000-01-01T${endTime}`);
+            
+            let current = new Date(start);
+            while (current < end) {
+                const timeStr = current.toTimeString().slice(0, 5);
+                const nextTime = new Date(current.getTime() + 60 * 60 * 1000); // Add 1 hour
+                const nextTimeStr = nextTime.toTimeString().slice(0, 5);
+                
+                blocks.push({
+                    time: `${timeStr} - ${nextTimeStr}`,
+                    activity: '',
+                    priority: 'medium',
+                    completed: false
+                });
+                
+                current = nextTime;
+            }
+            
+            return blocks;
+        }
+
+        function displayPlanner(data) {
+            const output = document.getElementById('plannerOutput');
+            const dateObj = new Date(data.date);
+            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+            const dateStr = dateObj.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            output.innerHTML = `
+                <div class="text-center mb-4">
+                    <h4>${data.title}</h4>
+                    <p class="text-muted">${dayName}, ${dateStr}</p>
+                    <p class="text-muted">${data.startTime} - ${data.endTime}</p>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 20%">Time</th>
+                                <th style="width: 50%">Activity</th>
+                                <th style="width: 15%">Priority</th>
+                                <th style="width: 15%">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.timeBlocks.map((block, index) => `
+                                <tr>
+                                    <td class="fw-bold">${block.time}</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" 
+                                               placeholder="Enter activity..." 
+                                               onchange="updateActivity(${index}, this.value)">
+                                    </td>
+                                    <td>
+                                        <select class="form-select form-select-sm" 
+                                                onchange="updatePriority(${index}, this.value)">
+                                            <option value="low" ${block.priority === 'low' ? 'selected' : ''}>Low</option>
+                                            <option value="medium" ${block.priority === 'medium' ? 'selected' : ''}>Medium</option>
+                                            <option value="high" ${block.priority === 'high' ? 'selected' : ''}>High</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   onchange="updateStatus(${index}, this.checked)"
+                                                   ${block.completed ? 'checked' : ''}>
+                                            <label class="form-check-label">Done</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6>Total Blocks</h6>
+                                <h4 class="text-primary">${data.timeBlocks.length}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6>Completed</h6>
+                                <h4 class="text-success" id="completedCount">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6>Remaining</h6>
+                                <h4 class="text-warning" id="remainingCount">${data.timeBlocks.length}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            updateCounts();
+        }
+
+        function updateActivity(index, value) {
+            plannerData.timeBlocks[index].activity = value;
+        }
+
+        function updatePriority(index, value) {
+            plannerData.timeBlocks[index].priority = value;
+        }
+
+        function updateStatus(index, completed) {
+            plannerData.timeBlocks[index].completed = completed;
+            updateCounts();
+        }
+
+        function updateCounts() {
+            const completed = plannerData.timeBlocks.filter(block => block.completed).length;
+            const total = plannerData.timeBlocks.length;
+            const remaining = total - completed;
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('remainingCount').textContent = remaining;
+        }
+
+        function loadSampleData() {
+            document.getElementById('plannerDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('plannerTitle').value = 'My Daily Schedule';
+            document.getElementById('startTime').value = '08:00';
+            document.getElementById('endTime').value = '18:00';
+            createPlanner();
+        }
+
+        function clearPlanner() {
+            document.getElementById('plannerContainer').style.display = 'none';
+            plannerData = {};
+            MultiTools.showSuccess('Planner cleared');
+        }
+
+        function downloadPlanner() {
+            if (!plannerData.date) {
+                MultiTools.showError('No planner to download');
+                return;
+            }
+
+            let content = `${plannerData.title}\n`;
+            content += `Date: ${plannerData.date}\n`;
+            content += `Time: ${plannerData.startTime} - ${plannerData.endTime}\n\n`;
+            content += `TIME BLOCKS:\n`;
+            content += `============\n\n`;
+            
+            plannerData.timeBlocks.forEach((block, index) => {
+                content += `${index + 1}. ${block.time}\n`;
+                content += `   Activity: ${block.activity || 'Not specified'}\n`;
+                content += `   Priority: ${block.priority}\n`;
+                content += `   Status: ${block.completed ? 'Completed' : 'Pending'}\n\n`;
+            });
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `daily-planner-${plannerData.date}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            MultiTools.showSuccess('Planner downloaded!');
+        }
+
+        function copyPlanner() {
+            if (!plannerData.date) {
+                MultiTools.showError('No planner to copy');
+                return;
+            }
+
+            let content = `${plannerData.title} - ${plannerData.date}\n\n`;
+            
+            plannerData.timeBlocks.forEach((block, index) => {
+                content += `${index + 1}. ${block.time}: ${block.activity || 'Not specified'} (${block.priority})\n`;
+            });
+
+            navigator.clipboard.writeText(content).then(() => {
+                MultiTools.showSuccess('Planner copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy planner');
+            });
+        }
+
+        function printPlanner() {
+            if (!plannerData.date) {
+                MultiTools.showError('No planner to print');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>${plannerData.title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>${plannerData.title}</h2>
+                        <p>Date: ${plannerData.date}</p>
+                        <p>Time: ${plannerData.startTime} - ${plannerData.endTime}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Activity</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${plannerData.timeBlocks.map(block => `
+                                <tr>
+                                    <td>${block.time}</td>
+                                    <td>${block.activity || ''}</td>
+                                    <td>${block.priority}</td>
+                                    <td>${block.completed ? 'Completed' : 'Pending'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

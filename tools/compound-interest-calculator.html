@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compound Interest Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate compound interest, future values, and investment growth with our free online compound interest calculator. Perfect for financial planning.">
+    <meta name="keywords" content="compound interest calculator, investment calculator, future value calculator, financial calculator, interest rate calculator">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header"></div>
+
+    <!-- AdSense Ad Unit 1 -->
+    <div class="container mt-3">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-chart-line"></i> Compound Interest Calculator</h1>
+                <p>Calculate compound interest, future values, and investment growth over time with different compounding frequencies.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="principal" class="form-label">Principal Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="principal" placeholder="Enter principal amount" step="0.01">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="rate" class="form-label">Annual Interest Rate</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="rate" placeholder="Enter annual rate" step="0.01">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="time" class="form-label">Time Period</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="time" placeholder="Enter time period">
+                                            <select class="form-select" id="timeUnit">
+                                                <option value="years">Years</option>
+                                                <option value="months">Months</option>
+                                                <option value="days">Days</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="compounding" class="form-label">Compounding Frequency</label>
+                                        <select class="form-select" id="compounding">
+                                            <option value="annually">Annually</option>
+                                            <option value="semiannually">Semi-annually</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="continuously">Continuously</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="contribution" class="form-label">Regular Contribution (Optional)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="contribution" placeholder="Enter contribution amount" step="0.01" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="contributionFreq" class="form-label">Contribution Frequency</label>
+                                        <select class="form-select" id="contributionFreq">
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="annually">Annually</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="calculateCompoundInterest()">
+                                <i class="fas fa-calculator"></i> Calculate
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetCalculator()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="result" class="mt-4"></div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Compound Interest Formula</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Standard:</strong> A = P(1 + r/n)^(nt)</li>
+                                <li><strong>Continuous:</strong> A = Pe^(rt)</li>
+                                <li><strong>Where:</strong></li>
+                                <li>• A = Future Value</li>
+                                <li>• P = Principal</li>
+                                <li>• r = Annual Rate</li>
+                                <li>• n = Compounding Frequency</li>
+                                <li>• t = Time Period</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Compounding Frequencies</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li>• Annually: n = 1</li>
+                                <li>• Semi-annually: n = 2</li>
+                                <li>• Quarterly: n = 4</li>
+                                <li>• Monthly: n = 12</li>
+                                <li>• Daily: n = 365</li>
+                                <li>• Continuous: e^(rt)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-pie"></i> Investment Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li>• Start investing early to maximize compound growth</li>
+                                <li>• Consider higher compounding frequencies for better returns</li>
+                                <li>• Regular contributions significantly boost long-term growth</li>
+                                <li>• Factor in inflation when planning for the future</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AdSense Ad Unit 2 -->
+    <div class="container mb-4">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/loader.js"></script>
+
+    <script>
+        function calculateCompoundInterest() {
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const time = parseFloat(document.getElementById('time').value);
+            const timeUnit = document.getElementById('timeUnit').value;
+            const compounding = document.getElementById('compounding').value;
+            const contribution = parseFloat(document.getElementById('contribution').value) || 0;
+            const contributionFreq = document.getElementById('contributionFreq').value;
+
+            if (isNaN(principal) || isNaN(rate) || isNaN(time) || principal <= 0 || rate < 0 || time <= 0) {
+                MultiTools.showError('Please enter valid numbers. Principal, rate, and time must be positive.');
+                return;
+            }
+
+            // Convert time to years
+            let timeInYears = time;
+            if (timeUnit === 'months') {
+                timeInYears = time / 12;
+            } else if (timeUnit === 'days') {
+                timeInYears = time / 365;
+            }
+
+            // Calculate compounding frequency
+            let n = 1;
+            switch (compounding) {
+                case 'annually': n = 1; break;
+                case 'semiannually': n = 2; break;
+                case 'quarterly': n = 4; break;
+                case 'monthly': n = 12; break;
+                case 'daily': n = 365; break;
+                case 'continuously': n = 'continuous'; break;
+            }
+
+            // Calculate future value
+            let futureValue, interestEarned;
+            if (n === 'continuous') {
+                futureValue = principal * Math.exp(rate / 100 * timeInYears);
+                interestEarned = futureValue - principal;
+            } else {
+                futureValue = principal * Math.pow(1 + (rate / 100) / n, n * timeInYears);
+                interestEarned = futureValue - principal;
+            }
+
+            // Calculate contributions
+            let totalContributions = 0;
+            let contributionGrowth = 0;
+            if (contribution > 0) {
+                let contributionPeriods;
+                switch (contributionFreq) {
+                    case 'monthly': contributionPeriods = timeInYears * 12; break;
+                    case 'quarterly': contributionPeriods = timeInYears * 4; break;
+                    case 'annually': contributionPeriods = timeInYears; break;
+                }
+
+                totalContributions = contribution * contributionPeriods;
+                
+                // Calculate growth on contributions
+                if (n === 'continuous') {
+                    contributionGrowth = contribution * (Math.exp(rate / 100 * timeInYears) - 1) / (rate / 100);
+                } else {
+                    contributionGrowth = contribution * (Math.pow(1 + (rate / 100) / n, n * timeInYears) - 1) / ((rate / 100) / n);
+                }
+            }
+
+            const totalValue = futureValue + contributionGrowth;
+            const totalInterest = interestEarned + contributionGrowth;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Compound Interest Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-success">$${totalValue.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Total Future Value</strong></p>
+                                <p class="mb-0"><strong>Principal:</strong> $${principal.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Interest Earned:</strong> $${totalInterest.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Total Contributions:</strong> $${totalContributions.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-info">
+                                    <h6><i class="fas fa-calculator"></i> Breakdown</h6>
+                                    <p class="mb-1"><strong>Principal Growth:</strong> $${futureValue.toFixed(2)}</p>
+                                    <p class="mb-1"><strong>Principal Interest:</strong> $${interestEarned.toFixed(2)}</p>
+                                    <p class="mb-0"><strong>Contribution Growth:</strong> $${contributionGrowth.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-info-circle"></i> Calculation Details</h6>
+                                <ul class="list-unstyled small">
+                                    <li><strong>Annual Rate:</strong> ${rate}%</li>
+                                    <li><strong>Time Period:</strong> ${time} ${timeUnit}</li>
+                                    <li><strong>Compounding:</strong> ${compounding}</li>
+                                    <li><strong>Effective Annual Rate:</strong> ${((Math.pow(1 + (rate / 100) / (n === 'continuous' ? 1 : n), n === 'continuous' ? 1 : n) - 1) * 100).toFixed(4)}%</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${(principal / totalValue * 100)}%" aria-valuenow="${principal}" aria-valuemin="0" aria-valuemax="${totalValue}">
+                                        Principal: ${(principal / totalValue * 100).toFixed(1)}%
+                                    </div>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: ${(totalContributions / totalValue * 100)}%" aria-valuenow="${totalContributions}" aria-valuemin="0" aria-valuemax="${totalValue}">
+                                        Contributions: ${(totalContributions / totalValue * 100).toFixed(1)}%
+                                    </div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: ${(totalInterest / totalValue * 100)}%" aria-valuenow="${totalInterest}" aria-valuemin="0" aria-valuemax="${totalValue}">
+                                        Interest: ${(totalInterest / totalValue * 100).toFixed(1)}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-3" onclick="MultiTools.copyToClipboard('Future Value: $${totalValue.toFixed(2)}, Interest Earned: $${totalInterest.toFixed(2)}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function resetCalculator() {
+            document.getElementById('principal').value = '';
+            document.getElementById('rate').value = '';
+            document.getElementById('time').value = '';
+            document.getElementById('timeUnit').value = 'years';
+            document.getElementById('compounding').value = 'annually';
+            document.getElementById('contribution').value = '0';
+            document.getElementById('contributionFreq').value = 'monthly';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

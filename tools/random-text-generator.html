@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Text Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container my-4">
+        <h1 class="text-center mb-4">Random Text Generator</h1>
+        <div class="ad-section">
+            <!-- Ad Space -->
+            <p>Advertisement</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Random Text Generator</h5>
+                <div class="mb-3">
+                    <label for="paragraphCount" class="form-label">Number of Paragraphs:</label>
+                    <input type="number" class="form-control" id="paragraphCount" value="3" min="1">
+                </div>
+                <button id="generateBtn" class="btn btn-primary mb-3">Generate Text</button>
+                <div class="form-group">
+                    <label for="generatedText" class="form-label">Generated Text:</label>
+                    <textarea class="form-control" id="generatedText" rows="10" readonly></textarea>
+                </div>
+                <button id="copyBtn" class="btn btn-secondary mt-2">Copy to Clipboard</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loadComponents.js"></script>
+    <script>
+        // JavaScript for Random Text Generator tool
+        document.addEventListener('DOMContentLoaded', function() {
+            const paragraphCountInput = document.getElementById('paragraphCount');
+            const generateBtn = document.getElementById('generateBtn');
+            const generatedTextarea = document.getElementById('generatedText');
+            const copyBtn = document.getElementById('copyBtn');
+
+            const loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+            function generateRandomText() {
+                const count = parseInt(paragraphCountInput.value);
+                let text = '';
+                for (let i = 0; i < count; i++) {
+                    text += loremIpsum + (i < count - 1 ? '\n\n' : '');
+                }
+                generatedTextarea.value = text;
+            }
+
+            generateBtn.addEventListener('click', generateRandomText);
+
+            copyBtn.addEventListener('click', function() {
+                generatedTextarea.select();
+                generatedTextarea.setSelectionRange(0, 99999); // For mobile devices
+                document.execCommand('copy');
+                alert('Text copied to clipboard!');
+            });
+
+            // Initial generation on load
+            generateRandomText();
+        });
+    </script>
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

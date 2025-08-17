@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Thumbnail Downloader - Free Online Tools</title>
+    <meta name="description" content="Download YouTube video thumbnails in high quality for free. Get thumbnails from any YouTube video URL.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="3374471779" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">YouTube Thumbnail Downloader</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="videoUrl" class="form-label">Enter YouTube Video URL:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                                <button class="btn btn-primary" onclick="getThumbnails()">Get Thumbnails</button>
+                            </div>
+                        </div>
+                        <div id="thumbnailResults" class="d-none">
+                            <h5 class="mb-3">Available Thumbnails:</h5>
+                            <div class="row" id="thumbnailContainer"></div>
+                        </div>
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="1701935776" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        function getThumbnails() {
+            const videoUrl = document.getElementById('videoUrl').value.trim();
+            const videoId = extractVideoId(videoUrl);
+            const thumbnailResults = document.getElementById('thumbnailResults');
+            const thumbnailContainer = document.getElementById('thumbnailContainer');
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (!videoId) {
+                errorMessage.textContent = 'Invalid YouTube URL. Please enter a valid YouTube video URL.';
+                errorMessage.classList.remove('d-none');
+                thumbnailResults.classList.add('d-none');
+                return;
+            }
+
+            errorMessage.classList.add('d-none');
+            thumbnailResults.classList.remove('d-none');
+            thumbnailContainer.innerHTML = '';
+
+            const qualities = [
+                { name: 'Max Resolution', url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` },
+                { name: 'High Quality', url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` },
+                { name: 'Medium Quality', url: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` },
+                { name: 'Standard Quality', url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg` },
+                { name: 'Default Thumbnail', url: `https://img.youtube.com/vi/${videoId}/default.jpg` }
+            ];
+
+            qualities.forEach(quality => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-4';
+                col.innerHTML = `
+                    <div class="card h-100">
+                        <img src="${quality.url}" class="card-img-top" alt="${quality.name} thumbnail">
+                        <div class="card-body">
+                            <h5 class="card-title">${quality.name}</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button class="btn btn-primary btn-sm" onclick="downloadThumbnail('${quality.url}', '${videoId}_${quality.name.toLowerCase().replace(' ', '_')}')">Download</button>
+                                <button class="btn btn-secondary btn-sm" onclick="copyImageUrl('${quality.url}')">Copy URL</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                thumbnailContainer.appendChild(col);
+            });
+        }
+
+        function extractVideoId(url) {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/v\/)|(\/embed\/)|(\/watch\?))?\??v?=?([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[7].length === 11) ? match[7] : false;
+        }
+
+        function downloadThumbnail(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${filename}.jpg`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('Error downloading thumbnail:', error);
+                    alert('Error downloading thumbnail. Please try again.');
+                });
+        }
+
+        function copyImageUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Thumbnail URL copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy URL:', err);
+                alert('Failed to copy URL. Please try again.');
+            });
+        }
+
+        // Initialize ads
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <script>
+        (function() {
+          function getTheme() {
+            try {
+              var t = localStorage.getItem('theme');
+              if (t === 'dark' || t === 'light') return t;
+            } catch(e) {}
+            return 'light';
+          }
+          document.documentElement.setAttribute('data-theme', getTheme());
+        })();
+    </script>
+</body>
+</html>

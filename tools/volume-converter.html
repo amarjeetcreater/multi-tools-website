@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volume Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different volume units including liters, gallons, cubic meters, pints, and more. Free online volume converter tool.">
+    <meta name="keywords" content="volume converter, liters to gallons, gallons to liters, volume units, capacity converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid tool-page">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-cube"></i> Volume Converter</h1>
+                        <p>Convert between different volume units including liters, gallons, cubic meters, pints, cups, and more.</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit">From Unit:</label>
+                                    <select id="fromUnit" class="form-control">
+                                        <option value="liters">Liters (L)</option>
+                                        <option value="gallons">US Gallons (gal)</option>
+                                        <option value="imperial_gallons">Imperial Gallons (imp gal)</option>
+                                        <option value="cubic_meters">Cubic Meters (m³)</option>
+                                        <option value="cubic_feet">Cubic Feet (ft³)</option>
+                                        <option value="cubic_inches">Cubic Inches (in³)</option>
+                                        <option value="pints">US Pints (pt)</option>
+                                        <option value="imperial_pints">Imperial Pints (imp pt)</option>
+                                        <option value="cups">US Cups (cup)</option>
+                                        <option value="fluid_ounces">US Fluid Ounces (fl oz)</option>
+                                        <option value="imperial_fluid_ounces">Imperial Fluid Ounces (imp fl oz)</option>
+                                        <option value="milliliters">Milliliters (mL)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit">To Unit:</label>
+                                    <select id="toUnit" class="form-control">
+                                        <option value="gallons">US Gallons (gal)</option>
+                                        <option value="liters">Liters (L)</option>
+                                        <option value="imperial_gallons">Imperial Gallons (imp gal)</option>
+                                        <option value="cubic_meters">Cubic Meters (m³)</option>
+                                        <option value="cubic_feet">Cubic Feet (ft³)</option>
+                                        <option value="cubic_inches">Cubic Inches (in³)</option>
+                                        <option value="pints">US Pints (pt)</option>
+                                        <option value="imperial_pints">Imperial Pints (imp pt)</option>
+                                        <option value="cups">US Cups (cup)</option>
+                                        <option value="fluid_ounces">US Fluid Ounces (fl oz)</option>
+                                        <option value="imperial_fluid_ounces">Imperial Fluid Ounces (imp fl oz)</option>
+                                        <option value="milliliters">Milliliters (mL)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="volumeValue">Volume Value:</label>
+                            <input type="number" id="volumeValue" class="form-control" placeholder="Enter volume value" step="any">
+                        </div>
+
+                        <div class="btn-group mt-3" role="group">
+                            <button type="button" class="btn btn-primary" onclick="convertVolume()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="swapUnits()">
+                                <i class="fas fa-arrows-alt-h"></i> Swap Units
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="copyResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+
+                        <div id="result" class="result-container mt-4" style="display: none;">
+                            <h4><i class="fas fa-chart-line"></i> Conversion Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="conversionResult"></strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Formula Used:</h5>
+                                    <p id="formula"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Conversion Factor:</h5>
+                                    <p id="factor"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-conversions mt-4">
+                            <h4><i class="fas fa-bolt"></i> Quick Conversions</h4>
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'liters', 'gallons')">
+                                        1 L → gal
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'gallons', 'liters')">
+                                        1 gal → L
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1000, 'milliliters', 'liters')">
+                                        1000 mL → L
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'cubic_meters', 'liters')">
+                                        1 m³ → L
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="volume-info mt-4">
+                            <h4><i class="fas fa-info-circle"></i> Volume Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Common Volume References:</h5>
+                                    <ul>
+                                        <li><strong>Water Bottle:</strong> 500 mL (0.5 L)</li>
+                                        <li><strong>Milk Jug:</strong> 1 gallon (3.785 L)</li>
+                                        <li><strong>Gas Tank:</strong> 15 gallons (56.8 L)</li>
+                                        <li><strong>Swimming Pool:</strong> 20,000 gallons (75,700 L)</li>
+                                        <li><strong>Olympic Pool:</strong> 660,000 gallons (2.5 million L)</li>
+                                        <li><strong>Teaspoon:</strong> 5 mL</li>
+                                        <li><strong>Tablespoon:</strong> 15 mL</li>
+                                        <li><strong>Cup:</strong> 240 mL</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Volume Units Explained:</h5>
+                                    <ul>
+                                        <li><strong>Liters:</strong> Metric volume unit (1 L = 1000 mL)</li>
+                                        <li><strong>US Gallons:</strong> US customary unit (1 gal = 3.785 L)</li>
+                                        <li><strong>Imperial Gallons:</strong> UK unit (1 imp gal = 4.546 L)</li>
+                                        <li><strong>Cubic Meters:</strong> SI volume unit (1 m³ = 1000 L)</li>
+                                        <li><strong>Cubic Feet:</strong> Imperial volume unit (1 ft³ = 28.317 L)</li>
+                                        <li><strong>Pints:</strong> 1 US pint = 473 mL, 1 Imperial pint = 568 mL</li>
+                                        <li><strong>Cups:</strong> 1 US cup = 240 mL</li>
+                                        <li><strong>Fluid Ounces:</strong> 1 US fl oz = 29.574 mL</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        // Volume conversion factors (to liters as base unit)
+        const volumeFactors = {
+            'liters': 1,                    // liters (base unit)
+            'milliliters': 0.001,           // milliliters
+            'gallons': 3.78541,             // US gallons
+            'imperial_gallons': 4.54609,    // imperial gallons
+            'cubic_meters': 1000,           // cubic meters
+            'cubic_feet': 28.3168,          // cubic feet
+            'cubic_inches': 0.0163871,      // cubic inches
+            'pints': 0.473176,              // US pints
+            'imperial_pints': 0.568261,     // imperial pints
+            'cups': 0.236588,               // US cups
+            'fluid_ounces': 0.0295735,      // US fluid ounces
+            'imperial_fluid_ounces': 0.0284131 // imperial fluid ounces
+        };
+
+        const unitNames = {
+            'liters': 'Liters',
+            'milliliters': 'Milliliters',
+            'gallons': 'US Gallons',
+            'imperial_gallons': 'Imperial Gallons',
+            'cubic_meters': 'Cubic Meters',
+            'cubic_feet': 'Cubic Feet',
+            'cubic_inches': 'Cubic Inches',
+            'pints': 'US Pints',
+            'imperial_pints': 'Imperial Pints',
+            'cups': 'US Cups',
+            'fluid_ounces': 'US Fluid Ounces',
+            'imperial_fluid_ounces': 'Imperial Fluid Ounces'
+        };
+
+        const unitSymbols = {
+            'liters': 'L',
+            'milliliters': 'mL',
+            'gallons': 'gal',
+            'imperial_gallons': 'imp gal',
+            'cubic_meters': 'm³',
+            'cubic_feet': 'ft³',
+            'cubic_inches': 'in³',
+            'pints': 'pt',
+            'imperial_pints': 'imp pt',
+            'cups': 'cup',
+            'fluid_ounces': 'fl oz',
+            'imperial_fluid_ounces': 'imp fl oz'
+        };
+
+        function convertVolume() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const volumeValue = parseFloat(document.getElementById('volumeValue').value);
+
+            if (isNaN(volumeValue)) {
+                MultiTools.showError('Please enter a valid volume value.');
+                return;
+            }
+
+            // Convert to base unit (liters) first
+            const baseValue = volumeValue * volumeFactors[fromUnit];
+            
+            // Convert from base unit to target unit
+            const result = baseValue / volumeFactors[toUnit];
+
+            const fromSymbol = unitSymbols[fromUnit];
+            const toSymbol = unitSymbols[toUnit];
+            const fromName = unitNames[fromUnit];
+            const toName = unitNames[toUnit];
+
+            document.getElementById('conversionResult').innerHTML = 
+                `${volumeValue} ${fromSymbol} = ${result.toFixed(6)} ${toSymbol}`;
+            
+            document.getElementById('formula').innerHTML = 
+                `${fromName} × ${volumeFactors[fromUnit]} ÷ ${volumeFactors[toUnit]} = ${toName}`;
+            
+            document.getElementById('factor').innerHTML = 
+                `1 ${fromSymbol} = ${(volumeFactors[fromUnit] / volumeFactors[toUnit]).toFixed(6)} ${toSymbol}`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            
+            if (document.getElementById('volumeValue').value) {
+                convertVolume();
+            }
+        }
+
+        function resetConverter() {
+            document.getElementById('volumeValue').value = '';
+            document.getElementById('fromUnit').value = 'liters';
+            document.getElementById('toUnit').value = 'gallons';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function quickConvert(value, from, to) {
+            document.getElementById('volumeValue').value = value;
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            convertVolume();
+        }
+
+        function copyResult() {
+            const result = document.getElementById('conversionResult').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    MultiTools.showSuccess('Result copied to clipboard!');
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy result.');
+                });
+            }
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

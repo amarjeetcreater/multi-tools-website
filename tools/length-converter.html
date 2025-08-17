@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Length Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different length units like meters, feet, inches, kilometers, miles. Free online length converter tool.">
+    <meta name="keywords" content="length converter, meter converter, feet converter, inch converter, kilometer converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-ruler"></i> Length Converter</h1>
+                <p>Convert between different length units with precision</p>
+            </div>
+
+            <div class="tool-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fromUnit">From Unit</label>
+                            <select id="fromUnit" class="form-control">
+                                <option value="meter">Meter (m)</option>
+                                <option value="kilometer">Kilometer (km)</option>
+                                <option value="centimeter">Centimeter (cm)</option>
+                                <option value="millimeter">Millimeter (mm)</option>
+                                <option value="foot">Foot (ft)</option>
+                                <option value="inch">Inch (in)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="mile">Mile (mi)</option>
+                                <option value="nautical-mile">Nautical Mile (nmi)</option>
+                                <option value="light-year">Light Year (ly)</option>
+                                <option value="astronomical-unit">Astronomical Unit (AU)</option>
+                                <option value="parsec">Parsec (pc)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="toUnit">To Unit</label>
+                            <select id="toUnit" class="form-control">
+                                <option value="foot">Foot (ft)</option>
+                                <option value="meter">Meter (m)</option>
+                                <option value="kilometer">Kilometer (km)</option>
+                                <option value="centimeter">Centimeter (cm)</option>
+                                <option value="millimeter">Millimeter (mm)</option>
+                                <option value="inch">Inch (in)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="mile">Mile (mi)</option>
+                                <option value="nautical-mile">Nautical Mile (nmi)</option>
+                                <option value="light-year">Light Year (ly)</option>
+                                <option value="astronomical-unit">Astronomical Unit (AU)</option>
+                                <option value="parsec">Parsec (pc)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="inputValue">Length Value</label>
+                            <input type="number" id="inputValue" class="form-control" placeholder="Enter length value" step="any">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-primary w-100" onclick="convertLength()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-outline-secondary" onclick="swapUnits()">
+                            <i class="fas fa-arrows-alt-h"></i> Swap Units
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="copyResult()">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+
+                <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                    <h3>Conversion Result</h3>
+                    <div class="conversion-result">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-value">
+                                    <strong>Input:</strong> <span id="inputDisplay">-</span>
+                                    <br><small id="inputUnit">-</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="output-value">
+                                    <strong>Output:</strong> <span id="outputDisplay">-</span>
+                                    <br><small id="outputUnit">-</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="conversion-formula mt-3">
+                            <small>Formula: <span id="conversionFormula">-</span></small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-conversions mt-4">
+                    <h4>Quick Conversions</h4>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('meter', 'foot', 1)">
+                                1 Meter → Feet
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('foot', 'meter', 1)">
+                                1 Foot → Meters
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('kilometer', 'mile', 1)">
+                                1 Kilometer → Miles
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('mile', 'kilometer', 1)">
+                                1 Mile → Kilometers
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="common-lengths mt-4">
+                    <h4>Common Length References</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Object</th>
+                                    <th>Length</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Paper clip</td><td>3.5 cm</td><td>Standard paper clip</td></tr>
+                                <tr><td>Credit card</td><td>8.5 cm</td><td>Standard credit card</td></tr>
+                                <tr><td>Pencil</td><td>18 cm</td><td>Standard pencil</td></tr>
+                                <tr><td>Ruler</td><td>30 cm</td><td>Standard ruler</td></tr>
+                                <tr><td>Baseball bat</td><td>1 m</td><td>Standard baseball bat</td></tr>
+                                <tr><td>Car</td><td>4.5 m</td><td>Average car length</td></tr>
+                                <tr><td>Football field</td><td>100 m</td><td>Standard football field</td></tr>
+                                <tr><td>Marathon</td><td>42.2 km</td><td>Marathon distance</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="length-systems mt-4">
+                    <h4>Length Measurement Systems</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5>Metric System</h5>
+                                <ul>
+                                    <li><strong>Millimeter (mm)</strong> - 1/1000 of a meter</li>
+                                    <li><strong>Centimeter (cm)</strong> - 1/100 of a meter</li>
+                                    <li><strong>Meter (m)</strong> - Base unit of length</li>
+                                    <li><strong>Kilometer (km)</strong> - 1000 meters</li>
+                                    <li>Used worldwide, except in USA</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5>Imperial System</h5>
+                                <ul>
+                                    <li><strong>Inch (in)</strong> - 1/12 of a foot</li>
+                                    <li><strong>Foot (ft)</strong> - 12 inches</li>
+                                    <li><strong>Yard (yd)</strong> - 3 feet</li>
+                                    <li><strong>Mile (mi)</strong> - 5280 feet</li>
+                                    <li>Primarily used in USA</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    <script>
+        // Length conversion factors (to meters)
+        const lengthFactors = {
+            'meter': 1,
+            'kilometer': 1000,
+            'centimeter': 0.01,
+            'millimeter': 0.001,
+            'foot': 0.3048,
+            'inch': 0.0254,
+            'yard': 0.9144,
+            'mile': 1609.344,
+            'nautical-mile': 1852,
+            'light-year': 9.461e15,
+            'astronomical-unit': 1.496e11,
+            'parsec': 3.086e16
+        };
+
+        const unitNames = {
+            'meter': 'Meter',
+            'kilometer': 'Kilometer',
+            'centimeter': 'Centimeter',
+            'millimeter': 'Millimeter',
+            'foot': 'Foot',
+            'inch': 'Inch',
+            'yard': 'Yard',
+            'mile': 'Mile',
+            'nautical-mile': 'Nautical Mile',
+            'light-year': 'Light Year',
+            'astronomical-unit': 'Astronomical Unit',
+            'parsec': 'Parsec'
+        };
+
+        const unitSymbols = {
+            'meter': 'm',
+            'kilometer': 'km',
+            'centimeter': 'cm',
+            'millimeter': 'mm',
+            'foot': 'ft',
+            'inch': 'in',
+            'yard': 'yd',
+            'mile': 'mi',
+            'nautical-mile': 'nmi',
+            'light-year': 'ly',
+            'astronomical-unit': 'AU',
+            'parsec': 'pc'
+        };
+
+        function convertLength() {
+            const inputValue = parseFloat(document.getElementById('inputValue').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            if (isNaN(inputValue)) {
+                MultiTools.showError('Please enter a valid number');
+                return;
+            }
+
+            if (fromUnit === toUnit) {
+                MultiTools.showResult(`${inputValue} ${unitSymbols[fromUnit]} = ${inputValue} ${unitSymbols[toUnit]}`, 'Same unit, no conversion needed');
+                return;
+            }
+
+            // Convert to meters first, then to target unit
+            const meters = inputValue * lengthFactors[fromUnit];
+            const result = meters / lengthFactors[toUnit];
+
+            // Format result based on magnitude
+            let formattedResult;
+            if (result < 0.001) {
+                formattedResult = result.toExponential(4);
+            } else if (result < 1) {
+                formattedResult = result.toFixed(6);
+            } else if (result < 1000) {
+                formattedResult = result.toFixed(4);
+            } else {
+                formattedResult = result.toExponential(4);
+            }
+
+            // Update display
+            document.getElementById('inputDisplay').textContent = inputValue;
+            document.getElementById('inputUnit').textContent = `${unitNames[fromUnit]} (${unitSymbols[fromUnit]})`;
+            document.getElementById('outputDisplay').textContent = formattedResult;
+            document.getElementById('outputUnit').textContent = `${unitNames[toUnit]} (${unitSymbols[toUnit]})`;
+
+            // Show conversion formula
+            const formula = `${inputValue} ${unitSymbols[fromUnit]} × ${lengthFactors[fromUnit]} m/${unitSymbols[fromUnit]} ÷ ${lengthFactors[toUnit]} m/${unitSymbols[toUnit]} = ${formattedResult} ${unitSymbols[toUnit]}`;
+            document.getElementById('conversionFormula').textContent = formula;
+
+            document.getElementById('resultContainer').style.display = 'block';
+            MultiTools.showResult(`${inputValue} ${unitSymbols[fromUnit]} = ${formattedResult} ${unitSymbols[toUnit]}`, `Converted from ${unitNames[fromUnit]} to ${unitNames[toUnit]}`);
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            convertLength();
+        }
+
+        function resetConverter() {
+            document.getElementById('inputValue').value = '';
+            document.getElementById('fromUnit').value = 'meter';
+            document.getElementById('toUnit').value = 'foot';
+            document.getElementById('resultContainer').style.display = 'none';
+            MultiTools.clearResults();
+        }
+
+        function copyResult() {
+            const output = document.getElementById('outputDisplay').textContent;
+            const outputUnit = document.getElementById('outputUnit').textContent;
+            if (output && output !== '-') {
+                const text = `${output} ${outputUnit}`;
+                navigator.clipboard.writeText(text).then(() => {
+                    MultiTools.showResult('Result copied to clipboard!', text);
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy to clipboard');
+                });
+            }
+        }
+
+        function quickConvert(from, to, value) {
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            document.getElementById('inputValue').value = value;
+            convertLength();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+            
+            // Auto-convert on input change
+            document.getElementById('inputValue').addEventListener('input', function() {
+                if (this.value && !isNaN(this.value)) {
+                    convertLength();
+                }
+            });
+            
+            document.getElementById('fromUnit').addEventListener('change', function() {
+                if (document.getElementById('inputValue').value && !isNaN(document.getElementById('inputValue').value)) {
+                    convertLength();
+                }
+            });
+            
+            document.getElementById('toUnit').addEventListener('change', function() {
+                if (document.getElementById('inputValue').value && !isNaN(document.getElementById('inputValue').value)) {
+                    convertLength();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

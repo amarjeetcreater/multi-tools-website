@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller Simulator - Multi-Tools</title>
+    <meta name="description" content="Roll virtual dice for games and simulations. Support for various dice types including D6, D20, and custom dice.">
+    <meta name="keywords" content="dice roller, dice simulator, virtual dice, d6, d20, dice games">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-dice-d6"></i> Dice Roller Simulator
+                    </h1>
+                    <p class="tool-description">
+                        Roll virtual dice for games and simulations. Support for various dice types 
+                        including D6, D20, and custom dice with detailed statistics.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="diceType" class="form-label">Dice Type</label>
+                                        <select class="form-select" id="diceType">
+                                            <option value="d4">D4 (1-4)</option>
+                                            <option value="d6" selected>D6 (1-6)</option>
+                                            <option value="d8">D8 (1-8)</option>
+                                            <option value="d10">D10 (1-10)</option>
+                                            <option value="d12">D12 (1-12)</option>
+                                            <option value="d20">D20 (1-20)</option>
+                                            <option value="d100">D100 (1-100)</option>
+                                            <option value="custom">Custom Dice</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="diceCount" class="form-label">Number of Dice</label>
+                                        <select class="form-select" id="diceCount">
+                                            <option value="1">1 die</option>
+                                            <option value="2">2 dice</option>
+                                            <option value="3">3 dice</option>
+                                            <option value="4">4 dice</option>
+                                            <option value="5">5 dice</option>
+                                            <option value="10">10 dice</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="customDiceSettings" class="row" style="display: none;">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="customSides" class="form-label">Number of Sides</label>
+                                        <input type="number" class="form-control" id="customSides" 
+                                               min="2" max="1000" value="6">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="customName" class="form-label">Dice Name</label>
+                                        <input type="text" class="form-control" id="customName" 
+                                               placeholder="e.g., D6, D20">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary" onclick="rollDice()">
+                                    <i class="fas fa-dice-d6"></i> Roll Dice
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadSampleData()">
+                                    <i class="fas fa-file-alt"></i> Load Sample
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="clearResults()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Dice Roll Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div id="diceOutput"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="stats-container">
+                                            <h6>Roll Statistics</h6>
+                                            <div id="statsOutput"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadResults()">
+                                        <i class="fas fa-download"></i> Download Results
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyResults()">
+                                        <i class="fas fa-copy"></i> Copy Results
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Dice Types</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>D4:</strong> 4-sided die (1-4)</li>
+                                <li><strong>D6:</strong> 6-sided die (1-6)</li>
+                                <li><strong>D8:</strong> 8-sided die (1-8)</li>
+                                <li><strong>D10:</strong> 10-sided die (1-10)</li>
+                                <li><strong>D12:</strong> 12-sided die (1-12)</li>
+                                <li><strong>D20:</strong> 20-sided die (1-20)</li>
+                                <li><strong>D100:</strong> 100-sided die (1-100)</li>
+                                <li><strong>Custom:</strong> Any number of sides</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Game Uses</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Board games</li>
+                                <li>• Tabletop RPGs</li>
+                                <li>• Probability testing</li>
+                                <li>• Random selection</li>
+                                <li>• Game development</li>
+                                <li>• Educational purposes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        let rollHistory = [];
+
+        // Show/hide custom dice settings
+        document.getElementById('diceType').addEventListener('change', function() {
+            const customSettings = document.getElementById('customDiceSettings');
+            if (this.value === 'custom') {
+                customSettings.style.display = 'block';
+            } else {
+                customSettings.style.display = 'none';
+            }
+        });
+
+        function rollDice() {
+            const diceType = document.getElementById('diceType').value;
+            const diceCount = parseInt(document.getElementById('diceCount').value);
+            
+            let sides, diceName;
+            
+            if (diceType === 'custom') {
+                sides = parseInt(document.getElementById('customSides').value);
+                diceName = document.getElementById('customName').value || `D${sides}`;
+            } else {
+                sides = parseInt(diceType.substring(1));
+                diceName = diceType.toUpperCase();
+            }
+            
+            const rolls = [];
+            for (let i = 0; i < diceCount; i++) {
+                rolls.push(Math.floor(Math.random() * sides) + 1);
+            }
+            
+            const total = rolls.reduce((sum, roll) => sum + roll, 0);
+            
+            rollHistory.push({
+                dice: diceName,
+                sides: sides,
+                count: diceCount,
+                rolls: rolls,
+                total: total,
+                timestamp: new Date().toLocaleTimeString()
+            });
+            
+            displayResults(rolls, diceName, total);
+            updateStats();
+            document.getElementById('resultContainer').style.display = 'block';
+            MultiTools.showSuccess(`Rolled ${diceCount} ${diceName} dice!`);
+        }
+
+        function displayResults(rolls, diceName, total) {
+            const output = document.getElementById('diceOutput');
+            output.innerHTML = `
+                <div class="mb-3">
+                    <h6>${diceName} Rolls</h6>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        ${rolls.map(roll => `
+                            <span class="badge bg-primary fs-6">${roll}</span>
+                        `).join('')}
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>Total:</strong> ${total}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStats() {
+            if (rollHistory.length === 0) return;
+            
+            const allRolls = rollHistory.flatMap(roll => roll.rolls);
+            const totalRolls = allRolls.length;
+            const sum = allRolls.reduce((acc, roll) => acc + roll, 0);
+            const average = sum / totalRolls;
+            const min = Math.min(...allRolls);
+            const max = Math.max(...allRolls);
+            
+            // Calculate frequency
+            const frequency = {};
+            allRolls.forEach(roll => {
+                frequency[roll] = (frequency[roll] || 0) + 1;
+            });
+            
+            const mostCommon = Object.keys(frequency).filter(key => 
+                frequency[key] === Math.max(...Object.values(frequency))
+            );
+            
+            document.getElementById('statsOutput').innerHTML = `
+                <div class="mb-2"><strong>Total Rolls:</strong> ${totalRolls}</div>
+                <div class="mb-2"><strong>Average:</strong> ${average.toFixed(2)}</div>
+                <div class="mb-2"><strong>Lowest:</strong> ${min}</div>
+                <div class="mb-2"><strong>Highest:</strong> ${max}</div>
+                <div class="mb-2"><strong>Most Common:</strong> ${mostCommon.join(', ')}</div>
+                <div class="mb-2"><strong>Total Sum:</strong> ${sum}</div>
+            `;
+        }
+
+        function loadSampleData() {
+            document.getElementById('diceType').value = 'd6';
+            document.getElementById('diceCount').value = '3';
+            document.getElementById('customDiceSettings').style.display = 'none';
+            rollDice();
+        }
+
+        function clearResults() {
+            rollHistory = [];
+            document.getElementById('resultContainer').style.display = 'none';
+            MultiTools.showSuccess('Results cleared');
+        }
+
+        function downloadResults() {
+            if (rollHistory.length === 0) {
+                MultiTools.showError('No results to download');
+                return;
+            }
+
+            let content = `Dice Roll Results\n`;
+            content += `Generated on: ${new Date().toLocaleString()}\n\n`;
+            
+            rollHistory.forEach((roll, index) => {
+                content += `Roll ${index + 1} (${roll.timestamp}):\n`;
+                content += `Dice: ${roll.dice}\n`;
+                content += `Sides: ${roll.sides}\n`;
+                content += `Count: ${roll.count}\n`;
+                content += `Rolls: ${roll.rolls.join(', ')}\n`;
+                content += `Total: ${roll.total}\n\n`;
+            });
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dice-roll-results.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            MultiTools.showSuccess('Results downloaded!');
+        }
+
+        function copyResults() {
+            if (rollHistory.length === 0) {
+                MultiTools.showError('No results to copy');
+                return;
+            }
+
+            const lastRoll = rollHistory[rollHistory.length - 1];
+            const content = `${lastRoll.dice} Rolls: ${lastRoll.rolls.join(', ')} | Total: ${lastRoll.total}`;
+            
+            navigator.clipboard.writeText(content).then(() => {
+                MultiTools.showSuccess('Results copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy results');
+            });
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate your exact age from birth date to current date. Get detailed breakdown in years, months, days, hours, and minutes. Free online age calculator tool.">
+    <meta name="keywords" content="age calculator, birth date, age calculation, birthday calculator">
+    
+        <!-- Bootstrap CSS -->
+        <script>
+        // Standardized theme detection script
+        (() => {
+            const userTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = userTheme || systemTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-birthday-cake"></i> Age Calculator</h1>
+                
+                <!-- ✅ Top Ad -->
+                <div class="text-center my-4">
+                  <ins class="adsbygoogle"
+                       style="display:block"
+                       data-ad-client="ca-pub-XXXXXXXXXXXX"
+                       data-ad-slot="1111111111"
+                       data-ad-format="auto"
+                       data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+                <p>Calculate your exact age from birth date to current date with detailed breakdown.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="tool-content">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="birthDate" class="form-label">Birth Date</label>
+                                <input type="date" class="form-control" id="birthDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="currentDate" class="form-label">Current Date (Optional)</label>
+                                <input type="date" class="form-control" id="currentDate">
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button class="btn btn-primary me-2" onclick="calculateAge()">
+                                    <i class="fas fa-calculator"></i> Calculate Age
+                                </button>
+                                <button class="btn btn-outline-secondary me-2" onclick="resetCalculator()">
+                                    <i class="fas fa-undo"></i> Reset
+                                </button>
+                                <button class="btn btn-success" onclick="copyResult()" id="copyBtn" style="display: none;">
+                                    <i class="fas fa-copy"></i> Copy Result
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                            <h4><i class="fas fa-calculator"></i> Age Calculation Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="resultText"></strong>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <h5><i class="fas fa-info-circle"></i> Detailed Breakdown</h5>
+                                    <div id="detailedBreakdown">
+                                        <!-- Detailed breakdown will be populated here -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><i class="fas fa-calendar"></i> Date Information</h5>
+                                    <div id="dateInfo">
+                                        <!-- Date information will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="age-facts mt-4">
+                            <h4><i class="fas fa-lightbulb"></i> Age Facts</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6>Life Milestones</h6>
+                                            <ul class="list-unstyled">
+                                                <li>• 18: Legal adult in most countries</li>
+                                                <li>• 21: Legal drinking age in US</li>
+                                                <li>• 25: Brain fully developed</li>
+                                                <li>• 65: Traditional retirement age</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6>Age Categories</h6>
+                                            <ul class="list-unstyled">
+                                                <li>• 0-12: Childhood</li>
+                                                <li>• 13-19: Teenage years</li>
+                                                <li>• 20-39: Young adult</li>
+                                                <li>• 40-59: Middle age</li>
+                                                <li>• 60+: Senior</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="tool-sidebar">
+                        <div class="age-functions">
+                            <h4><i class="fas fa-info-circle"></i> Age Functions</h4>
+                            <div class="accordion" id="functionAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                            Exact Age Calculation
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#functionAccordion">
+                                        <div class="accordion-body">
+                                            Calculate precise age in years, months, days, hours, and minutes from birth date.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                            Custom Date Calculation
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#functionAccordion">
+                                        <div class="accordion-body">
+                                            Calculate age up to any specific date, not just today.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                            Life Statistics
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#functionAccordion">
+                                        <div class="accordion-body">
+                                            Get interesting statistics about your age and life milestones.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="age-tips mt-4">
+                            <h4><i class="fas fa-lightbulb"></i> Age Tips</h4>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Use exact birth date for accuracy</li>
+                                <li><i class="fas fa-check text-success"></i> Account for leap years</li>
+                                <li><i class="fas fa-check text-success"></i> Consider time zones</li>
+                                <li><i class="fas fa-check text-success"></i> Age is just a number!</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4">
+                          <ins class="adsbygoogle"
+                               style="display:block"
+                               data-ad-client="ca-pub-XXXXXXXXXXXX"
+                               data-ad-slot="3333333333"
+                               data-ad-format="auto"
+                               data-full-width-responsive="true"></ins>
+                          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/loader.js"></script> <!--Use "../" or adjust as needed -->
+    
+    <script>
+        function calculateAge() {
+            const birthDate = new Date(document.getElementById('birthDate').value);
+            const currentDateInput = document.getElementById('currentDate').value;
+            const currentDate = currentDateInput ? new Date(currentDateInput) : new Date();
+
+            if (!document.getElementById('birthDate').value) {
+                MultiTools.showError('Please enter your birth date.');
+                return;
+            }
+
+            if (birthDate > currentDate) {
+                MultiTools.showError('Birth date cannot be in the future.');
+                return;
+            }
+
+            const diffTime = currentDate - birthDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+
+            // Calculate years, months, and days
+            let years = currentDate.getFullYear() - birthDate.getFullYear();
+            let months = currentDate.getMonth() - birthDate.getMonth();
+            let days = currentDate.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const resultText = `Age: ${years} years, ${months} months, ${days} days`;
+            document.getElementById('resultText').textContent = resultText;
+
+            // Detailed breakdown
+            const detailedBreakdown = document.getElementById('detailedBreakdown');
+            detailedBreakdown.innerHTML = `
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>Years</h6>
+                                <p class="mb-0">${years}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>Months</h6>
+                                <p class="mb-0">${months}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>Days</h6>
+                                <p class="mb-0">${days}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>Total Days</h6>
+                                <p class="mb-0">${diffDays}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>Hours</h6>
+                                <p class="mb-0">${diffHours}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>Minutes</h6>
+                                <p class="mb-0">${diffMinutes}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Date information
+            const dateInfo = document.getElementById('dateInfo');
+            const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            dateInfo.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <h6>Birth Date</h6>
+                        <p class="mb-2">${birthDate.toDateString()}</p>
+                        <p class="mb-0 small">Day of week: ${weekdays[birthDate.getDay()]}</p>
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h6>Current Date</h6>
+                        <p class="mb-2">${currentDate.toDateString()}</p>
+                        <p class="mb-0 small">Day of week: ${weekdays[currentDate.getDay()]}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultContainer').style.display = 'block';
+            document.getElementById('copyBtn').style.display = 'inline-block';
+        }
+
+        function resetCalculator() {
+            document.getElementById('birthDate').value = '';
+            document.getElementById('currentDate').value = '';
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('copyBtn').style.display = 'none';
+        }
+
+        function copyResult() {
+            const resultText = document.getElementById('resultText').textContent;
+            MultiTools.copyToClipboard(resultText);
+        }
+
+        // Set default current date
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+
+            // Set today's date as default for current date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('currentDate').value = today;
+        });
+    </script>
+</body>
+</html> 

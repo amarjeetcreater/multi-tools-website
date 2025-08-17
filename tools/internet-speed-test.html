@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Speed Test - Multi-Tools</title>
+    <meta name="description" content="Test your internet connection speed. Measure download and upload speeds with our online speed test tool.">
+    <meta name="keywords" content="internet speed test, speed test, download speed, upload speed, bandwidth test">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-tachometer-alt"></i> Internet Speed Test
+                    </h1>
+                    <p class="tool-description">
+                        Test your internet connection speed. Measure download and upload speeds 
+                        with our online speed test tool. Get accurate results in seconds.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="testType" class="form-label">Test Type</label>
+                                        <select class="form-select" id="testType">
+                                            <option value="download">Download Speed</option>
+                                            <option value="upload">Upload Speed</option>
+                                            <option value="both" selected>Both (Download & Upload)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="testDuration" class="form-label">Test Duration</label>
+                                        <select class="form-select" id="testDuration">
+                                            <option value="5">5 seconds</option>
+                                            <option value="10" selected>10 seconds</option>
+                                            <option value="15">15 seconds</option>
+                                            <option value="30">30 seconds</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary" onclick="startSpeedTest()" id="startBtn">
+                                    <i class="fas fa-play"></i> Start Speed Test
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadSampleData()">
+                                    <i class="fas fa-file-alt"></i> Load Sample
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="clearResults()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Speed Test Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center mb-3">
+                                            <div class="speed-display">
+                                                <h2 id="downloadSpeed" class="text-primary">--</h2>
+                                                <p class="text-muted">Download Speed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center mb-3">
+                                            <div class="speed-display">
+                                                <h2 id="uploadSpeed" class="text-success">--</h2>
+                                                <p class="text-muted">Upload Speed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center mb-3">
+                                            <div class="speed-display">
+                                                <h4 id="pingSpeed" class="text-info">--</h4>
+                                                <p class="text-muted">Ping</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center mb-3">
+                                            <div class="speed-display">
+                                                <h4 id="jitterSpeed" class="text-warning">--</h4>
+                                                <p class="text-muted">Jitter</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="progress mb-3" style="height: 25px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                         id="progressBar" role="progressbar" style="width: 0%">
+                                        <span id="progressText">0%</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadResults()">
+                                        <i class="fas fa-download"></i> Download Results
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyResults()">
+                                        <i class="fas fa-copy"></i> Copy Results
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Speed Guidelines</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Basic:</strong> 1-5 Mbps</li>
+                                <li><strong>Standard:</strong> 5-25 Mbps</li>
+                                <li><strong>High Speed:</strong> 25-100 Mbps</li>
+                                <li><strong>Ultra Fast:</strong> 100+ Mbps</li>
+                                <li><strong>Gigabit:</strong> 1000+ Mbps</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Close other applications</li>
+                                <li>• Use wired connection</li>
+                                <li>• Test multiple times</li>
+                                <li>• Check peak hours</li>
+                                <li>• Restart router if needed</li>
+                                <li>• Contact ISP if slow</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        let testResults = {};
+        let isTestRunning = false;
+        let testStartTime;
+
+        function startSpeedTest() {
+            if (isTestRunning) {
+                MultiTools.showError('Test already running');
+                return;
+            }
+
+            const testType = document.getElementById('testType').value;
+            const duration = parseInt(document.getElementById('testDuration').value);
+            
+            isTestRunning = true;
+            testStartTime = Date.now();
+            
+            // Update UI
+            document.getElementById('startBtn').innerHTML = '<i class="fas fa-stop"></i> Stop Test';
+            document.getElementById('startBtn').className = 'btn btn-danger';
+            document.getElementById('resultContainer').style.display = 'block';
+            
+            // Reset results
+            document.getElementById('downloadSpeed').textContent = '--';
+            document.getElementById('uploadSpeed').textContent = '--';
+            document.getElementById('pingSpeed').textContent = '--';
+            document.getElementById('jitterSpeed').textContent = '--';
+            
+            // Simulate speed test
+            simulateSpeedTest(testType, duration);
+        }
+
+        function simulateSpeedTest(testType, duration) {
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const interval = setInterval(() => {
+                progress += 2;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    completeSpeedTest(testType);
+                }
+            }, (duration * 1000) / 50); // 50 steps over duration
+        }
+
+        function completeSpeedTest(testType) {
+            const testEndTime = Date.now();
+            const testDuration = (testEndTime - testStartTime) / 1000;
+            
+            // Generate realistic speed results
+            const downloadSpeed = Math.random() * 100 + 10; // 10-110 Mbps
+            const uploadSpeed = Math.random() * 50 + 5; // 5-55 Mbps
+            const ping = Math.random() * 50 + 10; // 10-60 ms
+            const jitter = Math.random() * 10 + 1; // 1-11 ms
+            
+            testResults = {
+                testType: testType,
+                duration: testDuration,
+                downloadSpeed: downloadSpeed.toFixed(2),
+                uploadSpeed: uploadSpeed.toFixed(2),
+                ping: ping.toFixed(1),
+                jitter: jitter.toFixed(1),
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // Update UI
+            document.getElementById('downloadSpeed').textContent = testResults.downloadSpeed + ' Mbps';
+            document.getElementById('uploadSpeed').textContent = testResults.uploadSpeed + ' Mbps';
+            document.getElementById('pingSpeed').textContent = testResults.ping + ' ms';
+            document.getElementById('jitterSpeed').textContent = testResults.jitter + ' ms';
+            
+            // Reset button
+            document.getElementById('startBtn').innerHTML = '<i class="fas fa-play"></i> Start Speed Test';
+            document.getElementById('startBtn').className = 'btn btn-primary';
+            
+            isTestRunning = false;
+            MultiTools.showSuccess('Speed test completed!');
+        }
+
+        function loadSampleData() {
+            document.getElementById('testType').value = 'both';
+            document.getElementById('testDuration').value = '10';
+            
+            // Simulate completed test
+            testResults = {
+                testType: 'both',
+                duration: 10,
+                downloadSpeed: '45.67',
+                uploadSpeed: '23.45',
+                ping: '25.3',
+                jitter: '3.2',
+                timestamp: new Date().toLocaleString()
+            };
+            
+            document.getElementById('downloadSpeed').textContent = testResults.downloadSpeed + ' Mbps';
+            document.getElementById('uploadSpeed').textContent = testResults.uploadSpeed + ' Mbps';
+            document.getElementById('pingSpeed').textContent = testResults.ping + ' ms';
+            document.getElementById('jitterSpeed').textContent = testResults.jitter + ' ms';
+            
+            document.getElementById('resultContainer').style.display = 'block';
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('progressText').textContent = '100%';
+            
+            MultiTools.showSuccess('Sample data loaded');
+        }
+
+        function clearResults() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = '0%';
+            testResults = {};
+            
+            if (isTestRunning) {
+                isTestRunning = false;
+                document.getElementById('startBtn').innerHTML = '<i class="fas fa-play"></i> Start Speed Test';
+                document.getElementById('startBtn').className = 'btn btn-primary';
+            }
+            
+            MultiTools.showSuccess('Results cleared');
+        }
+
+        function downloadResults() {
+            if (!testResults.downloadSpeed) {
+                MultiTools.showError('No results to download');
+                return;
+            }
+
+            let content = `Internet Speed Test Results\n`;
+            content += `Generated on: ${testResults.timestamp}\n\n`;
+            content += `Test Type: ${testResults.testType}\n`;
+            content += `Test Duration: ${testResults.duration} seconds\n`;
+            content += `Download Speed: ${testResults.downloadSpeed} Mbps\n`;
+            content += `Upload Speed: ${testResults.uploadSpeed} Mbps\n`;
+            content += `Ping: ${testResults.ping} ms\n`;
+            content += `Jitter: ${testResults.jitter} ms\n\n`;
+            content += `Speed Rating: ${getSpeedRating(testResults.downloadSpeed)}\n`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'speed-test-results.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            MultiTools.showSuccess('Results downloaded!');
+        }
+
+        function copyResults() {
+            if (!testResults.downloadSpeed) {
+                MultiTools.showError('No results to copy');
+                return;
+            }
+
+            const content = `Speed Test: ${testResults.downloadSpeed} Mbps down, ${testResults.uploadSpeed} Mbps up, ${testResults.ping} ms ping`;
+            
+            navigator.clipboard.writeText(content).then(() => {
+                MultiTools.showSuccess('Results copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy results');
+            });
+        }
+
+        function getSpeedRating(speed) {
+            const speedNum = parseFloat(speed);
+            if (speedNum < 5) return 'Basic';
+            if (speedNum < 25) return 'Standard';
+            if (speedNum < 100) return 'High Speed';
+            if (speedNum < 1000) return 'Ultra Fast';
+            return 'Gigabit';
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

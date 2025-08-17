@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Photo Downloader - Free Online Tools</title>
+    <meta name="description" content="Download Instagram photos and stories easily. Save Instagram media to your device.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="3374471779" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Instagram Photo Downloader</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> Due to Instagram's API restrictions, this tool can only download public photos. For private content, you need to be logged in to Instagram.
+                        </div>
+                        <div class="mb-4">
+                            <label for="instagramUrl" class="form-label">Enter Instagram Post URL:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="instagramUrl" placeholder="https://www.instagram.com/p/...">
+                                <button class="btn btn-primary" onclick="downloadInstagramMedia()">Download</button>
+                            </div>
+                            <small class="text-muted">Works with public Instagram posts only</small>
+                        </div>
+                        <div id="mediaPreview" class="d-none">
+                            <h5 class="mb-3">Media Preview:</h5>
+                            <div class="text-center">
+                                <img id="previewImage" src="" alt="Instagram media preview" class="img-fluid mb-3">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" onclick="downloadMedia()"><i class="fas fa-download"></i> Download Media</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">How to Download Instagram Photos</h5>
+                        <ol class="mb-0">
+                            <li>Copy the URL of the Instagram post you want to download</li>
+                            <li>Paste the URL in the input field above</li>
+                            <li>Click the "Download" button</li>
+                            <li>Preview the media and click "Download Media" to save it</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="1701935776" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        function downloadInstagramMedia() {
+            const url = document.getElementById('instagramUrl').value.trim();
+            const mediaPreview = document.getElementById('mediaPreview');
+            const errorMessage = document.getElementById('errorMessage');
+            const previewImage = document.getElementById('previewImage');
+
+            if (!isValidInstagramUrl(url)) {
+                showError('Please enter a valid Instagram post URL');
+                return;
+            }
+
+            // In a real implementation, this would make an API call to Instagram
+            // For demo purposes, we'll show an error message about API restrictions
+            showError('Instagram API access is restricted. Due to Instagram\'s platform policy, direct downloading is not available. Please use Instagram\'s official features to save media.');
+        }
+
+        function isValidInstagramUrl(url) {
+            return url.match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|\/)([\/p\/])(.[a-zA-Z0-9-_\.]+)/i);
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const mediaPreview = document.getElementById('mediaPreview');
+            
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('d-none');
+            mediaPreview.classList.add('d-none');
+        }
+
+        function downloadMedia() {
+            // This function would handle the actual download in a real implementation
+            alert('Download functionality is not available due to Instagram API restrictions.');
+        }
+
+        // Initialize ads
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</body>
+</html>

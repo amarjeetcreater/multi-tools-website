@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator - Multi-Tools</title>
+    <meta name="description" content="Generate professional invoices online with customizable fields and templates. Create and download invoices easily.">
+    <meta name="keywords" content="invoice generator, invoice maker, professional invoice, billing, invoice template">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-receipt"></i> Invoice Generator
+                    </h1>
+                    <p class="tool-description">
+                        Generate professional invoices online with customizable fields and templates. 
+                        Create and download invoices easily for your business needs.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="invoiceForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>From (Your Business)</h5>
+                                        <div class="mb-3">
+                                            <label for="fromName" class="form-label">Business Name</label>
+                                            <input type="text" class="form-control" id="fromName" 
+                                                   placeholder="Your Business Name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="fromAddress" class="form-label">Address</label>
+                                            <textarea class="form-control" id="fromAddress" rows="3" 
+                                                      placeholder="Your business address"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="fromEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="fromEmail" 
+                                                   placeholder="your@email.com">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="fromPhone" class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" id="fromPhone" 
+                                                   placeholder="+1 (555) 123-4567">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>To (Client)</h5>
+                                        <div class="mb-3">
+                                            <label for="toName" class="form-label">Client Name</label>
+                                            <input type="text" class="form-control" id="toName" 
+                                                   placeholder="Client Name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="toAddress" class="form-label">Address</label>
+                                            <textarea class="form-control" id="toAddress" rows="3" 
+                                                      placeholder="Client address"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="toEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="toEmail" 
+                                                   placeholder="client@email.com">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="invoiceNumber" class="form-label">Invoice Number</label>
+                                            <input type="text" class="form-control" id="invoiceNumber" 
+                                                   placeholder="INV-001" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="invoiceDate" class="form-label">Invoice Date</label>
+                                            <input type="date" class="form-control" id="invoiceDate" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="dueDate" class="form-label">Due Date</label>
+                                    <input type="date" class="form-control" id="dueDate" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="items" class="form-label">Items/Services</label>
+                                    <div id="itemsContainer">
+                                        <div class="item-row row mb-2">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" placeholder="Item description" 
+                                                       name="itemDesc[]" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="number" class="form-control" placeholder="Qty" 
+                                                       name="itemQty[]" min="1" value="1" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="number" class="form-control" placeholder="Rate" 
+                                                       name="itemRate[]" min="0" step="0.01" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control" placeholder="Amount" 
+                                                       name="itemAmount[]" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="addItem()">
+                                        <i class="fas fa-plus"></i> Add Item
+                                    </button>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="subtotal" class="form-label">Subtotal</label>
+                                            <input type="text" class="form-control" id="subtotal" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="taxRate" class="form-label">Tax Rate (%)</label>
+                                            <input type="number" class="form-control" id="taxRate" 
+                                                   min="0" max="100" step="0.01" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="taxAmount" class="form-label">Tax Amount</label>
+                                            <input type="text" class="form-control" id="taxAmount" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="total" class="form-label">Total</label>
+                                            <input type="text" class="form-control" id="total" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="notes" class="form-label">Notes</label>
+                                    <textarea class="form-control" id="notes" rows="3" 
+                                              placeholder="Additional notes or terms"></textarea>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-magic"></i> Generate Invoice
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSampleData()">
+                                        <i class="fas fa-file-alt"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="clearInvoice()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Generated Invoice</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="invoiceOutput"></div>
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadInvoice()">
+                                        <i class="fas fa-download"></i> Download PDF
+                                    </button>
+                                    <button class="btn btn-info" onclick="printInvoice()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                    <button class="btn btn-warning" onclick="copyInvoice()">
+                                        <i class="fas fa-copy"></i> Copy Text
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Invoice Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Use clear item descriptions</li>
+                                <li>• Include payment terms</li>
+                                <li>• Add your business details</li>
+                                <li>• Set reasonable due dates</li>
+                                <li>• Keep professional formatting</li>
+                                <li>• Include contact information</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Key Elements</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Invoice number</li>
+                                <li>• Date and due date</li>
+                                <li>• Business and client info</li>
+                                <li>• Itemized services</li>
+                                <li>• Subtotal and tax</li>
+                                <li>• Payment terms</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        // Set default dates
+        document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('dueDate').value = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+        // Calculate amounts when items change
+        document.addEventListener('input', function(e) {
+            if (e.target.name === 'itemQty[]' || e.target.name === 'itemRate[]') {
+                calculateItemAmount(e.target);
+                calculateTotals();
+            }
+            if (e.target.id === 'taxRate') {
+                calculateTotals();
+            }
+        });
+
+        document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateInvoice();
+        });
+
+        function addItem() {
+            const container = document.getElementById('itemsContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'item-row row mb-2';
+            newRow.innerHTML = `
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Item description" 
+                           name="itemDesc[]" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Qty" 
+                           name="itemQty[]" min="1" value="1" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Rate" 
+                           name="itemRate[]" min="0" step="0.01" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" placeholder="Amount" 
+                           name="itemAmount[]" readonly>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function calculateItemAmount(input) {
+            const row = input.closest('.item-row');
+            const qty = parseFloat(row.querySelector('[name="itemQty[]"]').value) || 0;
+            const rate = parseFloat(row.querySelector('[name="itemRate[]"]').value) || 0;
+            const amount = qty * rate;
+            row.querySelector('[name="itemAmount[]"]').value = amount.toFixed(2);
+        }
+
+        function calculateTotals() {
+            const amounts = Array.from(document.querySelectorAll('[name="itemAmount[]"]'))
+                .map(input => parseFloat(input.value) || 0);
+            const subtotal = amounts.reduce((sum, amount) => sum + amount, 0);
+            
+            document.getElementById('subtotal').value = subtotal.toFixed(2);
+            
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const taxAmount = subtotal * (taxRate / 100);
+            const total = subtotal + taxAmount;
+            
+            document.getElementById('taxAmount').value = taxAmount.toFixed(2);
+            document.getElementById('total').value = total.toFixed(2);
+        }
+
+        function generateInvoice() {
+            const fromName = document.getElementById('fromName').value;
+            const toName = document.getElementById('toName').value;
+            const invoiceNumber = document.getElementById('invoiceNumber').value;
+            
+            if (!fromName || !toName || !invoiceNumber) {
+                MultiTools.showError('Please fill in all required fields');
+                return;
+            }
+
+            const invoiceHTML = createInvoiceHTML();
+            document.getElementById('invoiceOutput').innerHTML = invoiceHTML;
+            document.getElementById('resultContainer').style.display = 'block';
+            MultiTools.showSuccess('Invoice generated successfully!');
+        }
+
+        function createInvoiceHTML() {
+            const fromName = document.getElementById('fromName').value;
+            const fromAddress = document.getElementById('fromAddress').value;
+            const fromEmail = document.getElementById('fromEmail').value;
+            const fromPhone = document.getElementById('fromPhone').value;
+            
+            const toName = document.getElementById('toName').value;
+            const toAddress = document.getElementById('toAddress').value;
+            const toEmail = document.getElementById('toEmail').value;
+            
+            const invoiceNumber = document.getElementById('invoiceNumber').value;
+            const invoiceDate = document.getElementById('invoiceDate').value;
+            const dueDate = document.getElementById('dueDate').value;
+            const notes = document.getElementById('notes').value;
+            
+            const subtotal = document.getElementById('subtotal').value;
+            const taxAmount = document.getElementById('taxAmount').value;
+            const total = document.getElementById('total').value;
+
+            // Get items
+            const items = [];
+            const descs = document.querySelectorAll('[name="itemDesc[]"]');
+            const qtys = document.querySelectorAll('[name="itemQty[]"]');
+            const rates = document.querySelectorAll('[name="itemRate[]"]');
+            const amounts = document.querySelectorAll('[name="itemAmount[]"]');
+
+            for (let i = 0; i < descs.length; i++) {
+                if (descs[i].value.trim()) {
+                    items.push({
+                        description: descs[i].value,
+                        qty: qtys[i].value,
+                        rate: rates[i].value,
+                        amount: amounts[i].value
+                    });
+                }
+            }
+
+            return `
+                <div class="invoice-container" style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; line-height: 1.6;">
+                    <div class="invoice-header" style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #007bff; padding-bottom: 20px;">
+                        <h1 style="color: #007bff; margin-bottom: 10px;">INVOICE</h1>
+                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                            <div style="text-align: left;">
+                                <h4>From:</h4>
+                                <p><strong>${fromName}</strong></p>
+                                ${fromAddress ? `<p>${fromAddress}</p>` : ''}
+                                ${fromEmail ? `<p>Email: ${fromEmail}</p>` : ''}
+                                ${fromPhone ? `<p>Phone: ${fromPhone}</p>` : ''}
+                            </div>
+                            <div style="text-align: right;">
+                                <h4>To:</h4>
+                                <p><strong>${toName}</strong></p>
+                                ${toAddress ? `<p>${toAddress}</p>` : ''}
+                                ${toEmail ? `<p>Email: ${toEmail}</p>` : ''}
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                            <div>
+                                <strong>Invoice #:</strong> ${invoiceNumber}<br>
+                                <strong>Date:</strong> ${invoiceDate}
+                            </div>
+                            <div>
+                                <strong>Due Date:</strong> ${dueDate}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-items" style="margin-bottom: 30px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="border: 1px solid #dee2e6; padding: 10px; text-align: left;">Description</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 10px; text-align: center;">Qty</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 10px; text-align: right;">Rate</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 10px; text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${items.map(item => `
+                                    <tr>
+                                        <td style="border: 1px solid #dee2e6; padding: 10px;">${item.description}</td>
+                                        <td style="border: 1px solid #dee2e6; padding: 10px; text-align: center;">${item.qty}</td>
+                                        <td style="border: 1px solid #dee2e6; padding: 10px; text-align: right;">$${item.rate}</td>
+                                        <td style="border: 1px solid #dee2e6; padding: 10px; text-align: right;">$${item.amount}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="invoice-totals" style="text-align: right; margin-bottom: 30px;">
+                        <p><strong>Subtotal:</strong> $${subtotal}</p>
+                        <p><strong>Tax:</strong> $${taxAmount}</p>
+                        <h3 style="color: #007bff;"><strong>Total:</strong> $${total}</h3>
+                    </div>
+
+                    ${notes ? `
+                        <div class="invoice-notes" style="margin-bottom: 30px;">
+                            <h4>Notes:</h4>
+                            <p>${notes}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="invoice-footer" style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                        <p style="color: #6c757d;">Thank you for your business!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadSampleData() {
+            document.getElementById('fromName').value = 'TechCorp Solutions';
+            document.getElementById('fromAddress').value = '123 Business Street\nNew York, NY 10001';
+            document.getElementById('fromEmail').value = 'billing@techcorp.com';
+            document.getElementById('fromPhone').value = '+1 (555) 123-4567';
+            
+            document.getElementById('toName').value = 'Client Company Inc.';
+            document.getElementById('toAddress').value = '456 Client Avenue\nLos Angeles, CA 90210';
+            document.getElementById('toEmail').value = 'accounts@clientcompany.com';
+            
+            document.getElementById('invoiceNumber').value = 'INV-2024-001';
+            
+            // Clear existing items and add sample items
+            document.getElementById('itemsContainer').innerHTML = '';
+            addItem();
+            addItem();
+            
+            const items = document.querySelectorAll('.item-row');
+            const descs = items[0].querySelectorAll('[name="itemDesc[]"]');
+            const qtys = items[0].querySelectorAll('[name="itemQty[]"]');
+            const rates = items[0].querySelectorAll('[name="itemRate[]"]');
+            
+            descs[0].value = 'Web Development Services';
+            qtys[0].value = '40';
+            rates[0].value = '75.00';
+            
+            descs[1].value = 'UI/UX Design';
+            qtys[1].value = '20';
+            rates[1].value = '50.00';
+            
+            // Trigger calculations
+            document.querySelectorAll('[name="itemQty[]"], [name="itemRate[]"]').forEach(input => {
+                calculateItemAmount(input);
+            });
+            calculateTotals();
+            
+            document.getElementById('notes').value = 'Payment due within 30 days. Late payments subject to 1.5% monthly interest.';
+            
+            MultiTools.showSuccess('Sample data loaded!');
+        }
+
+        function clearInvoice() {
+            document.getElementById('invoiceForm').reset();
+            document.getElementById('itemsContainer').innerHTML = '';
+            addItem();
+            document.getElementById('resultContainer').style.display = 'none';
+            
+            // Reset dates
+            document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('dueDate').value = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            
+            MultiTools.showSuccess('Invoice form cleared');
+        }
+
+        function downloadInvoice() {
+            const invoiceContent = document.getElementById('invoiceOutput').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Invoice - ${document.getElementById('invoiceNumber').value}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            @media print { body { margin: 0; } }
+                        </style>
+                    </head>
+                    <body>${invoiceContent}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function printInvoice() {
+            window.print();
+        }
+
+        function copyInvoice() {
+            const invoiceText = extractInvoiceText();
+            navigator.clipboard.writeText(invoiceText).then(() => {
+                MultiTools.showSuccess('Invoice text copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy invoice text');
+            });
+        }
+
+        function extractInvoiceText() {
+            const fromName = document.getElementById('fromName').value;
+            const toName = document.getElementById('toName').value;
+            const invoiceNumber = document.getElementById('invoiceNumber').value;
+            const invoiceDate = document.getElementById('invoiceDate').value;
+            const dueDate = document.getElementById('dueDate').value;
+            const subtotal = document.getElementById('subtotal').value;
+            const taxAmount = document.getElementById('taxAmount').value;
+            const total = document.getElementById('total').value;
+            const notes = document.getElementById('notes').value;
+
+            return `INVOICE
+
+From: ${fromName}
+To: ${toName}
+Invoice #: ${invoiceNumber}
+Date: ${invoiceDate}
+Due Date: ${dueDate}
+
+Subtotal: $${subtotal}
+Tax: $${taxAmount}
+Total: $${total}
+
+${notes ? `Notes: ${notes}` : ''}`;
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

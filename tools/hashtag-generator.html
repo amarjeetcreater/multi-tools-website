@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashtag Generator - Free Online Tools</title>
+    <meta name="description" content="Generate relevant hashtags for social media posts. Get trending and popular hashtags for better engagement.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+    <style>
+        .hashtag-chip {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .hashtag-chip:hover {
+            background-color: #dee2e6;
+        }
+        .hashtag-chip.selected {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="3374471779" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Hashtag Generator</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="keywords" class="form-label">Enter Keywords or Topic:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="keywords" placeholder="Enter keywords separated by commas">
+                                <button class="btn btn-primary" onclick="generateHashtags()">Generate Hashtags</button>
+                            </div>
+                            <small class="text-muted">Example: travel, photography, nature</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Select Platform:</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="platform" id="instagram" value="instagram" checked>
+                                <label class="btn btn-outline-primary" for="instagram"><i class="fab fa-instagram"></i> Instagram</label>
+
+                                <input type="radio" class="btn-check" name="platform" id="twitter" value="twitter">
+                                <label class="btn btn-outline-primary" for="twitter"><i class="fab fa-twitter"></i> Twitter</label>
+
+                                <input type="radio" class="btn-check" name="platform" id="tiktok" value="tiktok">
+                                <label class="btn btn-outline-primary" for="tiktok"><i class="fab fa-tiktok"></i> TikTok</label>
+                            </div>
+                        </div>
+
+                        <div id="hashtagResults" class="d-none">
+                            <h5 class="mb-3">Generated Hashtags:</h5>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Popular Hashtags</h6>
+                                    <div id="popularHashtags" class="mb-3"></div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Niche Hashtags</h6>
+                                    <div id="nicheHashtags" class="mb-3"></div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary" onclick="copySelectedHashtags()"><i class="fas fa-copy"></i> Copy Selected</button>
+                                <button class="btn btn-success" onclick="copyAllHashtags()"><i class="fas fa-copy"></i> Copy All</button>
+                            </div>
+                        </div>
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Tips for Using Hashtags</h5>
+                        <ul class="mb-0">
+                            <li>Use a mix of popular and niche hashtags</li>
+                            <li>Don't use too many hashtags (Instagram: max 30, Twitter: 2-3)</li>
+                            <li>Keep hashtags relevant to your content</li>
+                            <li>Research trending hashtags in your niche</li>
+                            <li>Avoid banned or flagged hashtags</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Ad Container -->
+    <div class="container my-3">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7389985631571522" data-ad-slot="1701935776" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Sample hashtag data (in a real implementation, this would come from an API)
+        const sampleHashtags = {
+            travel: ['#travel', '#wanderlust', '#travelgram', '#instatravel', '#adventure', '#travelphotography', '#explore', '#vacation', '#traveling', '#tourism'],
+            photography: ['#photography', '#photooftheday', '#photographer', '#photo', '#naturephotography', '#photoshoot', '#instagram', '#picoftheday', '#canon', '#nikon'],
+            nature: ['#nature', '#naturelover', '#naturelovers', '#naturephotography', '#outdoors', '#landscape', '#wildlife', '#mountains', '#hiking', '#environment']
+        };
+
+        function generateHashtags() {
+            const keywords = document.getElementById('keywords').value.trim();
+            const platform = document.querySelector('input[name="platform"]:checked').value;
+            const hashtagResults = document.getElementById('hashtagResults');
+            const popularHashtags = document.getElementById('popularHashtags');
+            const nicheHashtags = document.getElementById('nicheHashtags');
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (!keywords) {
+                showError('Please enter keywords to generate hashtags');
+                return;
+            }
+
+            // Clear previous results
+            popularHashtags.innerHTML = '';
+            nicheHashtags.innerHTML = '';
+            errorMessage.classList.add('d-none');
+            hashtagResults.classList.remove('d-none');
+
+            // Generate hashtags based on keywords
+            const keywordArray = keywords.split(',').map(k => k.trim().toLowerCase());
+            let generatedHashtags = [];
+
+            keywordArray.forEach(keyword => {
+                if (sampleHashtags[keyword]) {
+                    generatedHashtags = generatedHashtags.concat(sampleHashtags[keyword]);
+                }
+            });
+
+            // If no matches found in sample data
+            if (generatedHashtags.length === 0) {
+                // Generate some basic hashtags from the keywords
+                generatedHashtags = keywordArray.map(k => '#' + k.replace(/\s+/g, ''));
+            }
+
+            // Split into popular and niche hashtags
+            const popular = generatedHashtags.slice(0, Math.floor(generatedHashtags.length / 2));
+            const niche = generatedHashtags.slice(Math.floor(generatedHashtags.length / 2));
+
+            // Display hashtags
+            popular.forEach(hashtag => {
+                const chip = createHashtagChip(hashtag);
+                popularHashtags.appendChild(chip);
+            });
+
+            niche.forEach(hashtag => {
+                const chip = createHashtagChip(hashtag);
+                nicheHashtags.appendChild(chip);
+            });
+        }
+
+        function createHashtagChip(hashtag) {
+            const chip = document.createElement('span');
+            chip.className = 'hashtag-chip';
+            chip.textContent = hashtag;
+            chip.onclick = function() {
+                this.classList.toggle('selected');
+            };
+            return chip;
+        }
+
+        function copySelectedHashtags() {
+            const selected = document.querySelectorAll('.hashtag-chip.selected');
+            if (selected.length === 0) {
+                alert('Please select hashtags to copy');
+                return;
+            }
+            const hashtags = Array.from(selected).map(chip => chip.textContent).join(' ');
+            copyToClipboard(hashtags);
+        }
+
+        function copyAllHashtags() {
+            const allHashtags = document.querySelectorAll('.hashtag-chip');
+            const hashtags = Array.from(allHashtags).map(chip => chip.textContent).join(' ');
+            copyToClipboard(hashtags);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Hashtags copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy hashtags:', err);
+                alert('Failed to copy hashtags. Please try again.');
+            });
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const hashtagResults = document.getElementById('hashtagResults');
+            
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('d-none');
+            hashtagResults.classList.add('d-none');
+        }
+
+        // Initialize ads
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</body>
+</html>

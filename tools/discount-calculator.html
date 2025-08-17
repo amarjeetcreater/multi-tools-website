@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate discounts, final prices, and savings with our free online discount calculator. Perfect for shopping and business calculations.">
+    <meta name="keywords" content="discount calculator, sale price calculator, savings calculator, percentage discount, online calculator">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-tags"></i> Discount Calculator</h1>
+                <p>Calculate discounts, final prices, and savings for shopping and business scenarios.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="discountTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="percentage-tab" data-bs-toggle="tab" data-bs-target="#percentage" type="button" role="tab">Percentage Discount</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="amount-tab" data-bs-toggle="tab" data-bs-target="#amount" type="button" role="tab">Fixed Amount Discount</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="reverse-tab" data-bs-toggle="tab" data-bs-target="#reverse" type="button" role="tab">Reverse Calculation</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="discountTabContent">
+                                <!-- Percentage Discount Tab -->
+                                <div class="tab-pane fade show active" id="percentage" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="originalPrice" class="form-label">Original Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="originalPrice" placeholder="Enter original price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="discountPercent" class="form-label">Discount Percentage</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="discountPercent" placeholder="Enter discount %" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculatePercentageDiscount()">
+                                        <i class="fas fa-calculator"></i> Calculate Discount
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetPercentage()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Fixed Amount Discount Tab -->
+                                <div class="tab-pane fade" id="amount" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="originalPriceFixed" class="form-label">Original Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="originalPriceFixed" placeholder="Enter original price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="discountAmount" class="form-label">Discount Amount</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="discountAmount" placeholder="Enter discount amount" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateAmountDiscount()">
+                                        <i class="fas fa-calculator"></i> Calculate Discount
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetAmount()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Reverse Calculation Tab -->
+                                <div class="tab-pane fade" id="reverse" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="finalPrice" class="form-label">Final Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="finalPrice" placeholder="Enter final price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="discountPercentReverse" class="form-label">Discount Percentage</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="discountPercentReverse" placeholder="Enter discount %" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateReverseDiscount()">
+                                        <i class="fas fa-calculator"></i> Calculate Original Price
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetReverse()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="result" class="mt-4"></div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Discount Formulas</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Discount Amount:</strong> Original Price × Discount %</li>
+                                <li><strong>Final Price:</strong> Original Price - Discount Amount</li>
+                                <li><strong>Savings:</strong> Original Price - Final Price</li>
+                                <li><strong>Effective Discount:</strong> (Discount Amount ÷ Original Price) × 100</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Common Discounts</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small>10% off = 0.9x price</small><br>
+                                    <small>20% off = 0.8x price</small><br>
+                                    <small>25% off = 0.75x price</small><br>
+                                    <small>50% off = 0.5x price</small>
+                                </div>
+                                <div class="col-6">
+                                    <small>15% off = 0.85x price</small><br>
+                                    <small>30% off = 0.7x price</small><br>
+                                    <small>40% off = 0.6x price</small><br>
+                                    <small>75% off = 0.25x price</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-shopping-cart"></i> Shopping Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li>• Compare final prices, not just discount percentages</li>
+                                <li>• Check if shipping costs offset the discount</li>
+                                <li>• Look for additional coupons or cashback</li>
+                                <li>• Consider the original price vs. market value</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+
+    <script>
+        function calculatePercentageDiscount() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice').value);
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value);
+
+            if (isNaN(originalPrice) || isNaN(discountPercent) || discountPercent < 0 || discountPercent > 100) {
+                MultiTools.showError('Please enter valid numbers. Discount percentage must be between 0 and 100.');
+                return;
+            }
+
+            const discountAmount = (originalPrice * discountPercent) / 100;
+            const finalPrice = originalPrice - discountAmount;
+            const savings = originalPrice - finalPrice;
+            const effectiveDiscount = (discountAmount / originalPrice) * 100;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tags"></i> Discount Calculation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-success">$${finalPrice.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Final Price</strong></p>
+                                <p class="mb-0"><strong>Original Price:</strong> $${originalPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Discount:</strong> ${discountPercent}%</p>
+                                <p class="mb-0"><strong>Discount Amount:</strong> $${discountAmount.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-success">
+                                    <h6><i class="fas fa-piggy-bank"></i> You Save</h6>
+                                    <h4 class="text-success mb-0">$${savings.toFixed(2)}</h4>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${discountPercent}%" aria-valuenow="${discountPercent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">${discountPercent}% discount applied</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('Final Price: $${finalPrice.toFixed(2)}, Savings: $${savings.toFixed(2)}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function calculateAmountDiscount() {
+            const originalPrice = parseFloat(document.getElementById('originalPriceFixed').value);
+            const discountAmount = parseFloat(document.getElementById('discountAmount').value);
+
+            if (isNaN(originalPrice) || isNaN(discountAmount) || discountAmount < 0 || discountAmount > originalPrice) {
+                MultiTools.showError('Please enter valid numbers. Discount amount cannot exceed original price.');
+                return;
+            }
+
+            const finalPrice = originalPrice - discountAmount;
+            const savings = originalPrice - finalPrice;
+            const discountPercent = (discountAmount / originalPrice) * 100;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-dollar-sign"></i> Fixed Amount Discount</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-success">$${finalPrice.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Final Price</strong></p>
+                                <p class="mb-0"><strong>Original Price:</strong> $${originalPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Discount Amount:</strong> $${discountAmount.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Discount Percentage:</strong> ${discountPercent.toFixed(2)}%</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-success">
+                                    <h6><i class="fas fa-piggy-bank"></i> You Save</h6>
+                                    <h4 class="text-success mb-0">$${savings.toFixed(2)}</h4>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${discountPercent}%" aria-valuenow="${discountPercent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">${discountPercent.toFixed(2)}% effective discount</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('Final Price: $${finalPrice.toFixed(2)}, Savings: $${savings.toFixed(2)}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function calculateReverseDiscount() {
+            const finalPrice = parseFloat(document.getElementById('finalPrice').value);
+            const discountPercent = parseFloat(document.getElementById('discountPercentReverse').value);
+
+            if (isNaN(finalPrice) || isNaN(discountPercent) || discountPercent < 0 || discountPercent > 100) {
+                MultiTools.showError('Please enter valid numbers. Discount percentage must be between 0 and 100.');
+                return;
+            }
+
+            const originalPrice = finalPrice / (1 - discountPercent / 100);
+            const discountAmount = originalPrice - finalPrice;
+            const savings = originalPrice - finalPrice;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-undo"></i> Reverse Calculation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary">$${originalPrice.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Original Price</strong></p>
+                                <p class="mb-0"><strong>Final Price:</strong> $${finalPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Discount:</strong> ${discountPercent}%</p>
+                                <p class="mb-0"><strong>Discount Amount:</strong> $${discountAmount.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-info">
+                                    <h6><i class="fas fa-calculator"></i> Calculation</h6>
+                                    <small>Original Price = Final Price ÷ (1 - Discount %)</small>
+                                    <br><small>Original Price = $${finalPrice.toFixed(2)} ÷ (1 - ${discountPercent}%)</small>
+                                    <br><small>Original Price = $${finalPrice.toFixed(2)} ÷ ${(1 - discountPercent / 100).toFixed(3)}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('Original Price: $${originalPrice.toFixed(2)}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function resetPercentage() {
+            document.getElementById('originalPrice').value = '';
+            document.getElementById('discountPercent').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function resetAmount() {
+            document.getElementById('originalPriceFixed').value = '';
+            document.getElementById('discountAmount').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function resetReverse() {
+            document.getElementById('finalPrice').value = '';
+            document.getElementById('discountPercentReverse').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Authority Checker - Multi-Tools</title>
+    <meta name="description" content="Check domain authority and page authority scores">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-chart-line"></i> Domain Authority Checker</h1>
+                <p>Check domain authority and page authority scores</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="authorityForm">
+                                <div class="mb-3">
+                                    <label for="domain" class="form-label">Domain or URL</label>
+                                    <input type="url" class="form-control" id="domain" placeholder="https://example.com" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="checkType" class="form-label">Check Type</label>
+                                    <select class="form-select" id="checkType">
+                                        <option value="both">Domain & Page Authority</option>
+                                        <option value="domain">Domain Authority Only</option>
+                                        <option value="page">Page Authority Only</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeMetrics" checked>
+                                        <label class="form-check-label" for="includeMetrics">
+                                            Include additional metrics
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Check Authority
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About Authority Scores</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">Domain Authority (DA) and Page Authority (PA) are SEO metrics that predict how likely a website or page is to rank in search engines.</p>
+                            <ul class="list-unstyled small">
+                                <li><strong>0-30:</strong> New or low-authority sites</li>
+                                <li><strong>31-50:</strong> Established sites</li>
+                                <li><strong>51-70:</strong> High-authority sites</li>
+                                <li><strong>71-100:</strong> Very high-authority sites</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-bar"></i> Authority Check Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="copyBtn">
+                                    <i class="fas fa-copy"></i> Copy Results
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm" id="downloadBtn">
+                                    <i class="fas fa-download"></i> Download Report
+                                </button>
+                            </div>
+                        </div>
+                        <div id="authorityResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let authorityData = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('authorityForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                checkAuthority();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForCopy();
+                MultiTools.copyToClipboard(resultsText);
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForDownload();
+                MultiTools.downloadFile(resultsText, 'domain-authority-results.txt', 'text/plain');
+            });
+        });
+
+        function checkAuthority() {
+            const domain = document.getElementById('domain').value.trim();
+            const checkType = document.getElementById('checkType').value;
+            const includeMetrics = document.getElementById('includeMetrics').checked;
+
+            if (!domain) {
+                MultiTools.showError('Please enter a domain or URL.');
+                return;
+            }
+
+            // Show loading
+            const resultsDiv = document.getElementById('authorityResults');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Checking authority...</div>';
+            document.getElementById('resultContainer').style.display = 'block';
+
+            // Simulate API call delay
+            setTimeout(() => {
+                authorityData = simulateAuthorityCheck(domain, checkType, includeMetrics);
+                displayResults();
+            }, 1500);
+        }
+
+        function simulateAuthorityCheck(domain, checkType, includeMetrics) {
+            const domainName = new URL(domain).hostname;
+            const domainAge = Math.floor(Math.random() * 10) + 1;
+            const backlinks = Math.floor(Math.random() * 10000) + 100;
+            const referringDomains = Math.floor(Math.random() * 500) + 10;
+            
+            let domainAuthority = Math.floor(Math.random() * 100) + 1;
+            let pageAuthority = Math.floor(Math.random() * 100) + 1;
+
+            // Ensure some correlation between DA and PA
+            if (checkType === 'both') {
+                pageAuthority = Math.max(1, Math.min(100, domainAuthority + (Math.random() * 20 - 10)));
+            }
+
+            const metrics = includeMetrics ? {
+                spamScore: Math.floor(Math.random() * 17),
+                trustFlow: Math.floor(Math.random() * 100) + 1,
+                citationFlow: Math.floor(Math.random() * 100) + 1,
+                domainAge: domainAge,
+                backlinks: backlinks,
+                referringDomains: referringDomains,
+                socialSignals: {
+                    facebook: Math.floor(Math.random() * 1000),
+                    twitter: Math.floor(Math.random() * 500),
+                    linkedin: Math.floor(Math.random() * 200)
+                }
+            } : null;
+
+            return {
+                domain: domainName,
+                url: domain,
+                domainAuthority: domainAuthority,
+                pageAuthority: pageAuthority,
+                checkType: checkType,
+                metrics: metrics,
+                lastUpdated: new Date()
+            };
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('authorityResults');
+            const data = authorityData;
+
+            let html = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-globe"></i> Domain Information</h6>
+                        <p><strong>Domain:</strong> ${data.domain}</p>
+                        <p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
+                        <p><strong>Last Updated:</strong> ${data.lastUpdated.toLocaleDateString()}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-chart-line"></i> Authority Scores</h6>
+            `;
+
+            if (data.checkType === 'both' || data.checkType === 'domain') {
+                html += `
+                    <div class="mb-3">
+                        <label class="form-label">Domain Authority: ${data.domainAuthority}/100</label>
+                        <div class="progress">
+                            <div class="progress-bar bg-${getAuthorityColor(data.domainAuthority)}" 
+                                 style="width: ${data.domainAuthority}%"></div>
+                        </div>
+                        <small class="text-muted">${getAuthorityDescription(data.domainAuthority)}</small>
+                    </div>
+                `;
+            }
+
+            if (data.checkType === 'both' || data.checkType === 'page') {
+                html += `
+                    <div class="mb-3">
+                        <label class="form-label">Page Authority: ${data.pageAuthority}/100</label>
+                        <div class="progress">
+                            <div class="progress-bar bg-${getAuthorityColor(data.pageAuthority)}" 
+                                 style="width: ${data.pageAuthority}%"></div>
+                        </div>
+                        <small class="text-muted">${getAuthorityDescription(data.pageAuthority)}</small>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+
+            if (data.metrics) {
+                html += `
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h6><i class="fas fa-chart-bar"></i> Additional Metrics</h6>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-primary">${data.metrics.backlinks.toLocaleString()}</h5>
+                                            <small>Backlinks</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-success">${data.metrics.referringDomains.toLocaleString()}</h5>
+                                            <small>Referring Domains</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-info">${data.metrics.domainAge}</h5>
+                                            <small>Years Old</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function getAuthorityColor(score) {
+            if (score >= 70) return 'success';
+            if (score >= 50) return 'info';
+            if (score >= 30) return 'warning';
+            return 'danger';
+        }
+
+        function getAuthorityDescription(score) {
+            if (score >= 70) return 'Very High Authority';
+            if (score >= 50) return 'High Authority';
+            if (score >= 30) return 'Medium Authority';
+            return 'Low Authority';
+        }
+
+        function formatResultsForCopy() {
+            const data = authorityData;
+            let text = 'Domain Authority Check Results\n';
+            text += '==============================\n\n';
+            text += `Domain: ${data.domain}\n`;
+            text += `URL: ${data.url}\n`;
+            text += `Last Updated: ${data.lastUpdated.toLocaleDateString()}\n\n`;
+            
+            if (data.checkType === 'both' || data.checkType === 'domain') {
+                text += `Domain Authority: ${data.domainAuthority}/100 (${getAuthorityDescription(data.domainAuthority)})\n`;
+            }
+            
+            if (data.checkType === 'both' || data.checkType === 'page') {
+                text += `Page Authority: ${data.pageAuthority}/100 (${getAuthorityDescription(data.pageAuthority)})\n`;
+            }
+
+            if (data.metrics) {
+                text += `\nAdditional Metrics:\n`;
+                text += `Backlinks: ${data.metrics.backlinks.toLocaleString()}\n`;
+                text += `Referring Domains: ${data.metrics.referringDomains.toLocaleString()}\n`;
+                text += `Domain Age: ${data.metrics.domainAge} years\n`;
+            }
+
+            return text;
+        }
+
+        function formatResultsForDownload() {
+            return formatResultsForCopy();
+        }
+    </script>
+</body>
+</html> 

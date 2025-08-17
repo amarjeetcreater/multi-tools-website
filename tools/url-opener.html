@@ -1,0 +1,12 @@
+<script>
+(function() {
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') return t;
+    } catch(e) {}
+    return 'light';
+  }
+  document.documentElement.setAttribute('data-theme', getTheme());
+})();
+</script>

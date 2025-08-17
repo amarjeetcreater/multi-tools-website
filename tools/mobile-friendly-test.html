@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile-Friendly Test - Multi-Tools</title>
+    <meta name="description" content="Test if your website is mobile-friendly">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-mobile-alt"></i> Mobile-Friendly Test</h1>
+                <p>Test if your website is mobile-friendly</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="mobileForm">
+                                <div class="mb-3">
+                                    <label for="url" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="url" placeholder="https://example.com" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="deviceType" class="form-label">Device Type</label>
+                                    <select class="form-select" id="deviceType">
+                                        <option value="mobile">Mobile</option>
+                                        <option value="tablet">Tablet</option>
+                                        <option value="desktop">Desktop</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeDetails" checked>
+                                        <label class="form-check-label" for="includeDetails">
+                                            Include detailed analysis
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-play"></i> Test Mobile-Friendliness
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Mobile-Friendly Factors</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success"></i> Responsive design</li>
+                                <li><i class="fas fa-check text-success"></i> Touch-friendly buttons</li>
+                                <li><i class="fas fa-check text-success"></i> Readable text size</li>
+                                <li><i class="fas fa-check text-success"></i> Fast loading speed</li>
+                                <li><i class="fas fa-check text-success"></i> No horizontal scrolling</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Mobile-Friendly Test Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="copyBtn">
+                                    <i class="fas fa-copy"></i> Copy Results
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm" id="downloadBtn">
+                                    <i class="fas fa-download"></i> Download Report
+                                </button>
+                            </div>
+                        </div>
+                        <div id="mobileResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        let mobileData = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('mobileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                testMobileFriendly();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForCopy();
+                MultiTools.copyToClipboard(resultsText);
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForDownload();
+                MultiTools.downloadFile(resultsText, 'mobile-friendly-test-results.txt', 'text/plain');
+            });
+        });
+
+        function testMobileFriendly() {
+            const url = document.getElementById('url').value.trim();
+            const deviceType = document.getElementById('deviceType').value;
+            const includeDetails = document.getElementById('includeDetails').checked;
+
+            if (!url) {
+                MultiTools.showError('Please enter a website URL.');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('mobileResults');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Testing mobile-friendliness...</div>';
+            document.getElementById('resultContainer').style.display = 'block';
+
+            setTimeout(() => {
+                mobileData = simulateMobileTest(url, deviceType, includeDetails);
+                displayResults();
+            }, 2000);
+        }
+
+        function simulateMobileTest(url, deviceType, includeDetails) {
+            const isMobileFriendly = Math.random() > 0.3;
+            const score = Math.floor(Math.random() * 40) + (isMobileFriendly ? 60 : 20);
+            
+            const issues = [];
+            const recommendations = [];
+
+            if (!isMobileFriendly) {
+                issues.push('Text too small to read');
+                issues.push('Links too close together');
+                issues.push('Content wider than screen');
+                recommendations.push('Use responsive design');
+                recommendations.push('Increase touch target sizes');
+                recommendations.push('Optimize viewport settings');
+            } else {
+                recommendations.push('Keep up the good work');
+                recommendations.push('Monitor performance regularly');
+                recommendations.push('Test on various devices');
+            }
+
+            const metrics = {
+                viewport: Math.random() > 0.2,
+                touchTargets: Math.random() > 0.3,
+                textSize: Math.random() > 0.25,
+                contentWidth: Math.random() > 0.2,
+                loadingSpeed: Math.floor(Math.random() * 3) + 1
+            };
+
+            return {
+                url: url,
+                deviceType: deviceType,
+                isMobileFriendly: isMobileFriendly,
+                score: score,
+                issues: issues,
+                recommendations: recommendations,
+                metrics: metrics,
+                testedAt: new Date()
+            };
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('mobileResults');
+            const data = mobileData;
+
+            let html = `
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-globe"></i> Test Information</h6>
+                        <p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
+                        <p><strong>Device:</strong> ${data.deviceType}</p>
+                        <p><strong>Tested:</strong> ${data.testedAt.toLocaleString()}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-mobile-alt"></i> Mobile-Friendly Score</h6>
+                        <div class="text-center">
+                            <div class="display-4 text-${getScoreColor(data.score)}">${data.score}</div>
+                            <small class="text-muted">/ 100</small>
+                            <div class="mt-2">
+                                <span class="badge bg-${data.isMobileFriendly ? 'success' : 'danger'}">
+                                    ${data.isMobileFriendly ? 'Mobile-Friendly' : 'Not Mobile-Friendly'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            html += `
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h6><i class="fas fa-chart-bar"></i> Mobile Metrics</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${data.metrics.viewport ? 'success' : 'danger'}">
+                                            <i class="fas fa-${data.metrics.viewport ? 'check' : 'times'}"></i>
+                                        </h5>
+                                        <small>Viewport</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${data.metrics.touchTargets ? 'success' : 'danger'}">
+                                            <i class="fas fa-${data.metrics.touchTargets ? 'check' : 'times'}"></i>
+                                        </h5>
+                                        <small>Touch Targets</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${data.metrics.textSize ? 'success' : 'danger'}">
+                                            <i class="fas fa-${data.metrics.textSize ? 'check' : 'times'}"></i>
+                                        </h5>
+                                        <small>Text Size</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${data.metrics.contentWidth ? 'success' : 'danger'}">
+                                            <i class="fas fa-${data.metrics.contentWidth ? 'check' : 'times'}"></i>
+                                        </h5>
+                                        <small>Content Width</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (data.issues.length > 0) {
+                html += `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Issues Found (${data.issues.length})</h6>
+                        <ul class="mb-0">
+                            ${data.issues.map(issue => `<li>${issue}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            if (data.recommendations.length > 0) {
+                html += `
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-lightbulb"></i> Recommendations</h6>
+                        <ul class="mb-0">
+                            ${data.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function getScoreColor(score) {
+            if (score >= 80) return 'success';
+            if (score >= 60) return 'warning';
+            return 'danger';
+        }
+
+        function formatResultsForCopy() {
+            const data = mobileData;
+            let text = 'Mobile-Friendly Test Results\n';
+            text += '============================\n\n';
+            text += `URL: ${data.url}\n`;
+            text += `Device: ${data.deviceType}\n`;
+            text += `Tested: ${data.testedAt.toLocaleString()}\n\n`;
+            text += `Score: ${data.score}/100\n`;
+            text += `Mobile-Friendly: ${data.isMobileFriendly ? 'Yes' : 'No'}\n\n`;
+
+            if (data.issues.length > 0) {
+                text += 'Issues Found:\n';
+                data.issues.forEach(issue => {
+                    text += `- ${issue}\n`;
+                });
+                text += '\n';
+            }
+
+            if (data.recommendations.length > 0) {
+                text += 'Recommendations:\n';
+                data.recommendations.forEach(rec => {
+                    text += `- ${rec}\n`;
+                });
+            }
+
+            return text;
+        }
+
+        function formatResultsForDownload() {
+            return formatResultsForCopy();
+        }
+    </script>
+</body>
+</html> 

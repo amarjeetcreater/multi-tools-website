@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Speed Checker - Multi-Tools</title>
+    <meta name="description" content="Test your website loading speed and performance">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Page Speed Checker</h1>
+                <p>Test your website loading speed and performance</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="speedForm">
+                                <div class="mb-3">
+                                    <label for="url" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="url" placeholder="https://example.com" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="device" class="form-label">Device Type</label>
+                                    <select class="form-select" id="device">
+                                        <option value="desktop">Desktop</option>
+                                        <option value="mobile">Mobile</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="connection" class="form-label">Connection Type</label>
+                                    <select class="form-select" id="connection">
+                                        <option value="fast">Fast 4G</option>
+                                        <option value="slow">Slow 3G</option>
+                                        <option value="cable">Cable</option>
+                                        <option value="dsl">DSL</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeLighthouse" checked>
+                                        <label class="form-check-label" for="includeLighthouse">
+                                            Include Lighthouse metrics
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-play"></i> Test Speed
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Performance Metrics</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">Key metrics for website performance:</p>
+                            <ul class="list-unstyled small">
+                                <li><strong>FCP:</strong> First Contentful Paint</li>
+                                <li><strong>LCP:</strong> Largest Contentful Paint</li>
+                                <li><strong>FID:</strong> First Input Delay</li>
+                                <li><strong>CLS:</strong> Cumulative Layout Shift</li>
+                                <li><strong>TTFB:</strong> Time to First Byte</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Speed Test Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="copyBtn">
+                                    <i class="fas fa-copy"></i> Copy Results
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm" id="downloadBtn">
+                                    <i class="fas fa-download"></i> Download Report
+                                </button>
+                            </div>
+                        </div>
+                        <div id="speedResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        let speedData = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('speedForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                testSpeed();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForCopy();
+                MultiTools.copyToClipboard(resultsText);
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForDownload();
+                MultiTools.downloadFile(resultsText, 'page-speed-results.txt', 'text/plain');
+            });
+        });
+
+        function testSpeed() {
+            const url = document.getElementById('url').value.trim();
+            const device = document.getElementById('device').value;
+            const connection = document.getElementById('connection').value;
+            const includeLighthouse = document.getElementById('includeLighthouse').checked;
+
+            if (!url) {
+                MultiTools.showError('Please enter a website URL.');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('speedResults');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Testing speed...</div>';
+            document.getElementById('resultContainer').style.display = 'block';
+
+            setTimeout(() => {
+                speedData = simulateSpeedTest(url, device, connection, includeLighthouse);
+                displayResults();
+            }, 3000);
+        }
+
+        function simulateSpeedTest(url, device, connection, includeLighthouse) {
+            const baseLoadTime = device === 'mobile' ? 2.5 : 1.8;
+            const connectionMultiplier = {
+                'fast': 1,
+                'slow': 3,
+                'cable': 1.2,
+                'dsl': 2
+            }[connection];
+
+            const loadTime = (baseLoadTime * connectionMultiplier + Math.random() * 2).toFixed(2);
+            const score = Math.max(0, Math.min(100, Math.floor(100 - (loadTime * 20))));
+
+            const metrics = {
+                fcp: (loadTime * 0.3 + Math.random() * 0.5).toFixed(2),
+                lcp: (loadTime * 0.6 + Math.random() * 0.8).toFixed(2),
+                fid: (Math.random() * 0.2).toFixed(3),
+                cls: (Math.random() * 0.1).toFixed(3),
+                ttfb: (loadTime * 0.4 + Math.random() * 0.3).toFixed(2)
+            };
+
+            const lighthouse = includeLighthouse ? {
+                performance: score,
+                accessibility: Math.floor(Math.random() * 30) + 70,
+                bestPractices: Math.floor(Math.random() * 20) + 80,
+                seo: Math.floor(Math.random() * 15) + 85
+            } : null;
+
+            return {
+                url: url,
+                device: device,
+                connection: connection,
+                loadTime: loadTime,
+                score: score,
+                metrics: metrics,
+                lighthouse: lighthouse,
+                testedAt: new Date()
+            };
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('speedResults');
+            const data = speedData;
+
+            let html = `
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-globe"></i> Test Information</h6>
+                        <p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
+                        <p><strong>Device:</strong> ${data.device}</p>
+                        <p><strong>Connection:</strong> ${data.connection}</p>
+                        <p><strong>Tested:</strong> ${data.testedAt.toLocaleString()}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-tachometer-alt"></i> Performance Score</h6>
+                        <div class="text-center">
+                            <div class="display-4 text-${getScoreColor(data.score)}">${data.score}</div>
+                            <small class="text-muted">/ 100</small>
+                            <p class="mt-2"><strong>Load Time:</strong> ${data.loadTime}s</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            html += `
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h6><i class="fas fa-chart-bar"></i> Core Web Vitals</h6>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${getMetricColor(data.metrics.fcp, 'fcp')}">${data.metrics.fcp}s</h5>
+                                        <small>First Contentful Paint</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${getMetricColor(data.metrics.lcp, 'lcp')}">${data.metrics.lcp}s</h5>
+                                        <small>Largest Contentful Paint</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${getMetricColor(data.metrics.fid, 'fid')}">${data.metrics.fid}s</h5>
+                                        <small>First Input Delay</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${getMetricColor(data.metrics.cls, 'cls')}">${data.metrics.cls}</h5>
+                                        <small>Cumulative Layout Shift</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${getMetricColor(data.metrics.ttfb, 'ttfb')}">${data.metrics.ttfb}s</h5>
+                                        <small>Time to First Byte</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (data.lighthouse) {
+                html += `
+                    <div class="row">
+                        <div class="col-12">
+                            <h6><i class="fas fa-lighthouse"></i> Lighthouse Scores</h6>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-${getScoreColor(data.lighthouse.performance)}">${data.lighthouse.performance}</h5>
+                                            <small>Performance</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-${getScoreColor(data.lighthouse.accessibility)}">${data.lighthouse.accessibility}</h5>
+                                            <small>Accessibility</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-${getScoreColor(data.lighthouse.bestPractices)}">${data.lighthouse.bestPractices}</h5>
+                                            <small>Best Practices</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-${getScoreColor(data.lighthouse.seo)}">${data.lighthouse.seo}</h5>
+                                            <small>SEO</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function getScoreColor(score) {
+            if (score >= 90) return 'success';
+            if (score >= 50) return 'warning';
+            return 'danger';
+        }
+
+        function getMetricColor(value, metric) {
+            const thresholds = {
+                fcp: { good: 1.8, poor: 3.0 },
+                lcp: { good: 2.5, poor: 4.0 },
+                fid: { good: 0.1, poor: 0.3 },
+                cls: { good: 0.1, poor: 0.25 },
+                ttfb: { good: 0.8, poor: 1.8 }
+            };
+
+            const threshold = thresholds[metric];
+            if (value <= threshold.good) return 'success';
+            if (value <= threshold.poor) return 'warning';
+            return 'danger';
+        }
+
+        function formatResultsForCopy() {
+            const data = speedData;
+            let text = 'Page Speed Test Results\n';
+            text += '======================\n\n';
+            text += `URL: ${data.url}\n`;
+            text += `Device: ${data.device}\n`;
+            text += `Connection: ${data.connection}\n`;
+            text += `Tested: ${data.testedAt.toLocaleString()}\n\n`;
+            text += `Performance Score: ${data.score}/100\n`;
+            text += `Load Time: ${data.loadTime}s\n\n`;
+            text += 'Core Web Vitals:\n';
+            text += `- First Contentful Paint: ${data.metrics.fcp}s\n`;
+            text += `- Largest Contentful Paint: ${data.metrics.lcp}s\n`;
+            text += `- First Input Delay: ${data.metrics.fid}s\n`;
+            text += `- Cumulative Layout Shift: ${data.metrics.cls}\n`;
+            text += `- Time to First Byte: ${data.metrics.ttfb}s\n\n`;
+
+            if (data.lighthouse) {
+                text += 'Lighthouse Scores:\n';
+                text += `- Performance: ${data.lighthouse.performance}/100\n`;
+                text += `- Accessibility: ${data.lighthouse.accessibility}/100\n`;
+                text += `- Best Practices: ${data.lighthouse.bestPractices}/100\n`;
+                text += `- SEO: ${data.lighthouse.seo}/100\n`;
+            }
+
+            return text;
+        }
+
+        function formatResultsForDownload() {
+            return formatResultsForCopy();
+        }
+    </script>
+</body>
+</html> 

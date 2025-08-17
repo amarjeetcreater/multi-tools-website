@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator - Multi-Tools Website</title>
+    <meta name="description" content="Free online scientific calculator tool. Advanced mathematical functions with modern interface.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+    <style>
+        .calculator-display {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            text-align: right;
+            margin-bottom: 20px;
+            min-height: 80px;
+            word-wrap: break-word;
+        }
+        .calc-button {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .calc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn-number { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-operator { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+        .btn-function { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .btn-equals { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+        .btn-clear { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); color: white; }
+        .history-item {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    
+    <main class="container-fluid py-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1><i class="fas fa-square-root-alt text-primary"></i> Scientific Calculator</h1>
+                    <p class="text-muted">Advanced mathematical calculator with scientific functions</p>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-calculator"></i> Calculator</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="calculator-display" id="display">0</div>
+                                    
+                                    <div class="function-grid">
+                                        <button class="btn calc-button btn-function" onclick="addFunction('sin')">sin</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('cos')">cos</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('tan')">tan</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('log')">log</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('ln')">ln</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('sqrt')">√</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('pow')">x^y</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('fact')">x!</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('abs')">|x|</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('exp')">e^x</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('pi')">π</button>
+                                        <button class="btn calc-button btn-function" onclick="addFunction('e')">e</button>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <!-- Number buttons -->
+                                        <div class="mb-2">
+                                            <button class="btn calc-button btn-number" onclick="addNumber('7')">7</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('8')">8</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('9')">9</button>
+                                            <button class="btn calc-button btn-operator" onclick="addOperator('÷')">÷</button>
+                                            <button class="btn calc-button btn-clear" onclick="clearDisplay()">C</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <button class="btn calc-button btn-number" onclick="addNumber('4')">4</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('5')">5</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('6')">6</button>
+                                            <button class="btn calc-button btn-operator" onclick="addOperator('×')">×</button>
+                                            <button class="btn calc-button btn-function" onclick="backspace()">⌫</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <button class="btn calc-button btn-number" onclick="addNumber('1')">1</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('2')">2</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('3')">3</button>
+                                            <button class="btn calc-button btn-operator" onclick="addOperator('-')">-</button>
+                                            <button class="btn calc-button btn-function" onclick="addParenthesis('(')">(</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <button class="btn calc-button btn-number" onclick="addNumber('0')">0</button>
+                                            <button class="btn calc-button btn-number" onclick="addNumber('.')">.</button>
+                                            <button class="btn calc-button btn-equals" onclick="calculate()">=</button>
+                                            <button class="btn calc-button btn-operator" onclick="addOperator('+')">+</button>
+                                            <button class="btn calc-button btn-function" onclick="addParenthesis(')')">)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-history"></i> History</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="history" style="max-height: 300px; overflow-y: auto;"></div>
+                                    <button class="btn btn-outline-secondary btn-sm w-100 mt-2" onclick="clearHistory()">
+                                        <i class="fas fa-trash"></i> Clear History
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-chart-line"></i> Advanced Functions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Trigonometric Functions:</h6>
+                                            <div class="function-grid">
+                                                <button class="btn btn-outline-primary btn-sm" onclick="addFunction('asin')">asin</button>
+                                                <button class="btn btn-outline-primary btn-sm" onclick="addFunction('acos')">acos</button>
+                                                <button class="btn btn-outline-primary btn-sm" onclick="addFunction('atan')">atan</button>
+                                                <button class="btn btn-outline-primary btn-sm" onclick="addFunction('sinh')">sinh</button>
+                                                <button class="btn btn-outline-primary btn-sm" onclick="addFunction('cosh')">cosh</button>
+                                                <button class="btn btn-outline-primary btn-sm" onclick="addFunction('tanh')">tanh</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Statistical Functions:</h6>
+                                            <div class="function-grid">
+                                                <button class="btn btn-outline-success btn-sm" onclick="addFunction('rand')">rand</button>
+                                                <button class="btn btn-outline-success btn-sm" onclick="addFunction('floor')">floor</button>
+                                                <button class="btn btn-outline-success btn-sm" onclick="addFunction('ceil')">ceil</button>
+                                                <button class="btn btn-outline-success btn-sm" onclick="addFunction('round')">round</button>
+                                                <button class="btn btn-outline-success btn-sm" onclick="addFunction('min')">min</button>
+                                                <button class="btn btn-outline-success btn-sm" onclick="addFunction('max')">max</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="ad-space mb-4">
+                        <h6><i class="fas fa-ad"></i> Advertisement</h6>
+                        <p class="text-muted">Perfect place for Google AdSense</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-info-circle"></i> Calculator Functions</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Basic arithmetic operations</li>
+                                <li><i class="fas fa-check text-success"></i> Trigonometric functions</li>
+                                <li><i class="fas fa-check text-success"></i> Logarithmic functions</li>
+                                <li><i class="fas fa-check text-success"></i> Power and root functions</li>
+                                <li><i class="fas fa-check text-success"></i> Constants (π, e)</li>
+                                <li><i class="fas fa-check text-success"></i> History tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h6>
+                        </div>
+                        <div class="card-body">
+                            <small class="text-muted">
+                                <strong>Numbers:</strong> 0-9<br>
+                                <strong>Operators:</strong> +, -, *, /<br>
+                                <strong>Enter:</strong> Calculate<br>
+                                <strong>Escape:</strong> Clear<br>
+                                <strong>Backspace:</strong> Delete last character
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-link"></i> Related Tools</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><a href="percentage-calculator.html" class="text-decoration-none"><i class="fas fa-percentage"></i> Percentage Calculator</a></li>
+                                <li><a href="age-calculator.html" class="text-decoration-none"><i class="fas fa-birthday-cake"></i> Age Calculator</a></li>
+                                <li><a href="unit-converter.html" class="text-decoration-none"><i class="fas fa-ruler-combined"></i> Unit Converter</a></li>
+                                <li><a href="json-formatter.html" class="text-decoration-none"><i class="fas fa-code"></i> JSON Formatter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="footer-placeholder"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        let display = '0';
+        let history = [];
+        let lastResult = 0;
+        
+        // Initialize calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDisplay();
+            
+            // Keyboard support
+            document.addEventListener('keydown', function(event) {
+                const key = event.key;
+                
+                if (key >= '0' && key <= '9' || key === '.') {
+                    addNumber(key);
+                } else if (key === '+' || key === '-') {
+                    addOperator(key);
+                } else if (key === '*') {
+                    addOperator('×');
+                } else if (key === '/') {
+                    addOperator('÷');
+                } else if (key === 'Enter' || key === '=') {
+                    calculate();
+                } else if (key === 'Escape') {
+                    clearDisplay();
+                } else if (key === 'Backspace') {
+                    backspace();
+                } else if (key === '(' || key === ')') {
+                    addParenthesis(key);
+                }
+            });
+        });
+        
+        function updateDisplay() {
+            document.getElementById('display').textContent = display;
+        }
+        
+        function addNumber(num) {
+            if (display === '0' && num !== '.') {
+                display = num;
+            } else {
+                display += num;
+            }
+            updateDisplay();
+        }
+        
+        function addOperator(op) {
+            if (display !== '0' && !display.endsWith('+') && !display.endsWith('-') && 
+                !display.endsWith('×') && !display.endsWith('÷')) {
+                display += op;
+                updateDisplay();
+            }
+        }
+        
+        function addFunction(func) {
+            if (func === 'pi') {
+                display += '3.14159265359';
+            } else if (func === 'e') {
+                display += '2.71828182846';
+            } else {
+                display += func + '(';
+            }
+            updateDisplay();
+        }
+        
+        function addParenthesis(paren) {
+            display += paren;
+            updateDisplay();
+        }
+        
+        function clearDisplay() {
+            display = '0';
+            updateDisplay();
+        }
+        
+        function backspace() {
+            if (display.length > 1) {
+                display = display.slice(0, -1);
+            } else {
+                display = '0';
+            }
+            updateDisplay();
+        }
+        
+        function calculate() {
+            try {
+                let expression = display;
+                
+                // Replace operators
+                expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+                
+                // Handle functions
+                expression = expression.replace(/sin\(/g, 'Math.sin(');
+                expression = expression.replace(/cos\(/g, 'Math.cos(');
+                expression = expression.replace(/tan\(/g, 'Math.tan(');
+                expression = expression.replace(/asin\(/g, 'Math.asin(');
+                expression = expression.replace(/acos\(/g, 'Math.acos(');
+                expression = expression.replace(/atan\(/g, 'Math.atan(');
+                expression = expression.replace(/sinh\(/g, 'Math.sinh(');
+                expression = expression.replace(/cosh\(/g, 'Math.cosh(');
+                expression = expression.replace(/tanh\(/g, 'Math.tanh(');
+                expression = expression.replace(/log\(/g, 'Math.log10(');
+                expression = expression.replace(/ln\(/g, 'Math.log(');
+                expression = expression.replace(/sqrt\(/g, 'Math.sqrt(');
+                expression = expression.replace(/abs\(/g, 'Math.abs(');
+                expression = expression.replace(/exp\(/g, 'Math.exp(');
+                expression = expression.replace(/floor\(/g, 'Math.floor(');
+                expression = expression.replace(/ceil\(/g, 'Math.ceil(');
+                expression = expression.replace(/round\(/g, 'Math.round(');
+                expression = expression.replace(/pow\(/g, 'Math.pow(');
+                expression = expression.replace(/fact\(/g, 'factorial(');
+                expression = expression.replace(/rand\(/g, 'Math.random()');
+                expression = expression.replace(/min\(/g, 'Math.min(');
+                expression = expression.replace(/max\(/g, 'Math.max(');
+                
+                const result = eval(expression);
+                
+                if (isFinite(result)) {
+                    // Add to history
+                    history.unshift({
+                        expression: display,
+                        result: result
+                    });
+                    
+                    if (history.length > 10) {
+                        history.pop();
+                    }
+                    
+                    updateHistory();
+                    display = result.toString();
+                    lastResult = result;
+                    updateDisplay();
+                } else {
+                    MultiTools.showError('Invalid calculation', 'result-container');
+                }
+            } catch (error) {
+                MultiTools.showError('Calculation error: ' + error.message, 'result-container');
+            }
+        }
+        
+        function factorial(n) {
+            if (n < 0) return NaN;
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+        
+        function updateHistory() {
+            const historyDiv = document.getElementById('history');
+            historyDiv.innerHTML = history.map(item => 
+                `<div class="history-item">
+                    <div class="text-muted">${item.expression}</div>
+                    <div class="fw-bold">= ${item.result}</div>
+                </div>`
+            ).join('');
+        }
+        
+        function clearHistory() {
+            history = [];
+            updateHistory();
+        }
+    </script>
+</body>
+</html> 

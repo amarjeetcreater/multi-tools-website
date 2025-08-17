@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Address Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container my-4">
+        <h1 class="text-center mb-4">Fake Address Generator</h1>
+        <div class="ad-section">
+            <!-- Ad Space -->
+            <p>Advertisement</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Fake Address Generator Functionality</h5>
+                <p class="card-text">Generate a random fake address with various details.</p>
+                <div class="mb-3">
+                    <button class="btn btn-primary" id="generateAddressBtn">Generate Address</button>
+                </div>
+                <div id="addressDetails" class="mt-4">
+                    <h6>Generated Address:</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Street:</strong> <span id="displayStreet"></span></li>
+                        <li class="list-group-item"><strong>City:</strong> <span id="displayCity"></span></li>
+                        <li class="list-group-item"><strong>State:</strong> <span id="displayState"></span></li>
+                        <li class="list-group-item"><strong>Zip Code:</strong> <span id="displayZip"></span></li>
+                        <li class="list-group-item"><strong>Country:</strong> <span id="displayCountry"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/loadComponents.js"></script>
+    <script>
+        // JavaScript for Fake Address Generator tool
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Fake Address Generator loaded.');
+
+            const generateAddressBtn = document.getElementById('generateAddressBtn');
+            const displayStreet = document.getElementById('displayStreet');
+            const displayCity = document.getElementById('displayCity');
+            const displayState = document.getElementById('displayState');
+            const displayZip = document.getElementById('displayZip');
+            const displayCountry = document.getElementById('displayCountry');
+
+            const streets = ["Main St", "Oak Ave", "Pine Ln", "Elm Rd", "Maple Dr"];
+            const cities = ["Springfield", "Rivertown", "Brookside", "Fairview", "Lakeside"];
+            const states = ["CA", "NY", "TX", "FL", "IL"];
+            const zipCodes = ["90210", "10001", "75001", "33101", "60601"];
+            const countries = ["USA", "Canada", "UK", "Australia"];
+
+            function getRandomElement(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            generateAddressBtn.addEventListener('click', function() {
+                displayStreet.textContent = `${Math.floor(Math.random() * 9999) + 1} ${getRandomElement(streets)}`;
+                displayCity.textContent = getRandomElement(cities);
+                displayState.textContent = getRandomElement(states);
+                displayZip.textContent = getRandomElement(zipCodes);
+                displayCountry.textContent = getRandomElement(countries);
+            });
+        });
+    </script>
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

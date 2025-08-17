@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Zone Converter - Multi-Tools</title>
+    <meta name="description" content="Convert times between different time zones around the world. Free online time zone converter tool.">
+    <meta name="keywords" content="time zone converter, world clock, time conversion, UTC converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-clock"></i> Time Zone Converter</h1>
+                <p>Convert times between different time zones around the world</p>
+            </div>
+
+            <div class="tool-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fromTime">From Time</label>
+                            <input type="datetime-local" id="fromTime" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fromTimezone">From Time Zone</label>
+                            <select id="fromTimezone" class="form-control">
+                                <option value="UTC">UTC - Coordinated Universal Time</option>
+                                <option value="America/New_York">EST/EDT - Eastern Time</option>
+                                <option value="America/Chicago">CST/CDT - Central Time</option>
+                                <option value="America/Denver">MST/MDT - Mountain Time</option>
+                                <option value="America/Los_Angeles">PST/PDT - Pacific Time</option>
+                                <option value="Europe/London">GMT/BST - London</option>
+                                <option value="Europe/Paris">CET/CEST - Paris</option>
+                                <option value="Europe/Berlin">CET/CEST - Berlin</option>
+                                <option value="Asia/Tokyo">JST - Tokyo</option>
+                                <option value="Asia/Shanghai">CST - Shanghai</option>
+                                <option value="Asia/Kolkata">IST - India</option>
+                                <option value="Australia/Sydney">AEST/AEDT - Sydney</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="toTimezone">To Time Zone</label>
+                            <select id="toTimezone" class="form-control">
+                                <option value="Europe/London">GMT/BST - London</option>
+                                <option value="UTC">UTC - Coordinated Universal Time</option>
+                                <option value="America/New_York">EST/EDT - Eastern Time</option>
+                                <option value="America/Chicago">CST/CDT - Central Time</option>
+                                <option value="America/Denver">MST/MDT - Mountain Time</option>
+                                <option value="America/Los_Angeles">PST/PDT - Pacific Time</option>
+                                <option value="Europe/Paris">CET/CEST - Paris</option>
+                                <option value="Europe/Berlin">CET/CEST - Berlin</option>
+                                <option value="Asia/Tokyo">JST - Tokyo</option>
+                                <option value="Asia/Shanghai">CST - Shanghai</option>
+                                <option value="Asia/Kolkata">IST - India</option>
+                                <option value="Australia/Sydney">AEST/AEDT - Sydney</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-primary w-100" onclick="convertTime()">
+                                <i class="fas fa-exchange-alt"></i> Convert Time
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-outline-secondary" onclick="swapTimezones()">
+                            <i class="fas fa-arrows-alt-h"></i> Swap Time Zones
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="setCurrentTime()">
+                            <i class="fas fa-clock"></i> Set Current Time
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                    <h3>Time Conversion Result</h3>
+                    <div class="conversion-result">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-time">
+                                    <strong>From:</strong> <span id="fromTimeDisplay">-</span>
+                                    <br><small id="fromTimezoneDisplay">-</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="output-time">
+                                    <strong>To:</strong> <span id="toTimeDisplay">-</span>
+                                    <br><small id="toTimezoneDisplay">-</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="time-difference mt-3">
+                            <small>Time Difference: <span id="timeDifference">-</span></small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="world-clock mt-4">
+                    <h4>World Clock</h4>
+                    <div class="row" id="worldClockGrid">
+                        <!-- World clock entries will be populated here -->
+                    </div>
+                </div>
+
+                <div class="popular-times mt-4">
+                    <h4>Popular Time Conversions</h4>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('America/New_York', 'Europe/London')">
+                                EST → GMT
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('Europe/London', 'America/New_York')">
+                                GMT → EST
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('America/Los_Angeles', 'Asia/Tokyo')">
+                                PST → JST
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('Asia/Tokyo', 'America/Los_Angeles')">
+                                JST → PST
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timezone-info mt-4">
+                    <h4>Time Zone Information</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5>Major Time Zones</h5>
+                                <ul>
+                                    <li><strong>UTC</strong> - Coordinated Universal Time (World standard)</li>
+                                    <li><strong>EST/EDT</strong> - Eastern Time (US East Coast)</li>
+                                    <li><strong>PST/PDT</strong> - Pacific Time (US West Coast)</li>
+                                    <li><strong>GMT/BST</strong> - London Time</li>
+                                    <li><strong>JST</strong> - Japan Standard Time</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5>Daylight Saving Time</h5>
+                                <ul>
+                                    <li>Spring Forward: Clocks move ahead 1 hour</li>
+                                    <li>Fall Back: Clocks move back 1 hour</li>
+                                    <li>Not all countries observe DST</li>
+                                    <li>Dates vary by country</li>
+                                    <li>Affects time zone conversions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    <script>
+        // Time zone data
+        const timeZones = {
+            'UTC': { name: 'UTC', offset: 0, description: 'Coordinated Universal Time' },
+            'America/New_York': { name: 'EST/EDT', offset: -5, description: 'Eastern Time' },
+            'America/Chicago': { name: 'CST/CDT', offset: -6, description: 'Central Time' },
+            'America/Denver': { name: 'MST/MDT', offset: -7, description: 'Mountain Time' },
+            'America/Los_Angeles': { name: 'PST/PDT', offset: -8, description: 'Pacific Time' },
+            'Europe/London': { name: 'GMT/BST', offset: 0, description: 'London Time' },
+            'Europe/Paris': { name: 'CET/CEST', offset: 1, description: 'Central European Time' },
+            'Europe/Berlin': { name: 'CET/CEST', offset: 1, description: 'Central European Time' },
+            'Asia/Tokyo': { name: 'JST', offset: 9, description: 'Japan Standard Time' },
+            'Asia/Shanghai': { name: 'CST', offset: 8, description: 'China Standard Time' },
+            'Asia/Kolkata': { name: 'IST', offset: 5.5, description: 'India Standard Time' },
+            'Australia/Sydney': { name: 'AEST/AEDT', offset: 10, description: 'Australian Eastern Time' }
+        };
+
+        function convertTime() {
+            const fromTime = document.getElementById('fromTime').value;
+            const fromTimezone = document.getElementById('fromTimezone').value;
+            const toTimezone = document.getElementById('toTimezone').value;
+
+            if (!fromTime) {
+                MultiTools.showError('Please select a time to convert');
+                return;
+            }
+
+            if (fromTimezone === toTimezone) {
+                MultiTools.showResult('Same time zone', 'No conversion needed');
+                return;
+            }
+
+            try {
+                // Create a date object from the input
+                const date = new Date(fromTime);
+                
+                // Get time zone offsets
+                const fromOffset = timeZones[fromTimezone].offset;
+                const toOffset = timeZones[toTimezone].offset;
+                
+                // Calculate the difference in hours
+                const offsetDifference = toOffset - fromOffset;
+                
+                // Convert the time
+                const convertedDate = new Date(date.getTime() + (offsetDifference * 60 * 60 * 1000));
+                
+                // Format the results
+                const fromTimeStr = date.toLocaleString('en-US', { 
+                    timeZone: fromTimezone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                
+                const toTimeStr = convertedDate.toLocaleString('en-US', { 
+                    timeZone: toTimezone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+
+                // Update display
+                document.getElementById('fromTimeDisplay').textContent = fromTimeStr;
+                document.getElementById('fromTimezoneDisplay').textContent = timeZones[fromTimezone].name;
+                document.getElementById('toTimeDisplay').textContent = toTimeStr;
+                document.getElementById('toTimezoneDisplay').textContent = timeZones[toTimezone].name;
+                
+                // Calculate and display time difference
+                const diffHours = Math.abs(offsetDifference);
+                const diffDirection = offsetDifference > 0 ? 'ahead' : 'behind';
+                document.getElementById('timeDifference').textContent = `${diffHours} hours ${diffDirection}`;
+
+                document.getElementById('resultContainer').style.display = 'block';
+                MultiTools.showResult(`${fromTimeStr} → ${toTimeStr}`, `Time difference: ${diffHours} hours ${diffDirection}`);
+
+            } catch (error) {
+                MultiTools.showError('Error converting time: ' + error.message);
+            }
+        }
+
+        function swapTimezones() {
+            const fromTimezone = document.getElementById('fromTimezone');
+            const toTimezone = document.getElementById('toTimezone');
+            const temp = fromTimezone.value;
+            fromTimezone.value = toTimezone.value;
+            toTimezone.value = temp;
+            convertTime();
+        }
+
+        function setCurrentTime() {
+            const now = new Date();
+            const localTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+            document.getElementById('fromTime').value = localTime.toISOString().slice(0, 16);
+            convertTime();
+        }
+
+        function resetConverter() {
+            document.getElementById('fromTime').value = '';
+            document.getElementById('fromTimezone').value = 'UTC';
+            document.getElementById('toTimezone').value = 'Europe/London';
+            document.getElementById('resultContainer').style.display = 'none';
+            MultiTools.clearResults();
+        }
+
+        function quickConvert(from, to) {
+            document.getElementById('fromTimezone').value = from;
+            document.getElementById('toTimezone').value = to;
+            setCurrentTime();
+        }
+
+        function updateWorldClock() {
+            const grid = document.getElementById('worldClockGrid');
+            grid.innerHTML = '';
+            
+            const now = new Date();
+            const majorTimeZones = [
+                'UTC', 'America/New_York', 'America/Los_Angeles', 
+                'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 
+                'Asia/Shanghai', 'Asia/Kolkata', 'Australia/Sydney'
+            ];
+
+            majorTimeZones.forEach(timezone => {
+                const time = now.toLocaleString('en-US', { 
+                    timeZone: timezone,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                
+                const date = now.toLocaleDateString('en-US', { 
+                    timeZone: timezone,
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                const col = document.createElement('div');
+                col.className = 'col-md-4 col-sm-6 mb-3';
+                col.innerHTML = `
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6 class="card-title">${timeZones[timezone].name}</h6>
+                            <div class="time-display">${time}</div>
+                            <small class="text-muted">${date}</small>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(col);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+            
+            // Set current time as default
+            setCurrentTime();
+            
+            // Update world clock every second
+            updateWorldClock();
+            setInterval(updateWorldClock, 1000);
+            
+            // Auto-convert on input change
+            document.getElementById('fromTime').addEventListener('change', convertTime);
+            document.getElementById('fromTimezone').addEventListener('change', convertTime);
+            document.getElementById('toTimezone').addEventListener('change', convertTime);
+        });
+    </script>
+    <script>
+(function() {
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') return t;
+    } catch(e) {}
+    return 'light';
+  }
+  document.documentElement.setAttribute('data-theme', getTheme());
+})();
+</script>
+</body>
+</html>

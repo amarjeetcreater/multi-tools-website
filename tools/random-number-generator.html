@@ -1,0 +1,399 @@
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Generator - Multi-Tools</title>
+    <meta name="description" content="Generate random numbers within a specified range. Create random numbers for games, 
+    testing, and various applications with customizable options.">
+    <meta name="keywords" content="random number generator, random numbers, random generator, random integer">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-dice"></i> Random Number Generator
+                    </h1>
+                    <p class="tool-description">
+                        Generate random numbers within a specified range. Create random numbers for games, 
+                        testing, and various applications with customizable options.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="minNumber" class="form-label">Minimum Number</label>
+                                        <input type="number" class="form-control" id="minNumber" 
+                                               value="1" min="-999999" max="999999">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="maxNumber" class="form-label">Maximum Number</label>
+                                        <input type="number" class="form-control" id="maxNumber" 
+                                               value="100" min="-999999" max="999999">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="numberCount" class="form-label">Number of Results</label>
+                                        <select class="form-select" id="numberCount">
+                                            <option value="1">1 number</option>
+                                            <option value="5">5 numbers</option>
+                                            <option value="10" selected>10 numbers</option>
+                                            <option value="20">20 numbers</option>
+                                            <option value="50">50 numbers</option>
+                                            <option value="100">100 numbers</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="numberType" class="form-label">Number Type</label>
+                                        <select class="form-select" id="numberType">
+                                            <option value="integer">Integer</option>
+                                            <option value="decimal">Decimal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="decimalPlaces" class="form-label">Decimal Places</label>
+                                        <select class="form-select" id="decimalPlaces">
+                                            <option value="0">0 (whole numbers)</option>
+                                            <option value="1">1 decimal place</option>
+                                            <option value="2" selected>2 decimal places</option>
+                                            <option value="3">3 decimal places</option>
+                                            <option value="4">4 decimal places</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="allowDuplicates" class="form-label">Allow Duplicates</label>
+                                        <select class="form-select" id="allowDuplicates">
+                                            <option value="true">Yes</option>
+                                            <option value="false" selected>No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary" onclick="generateNumbers()">
+                                    <i class="fas fa-magic"></i> Generate Numbers
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadSampleData()">
+                                    <i class="fas fa-file-alt"></i> Load Sample
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="clearResults()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Generated Random Numbers</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div id="numbersOutput"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="stats-container">
+                                            <h6>Statistics</h6>
+                                            <div id="statsOutput"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadNumbers()">
+                                        <i class="fas fa-download"></i> Download Numbers
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyNumbers()">
+                                        <i class="fas fa-copy"></i> Copy Numbers
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Generator Features</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Custom range selection</li>
+                                <li>• Integer or decimal numbers</li>
+                                <li>• Configurable decimal places</li>
+                                <li>• Duplicate prevention option</li>
+                                <li>• Multiple number generation</li>
+                                <li>• Statistical analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Common Uses</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Game development</li>
+                                <li>• Statistical sampling</li>
+                                <li>• Testing and debugging</li>
+                                <li>• Lottery number generation</li>
+                                <li>• Password generation</li>
+                                <li>• Data analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        let generatedNumbers = [];
+
+        // Update decimal places visibility based on number type
+        document.getElementById('numberType').addEventListener('change', function() {
+            const decimalPlacesSelect = document.getElementById('decimalPlaces');
+            if (this.value === 'integer') {
+                decimalPlacesSelect.value = '0';
+                decimalPlacesSelect.disabled = true;
+            } else {
+                decimalPlacesSelect.disabled = false;
+            }
+        });
+
+        function generateNumbers() {
+            const min = parseInt(document.getElementById('minNumber').value);
+            const max = parseInt(document.getElementById('maxNumber').value);
+            const count = parseInt(document.getElementById('numberCount').value);
+            const type = document.getElementById('numberType').value;
+            const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
+            const allowDuplicates = document.getElementById('allowDuplicates').value === 'true';
+            
+            if (min >= max) {
+                MultiTools.showError('Minimum number must be less than maximum number');
+                return;
+            }
+            
+            if (!allowDuplicates && (max - min + 1) < count) {
+                MultiTools.showError('Cannot generate unique numbers: range too small for count');
+                return;
+            }
+
+            generatedNumbers = [];
+            
+            if (allowDuplicates) {
+                for (let i = 0; i < count; i++) {
+                    generatedNumbers.push(generateRandomNumber(min, max, type, decimalPlaces));
+                }
+            } else {
+                const numbers = [];
+                while (numbers.length < count) {
+                    const num = generateRandomNumber(min, max, type, decimalPlaces);
+                    if (!numbers.includes(num)) {
+                        numbers.push(num);
+                    }
+                }
+                generatedNumbers = numbers;
+            }
+            
+            displayNumbers(generatedNumbers);
+            updateStats(generatedNumbers);
+            document.getElementById('resultContainer').style.display = 'block';
+            MultiTools.showSuccess('Random numbers generated successfully!');
+        }
+
+        function generateRandomNumber(min, max, type, decimalPlaces) {
+            if (type === 'integer') {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            } else {
+                const random = Math.random() * (max - min) + min;
+                return parseFloat(random.toFixed(decimalPlaces));
+            }
+        }
+
+        function displayNumbers(numbers) {
+            const output = document.getElementById('numbersOutput');
+            output.innerHTML = `
+                <div class="d-flex flex-wrap gap-2">
+                    ${numbers.map((num, index) => `
+                        <span class="badge bg-primary fs-6">${num}</span>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function updateStats(numbers) {
+            if (numbers.length === 0) return;
+            
+            const sorted = [...numbers].sort((a, b) => a - b);
+            const sum = numbers.reduce((acc, num) => acc + num, 0);
+            const average = sum / numbers.length;
+            const min = Math.min(...numbers);
+            const max = Math.max(...numbers);
+            const range = max - min;
+            
+            // Calculate median
+            const median = sorted.length % 2 === 0 ? 
+                (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2 :
+                sorted[Math.floor(sorted.length / 2)];
+            
+            // Calculate mode
+            const frequency = {};
+            numbers.forEach(num => {
+                frequency[num] = (frequency[num] || 0) + 1;
+            });
+            const maxFreq = Math.max(...Object.values(frequency));
+            const modes = Object.keys(frequency).filter(key => frequency[key] === maxFreq);
+            
+            document.getElementById('statsOutput').innerHTML = `
+                <div class="mb-2"><strong>Count:</strong> ${numbers.length}</div>
+                <div class="mb-2"><strong>Minimum:</strong> ${min}</div>
+                <div class="mb-2"><strong>Maximum:</strong> ${max}</div>
+                <div class="mb-2"><strong>Range:</strong> ${range}</div>
+                <div class="mb-2"><strong>Average:</strong> ${average.toFixed(2)}</div>
+                <div class="mb-2"><strong>Median:</strong> ${median}</div>
+                <div class="mb-2"><strong>Mode:</strong> ${modes.join(', ')}</div>
+                <div class="mb-2"><strong>Sum:</strong> ${sum}</div>
+            `;
+        }
+
+        function loadSampleData() {
+            document.getElementById('minNumber').value = '1';
+            document.getElementById('maxNumber').value = '100';
+            document.getElementById('numberCount').value = '10';
+            document.getElementById('numberType').value = 'integer';
+            document.getElementById('decimalPlaces').value = '0';
+            document.getElementById('allowDuplicates').value = 'false';
+            document.getElementById('decimalPlaces').disabled = true;
+            generateNumbers();
+        }
+
+        function clearResults() {
+            document.getElementById('resultContainer').style.display = 'none';
+            generatedNumbers = [];
+            MultiTools.showSuccess('Results cleared');
+        }
+
+        function downloadNumbers() {
+            if (generatedNumbers.length === 0) {
+                MultiTools.showError('No numbers to download');
+                return;
+            }
+
+            const min = document.getElementById('minNumber').value;
+            const max = document.getElementById('maxNumber').value;
+            const count = document.getElementById('numberCount').value;
+            const type = document.getElementById('numberType').value;
+
+            let content = `Random Number Generator Results\n`;
+            content += `Generated on: ${new Date().toLocaleString()}\n\n`;
+            content += `Range: ${min} to ${max}\n`;
+            content += `Count: ${count}\n`;
+            content += `Type: ${type}\n`;
+            content += `Allow Duplicates: ${document.getElementById('allowDuplicates').value}\n\n`;
+            content += `Generated Numbers:\n`;
+            content += generatedNumbers.join(', ');
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'random-numbers.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            MultiTools.showSuccess('Numbers downloaded!');
+        }
+
+        function copyNumbers() {
+            if (generatedNumbers.length === 0) {
+                MultiTools.showError('No numbers to copy');
+                return;
+            }
+
+            const content = generatedNumbers.join(', ');
+            navigator.clipboard.writeText(content).then(() => {
+                MultiTools.showSuccess('Numbers copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy numbers');
+            });
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+        // Standardized theme detection script
+        (() => {
+            const userTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = userTheme || systemTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="container my-4">
+        <h1 class="text-center mb-4">AI Chatbot Demo</h1>
+        <div class="ad-section">
+            <!-- Ad Space -->
+            <p>Advertisement</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">AI Chatbot Demo Functionality</h5>
+                <p class="card-text">Interact with a simple AI chatbot.</p>
+                <div class="card mb-3">
+                    <div class="card-header">Chat Window</div>
+                    <div class="card-body" id="chatWindow" style="height: 300px; overflow-y: scroll; border: 1px solid #dee2e6; border-radius: 0.25rem;"></div>
+                    <div class="card-footer d-flex">
+                        <input type="text" class="form-control me-2" id="chatInput" placeholder="Type your message...">
+                        <button class="btn btn-primary" id="sendMessageBtn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loader.js"></script>
+    <script>
+        // JavaScript for AI Chatbot Demo tool
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('AI Chatbot Demo loaded.');
+
+            const chatWindow = document.getElementById('chatWindow');
+            const chatInput = document.getElementById('chatInput');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+            function appendMessage(sender, message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('mb-2');
+                messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                chatWindow.appendChild(messageElement);
+                chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to bottom
+            }
+
+            function getBotResponse(message) {
+                const lowerCaseMessage = message.toLowerCase();
+                if (lowerCaseMessage.includes('hello') || lowerCaseMessage.includes('hi')) {
+                    return 'Hello there! How can I help you today?';
+                } else if (lowerCaseMessage.includes('how are you')) {
+                    return 'I am a bot, so I don\'t have feelings, but I\'m ready to assist you!';
+                } else if (lowerCaseMessage.includes('your name')) {
+                    return 'I am a simple AI chatbot demo.';
+                } else if (lowerCaseMessage.includes('help')) {
+                    return 'I can answer basic questions or just chat. Try asking me about my name or how I am.';
+                } else if (lowerCaseMessage.includes('bye')) {
+                    return 'Goodbye! Have a great day!';
+                } else {
+                    return 'I\'m sorry, I don\'t understand that. Can you rephrase?';
+                }
+            }
+
+            sendMessageBtn.addEventListener('click', function() {
+                const userMessage = chatInput.value.trim();
+                if (userMessage) {
+                    appendMessage('You', userMessage);
+                    chatInput.value = '';
+                    setTimeout(() => {
+                        const botResponse = getBotResponse(userMessage);
+                        appendMessage('Bot', botResponse);
+                    }, 500);
+                }
+            });
+
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessageBtn.click();
+                }
+            });
+
+            appendMessage('Bot', 'Hi! I am a simple AI Chatbot. Type something to start chatting!');
+        });
+    </script>
+</body>
+</html>

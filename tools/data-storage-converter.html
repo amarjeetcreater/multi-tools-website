@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Storage Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different data storage units including bytes, kilobytes, megabytes, gigabytes, terabytes, and more. Free online data storage converter tool.">
+    <meta name="keywords" content="data storage converter, bytes to mb, mb to gb, data units, file size converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid tool-page">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-hdd"></i> Data Storage Converter</h1>
+                        <p>Convert between different data storage units including bytes, kilobytes, megabytes, gigabytes, terabytes, and more.</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit">From Unit:</label>
+                                    <select id="fromUnit" class="form-control">
+                                        <option value="bytes">Bytes (B)</option>
+                                        <option value="kilobytes">Kilobytes (KB)</option>
+                                        <option value="megabytes">Megabytes (MB)</option>
+                                        <option value="gigabytes">Gigabytes (GB)</option>
+                                        <option value="terabytes">Terabytes (TB)</option>
+                                        <option value="petabytes">Petabytes (PB)</option>
+                                        <option value="exabytes">Exabytes (EB)</option>
+                                        <option value="kibibytes">Kibibytes (KiB)</option>
+                                        <option value="mebibytes">Mebibytes (MiB)</option>
+                                        <option value="gibibytes">Gibibytes (GiB)</option>
+                                        <option value="tebibytes">Tebibytes (TiB)</option>
+                                        <option value="bits">Bits (b)</option>
+                                        <option value="kilobits">Kilobits (Kb)</option>
+                                        <option value="megabits">Megabits (Mb)</option>
+                                        <option value="gigabits">Gigabits (Gb)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit">To Unit:</label>
+                                    <select id="toUnit" class="form-control">
+                                        <option value="megabytes">Megabytes (MB)</option>
+                                        <option value="bytes">Bytes (B)</option>
+                                        <option value="kilobytes">Kilobytes (KB)</option>
+                                        <option value="gigabytes">Gigabytes (GB)</option>
+                                        <option value="terabytes">Terabytes (TB)</option>
+                                        <option value="petabytes">Petabytes (PB)</option>
+                                        <option value="exabytes">Exabytes (EB)</option>
+                                        <option value="kibibytes">Kibibytes (KiB)</option>
+                                        <option value="mebibytes">Mebibytes (MiB)</option>
+                                        <option value="gibibytes">Gibibytes (GiB)</option>
+                                        <option value="tebibytes">Tebibytes (TiB)</option>
+                                        <option value="bits">Bits (b)</option>
+                                        <option value="kilobits">Kilobits (Kb)</option>
+                                        <option value="megabits">Megabits (Mb)</option>
+                                        <option value="gigabits">Gigabits (Gb)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="storageValue">Storage Value:</label>
+                            <input type="number" id="storageValue" class="form-control" placeholder="Enter storage value" step="any">
+                        </div>
+
+                        <div class="btn-group mt-3" role="group">
+                            <button type="button" class="btn btn-primary" onclick="convertStorage()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="swapUnits()">
+                                <i class="fas fa-arrows-alt-h"></i> Swap Units
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="copyResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+
+                        <div id="result" class="result-container mt-4" style="display: none;">
+                            <h4><i class="fas fa-chart-line"></i> Conversion Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="conversionResult"></strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Formula Used:</h5>
+                                    <p id="formula"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Conversion Factor:</h5>
+                                    <p id="factor"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-conversions mt-4">
+                            <h4><i class="fas fa-bolt"></i> Quick Conversions</h4>
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1024, 'bytes', 'kilobytes')">
+                                        1024 B → KB
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'gigabytes', 'megabytes')">
+                                        1 GB → MB
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1000, 'megabytes', 'gigabytes')">
+                                        1000 MB → GB
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(8, 'bits', 'bytes')">
+                                        8 bits → B
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="storage-info mt-4">
+                            <h4><i class="fas fa-info-circle"></i> Data Storage Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Common Storage References:</h5>
+                                    <ul>
+                                        <li><strong>Text File:</strong> 1-10 KB</li>
+                                        <li><strong>Photo:</strong> 1-10 MB</li>
+                                        <li><strong>MP3 Song:</strong> 3-5 MB</li>
+                                        <li><strong>HD Video:</strong> 100-500 MB</li>
+                                        <li><strong>DVD Movie:</strong> 4-8 GB</li>
+                                        <li><strong>Blu-ray Movie:</strong> 25-50 GB</li>
+                                        <li><strong>Hard Drive:</strong> 1-20 TB</li>
+                                        <li><strong>Data Center:</strong> 1-100 PB</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Storage Units Explained:</h5>
+                                    <ul>
+                                        <li><strong>Decimal Units:</strong> Based on powers of 10 (KB, MB, GB)</li>
+                                        <li><strong>Binary Units:</strong> Based on powers of 2 (KiB, MiB, GiB)</li>
+                                        <li><strong>Bytes:</strong> 8 bits = 1 byte</li>
+                                        <li><strong>Kilobytes:</strong> 1,000 bytes (decimal) or 1,024 bytes (binary)</li>
+                                        <li><strong>Megabytes:</strong> 1,000 KB (decimal) or 1,024 KB (binary)</li>
+                                        <li><strong>Gigabytes:</strong> 1,000 MB (decimal) or 1,024 MB (binary)</li>
+                                        <li><strong>Bits:</strong> Smallest unit of digital data</li>
+                                        <li><strong>Nibble:</strong> 4 bits = 0.5 bytes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conversion-types mt-4">
+                            <h4><i class="fas fa-calculator"></i> Conversion Types</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Decimal (SI) Units:</h5>
+                                    <ul>
+                                        <li>1 KB = 1,000 bytes</li>
+                                        <li>1 MB = 1,000 KB = 1,000,000 bytes</li>
+                                        <li>1 GB = 1,000 MB = 1,000,000,000 bytes</li>
+                                        <li>1 TB = 1,000 GB = 1,000,000,000,000 bytes</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Binary (IEC) Units:</h5>
+                                    <ul>
+                                        <li>1 KiB = 1,024 bytes</li>
+                                        <li>1 MiB = 1,024 KiB = 1,048,576 bytes</li>
+                                        <li>1 GiB = 1,024 MiB = 1,073,741,824 bytes</li>
+                                        <li>1 TiB = 1,024 GiB = 1,099,511,627,776 bytes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Data storage conversion factors (to bytes as base unit)
+        const storageFactors = {
+            'bits': 0.125,              // bits to bytes
+            'bytes': 1,                 // bytes (base unit)
+            'kilobytes': 1000,          // decimal kilobytes
+            'megabytes': 1000000,       // decimal megabytes
+            'gigabytes': 1000000000,    // decimal gigabytes
+            'terabytes': 1000000000000, // decimal terabytes
+            'petabytes': 1000000000000000, // decimal petabytes
+            'exabytes': 1000000000000000000, // decimal exabytes
+            'kibibytes': 1024,          // binary kilobytes
+            'mebibytes': 1048576,       // binary megabytes
+            'gibibytes': 1073741824,    // binary gigabytes
+            'tebibytes': 1099511627776, // binary terabytes
+            'kilobits': 125,            // kilobits to bytes
+            'megabits': 125000,         // megabits to bytes
+            'gigabits': 125000000       // gigabits to bytes
+        };
+
+        const unitNames = {
+            'bits': 'Bits',
+            'bytes': 'Bytes',
+            'kilobytes': 'Kilobytes',
+            'megabytes': 'Megabytes',
+            'gigabytes': 'Gigabytes',
+            'terabytes': 'Terabytes',
+            'petabytes': 'Petabytes',
+            'exabytes': 'Exabytes',
+            'kibibytes': 'Kibibytes',
+            'mebibytes': 'Mebibytes',
+            'gibibytes': 'Gibibytes',
+            'tebibytes': 'Tebibytes',
+            'kilobits': 'Kilobits',
+            'megabits': 'Megabits',
+            'gigabits': 'Gigabits'
+        };
+
+        const unitSymbols = {
+            'bits': 'b',
+            'bytes': 'B',
+            'kilobytes': 'KB',
+            'megabytes': 'MB',
+            'gigabytes': 'GB',
+            'terabytes': 'TB',
+            'petabytes': 'PB',
+            'exabytes': 'EB',
+            'kibibytes': 'KiB',
+            'mebibytes': 'MiB',
+            'gibibytes': 'GiB',
+            'tebibytes': 'TiB',
+            'kilobits': 'Kb',
+            'megabits': 'Mb',
+            'gigabits': 'Gb'
+        };
+
+        function convertStorage() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const storageValue = parseFloat(document.getElementById('storageValue').value);
+
+            if (isNaN(storageValue)) {
+                MultiTools.showError('Please enter a valid storage value.');
+                return;
+            }
+
+            // Convert to base unit (bytes) first
+            const baseValue = storageValue * storageFactors[fromUnit];
+            
+            // Convert from base unit to target unit
+            const result = baseValue / storageFactors[toUnit];
+
+            const fromSymbol = unitSymbols[fromUnit];
+            const toSymbol = unitSymbols[toUnit];
+            const fromName = unitNames[fromUnit];
+            const toName = unitNames[toUnit];
+
+            // Format result with appropriate precision
+            let formattedResult;
+            if (result >= 1000000) {
+                formattedResult = result.toExponential(3);
+            } else if (result >= 1000) {
+                formattedResult = result.toFixed(2);
+            } else {
+                formattedResult = result.toFixed(6);
+            }
+
+            document.getElementById('conversionResult').innerHTML = 
+                `${storageValue} ${fromSymbol} = ${formattedResult} ${toSymbol}`;
+            
+            document.getElementById('formula').innerHTML = 
+                `${fromName} × ${storageFactors[fromUnit]} ÷ ${storageFactors[toUnit]} = ${toName}`;
+            
+            const conversionFactor = storageFactors[fromUnit] / storageFactors[toUnit];
+            let formattedFactor;
+            if (conversionFactor >= 1000000) {
+                formattedFactor = conversionFactor.toExponential(3);
+            } else if (conversionFactor >= 1000) {
+                formattedFactor = conversionFactor.toFixed(2);
+            } else {
+                formattedFactor = conversionFactor.toFixed(6);
+            }
+            
+            document.getElementById('factor').innerHTML = 
+                `1 ${fromSymbol} = ${formattedFactor} ${toSymbol}`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            
+            if (document.getElementById('storageValue').value) {
+                convertStorage();
+            }
+        }
+
+        function resetConverter() {
+            document.getElementById('storageValue').value = '';
+            document.getElementById('fromUnit').value = 'bytes';
+            document.getElementById('toUnit').value = 'megabytes';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function quickConvert(value, from, to) {
+            document.getElementById('storageValue').value = value;
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            convertStorage();
+        }
+
+        function copyResult() {
+            const result = document.getElementById('conversionResult').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    MultiTools.showSuccess('Result copied to clipboard!');
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy result.');
+                });
+            }
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

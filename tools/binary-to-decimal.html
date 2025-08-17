@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary to Decimal Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between binary and decimal numbers. Free online binary to decimal converter tool.">
+    <meta name="keywords" content="binary converter, decimal converter, number converter, binary to decimal">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-exchange-alt"></i> Binary to Decimal Converter</h1>
+                <p>Convert between binary and decimal numbers with detailed explanations</p>
+            </div>
+
+            <div class="tool-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="inputNumber">Input Number</label>
+                            <input type="text" id="inputNumber" class="form-control" placeholder="Enter binary or decimal number">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="conversionType">Conversion Type</label>
+                            <select id="conversionType" class="form-control">
+                                <option value="binary-to-decimal">Binary to Decimal</option>
+                                <option value="decimal-to-binary">Decimal to Binary</option>
+                                <option value="auto-detect">Auto Detect</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="bitLength">Bit Length (for binary output)</label>
+                            <select id="bitLength" class="form-control">
+                                <option value="8">8 bits</option>
+                                <option value="16">16 bits</option>
+                                <option value="32">32 bits</option>
+                                <option value="64">64 bits</option>
+                                <option value="auto">Auto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-primary w-100" onclick="convertNumber()">
+                                <i class="fas fa-calculator"></i> Convert
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearInput()">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="swapConversion()">
+                            <i class="fas fa-arrows-alt-h"></i> Swap Conversion
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="copyResult()">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+
+                <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                    <h3>Conversion Result</h3>
+                    <div class="conversion-result">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-value">
+                                    <strong>Input:</strong> <span id="inputDisplay">-</span>
+                                    <br><small id="inputType">-</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="output-value">
+                                    <strong>Output:</strong> <span id="outputDisplay">-</span>
+                                    <br><small id="outputType">-</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversion-steps mt-4" id="stepsContainer" style="display: none;">
+                    <h4>Conversion Steps</h4>
+                    <div id="conversionSteps">
+                        <!-- Steps will be populated here -->
+                    </div>
+                </div>
+
+                <div class="quick-conversions mt-4">
+                    <h4>Quick Conversions</h4>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('1010')">
+                                1010 (Binary)
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('255')">
+                                255 (Decimal)
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('1000000')">
+                                1000000 (Binary)
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert('1024')">
+                                1024 (Decimal)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="number-systems mt-4">
+                    <h4>Number Systems Reference</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5>Binary (Base-2)</h5>
+                                <ul>
+                                    <li>Uses only 0 and 1</li>
+                                    <li>Each position represents a power of 2</li>
+                                    <li>Common in computer systems</li>
+                                    <li>Examples: 1010₂ = 10₁₀</li>
+                                    <li>1111₂ = 15₁₀</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5>Decimal (Base-10)</h5>
+                                <ul>
+                                    <li>Uses digits 0-9</li>
+                                    <li>Each position represents a power of 10</li>
+                                    <li>Most common number system</li>
+                                    <li>Examples: 10₁₀ = 1010₂</li>
+                                    <li>15₁₀ = 1111₂</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="common-values mt-4">
+                    <h4>Common Binary Values</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Binary</th>
+                                    <th>Decimal</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>0001</td><td>1</td><td>2⁰</td></tr>
+                                <tr><td>0010</td><td>2</td><td>2¹</td></tr>
+                                <tr><td>0100</td><td>4</td><td>2²</td></tr>
+                                <tr><td>1000</td><td>8</td><td>2³</td></tr>
+                                <tr><td>1111</td><td>15</td><td>4-bit maximum</td></tr>
+                                <tr><td>10000</td><td>16</td><td>2⁴</td></tr>
+                                <tr><td>11111111</td><td>255</td><td>8-bit maximum</td></tr>
+                                <tr><td>100000000</td><td>256</td><td>2⁸</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/loader.js"></script>
+    <script>
+        function convertNumber() {
+            const input = document.getElementById('inputNumber').value.trim();
+            const conversionType = document.getElementById('conversionType').value;
+            const bitLength = document.getElementById('bitLength').value;
+
+            if (!input) {
+                MultiTools.showError('Please enter a number to convert');
+                return;
+            }
+
+            let inputType, outputType, result, steps;
+
+            // Auto-detect conversion type
+            if (conversionType === 'auto-detect') {
+                if (/^[01]+$/.test(input)) {
+                    inputType = 'Binary';
+                    outputType = 'Decimal';
+                    result = binaryToDecimal(input);
+                    steps = getBinaryToDecimalSteps(input);
+                } else if (/^\d+$/.test(input)) {
+                    inputType = 'Decimal';
+                    outputType = 'Binary';
+                    result = decimalToBinary(parseInt(input), bitLength);
+                    steps = getDecimalToBinarySteps(parseInt(input));
+                } else {
+                    MultiTools.showError('Invalid input. Please enter a valid binary or decimal number');
+                    return;
+                }
+            } else if (conversionType === 'binary-to-decimal') {
+                if (!/^[01]+$/.test(input)) {
+                    MultiTools.showError('Please enter a valid binary number (only 0s and 1s)');
+                    return;
+                }
+                inputType = 'Binary';
+                outputType = 'Decimal';
+                result = binaryToDecimal(input);
+                steps = getBinaryToDecimalSteps(input);
+            } else if (conversionType === 'decimal-to-binary') {
+                if (!/^\d+$/.test(input)) {
+                    MultiTools.showError('Please enter a valid decimal number');
+                    return;
+                }
+                inputType = 'Decimal';
+                outputType = 'Binary';
+                result = decimalToBinary(parseInt(input), bitLength);
+                steps = getDecimalToBinarySteps(parseInt(input));
+            }
+
+            // Update display
+            document.getElementById('inputDisplay').textContent = input;
+            document.getElementById('inputType').textContent = inputType;
+            document.getElementById('outputDisplay').textContent = result;
+            document.getElementById('outputType').textContent = outputType;
+
+            // Show steps
+            document.getElementById('conversionSteps').innerHTML = steps;
+
+            document.getElementById('resultContainer').style.display = 'block';
+            document.getElementById('stepsContainer').style.display = 'block';
+            MultiTools.showResult(`${input} (${inputType}) = ${result} (${outputType})`, `Successfully converted ${inputType.toLowerCase()} to ${outputType.toLowerCase()}`);
+        }
+
+        function binaryToDecimal(binary) {
+            let decimal = 0;
+            for (let i = 0; i < binary.length; i++) {
+                if (binary[i] === '1') {
+                    decimal += Math.pow(2, binary.length - 1 - i);
+                }
+            }
+            return decimal;
+        }
+
+        function decimalToBinary(decimal, bitLength) {
+            if (decimal === 0) return '0';
+            
+            let binary = '';
+            let num = decimal;
+            
+            while (num > 0) {
+                binary = (num % 2) + binary;
+                num = Math.floor(num / 2);
+            }
+            
+            // Pad with zeros if bitLength is specified and not 'auto'
+            if (bitLength !== 'auto') {
+                const targetLength = parseInt(bitLength);
+                while (binary.length < targetLength) {
+                    binary = '0' + binary;
+                }
+            }
+            
+            return binary;
+        }
+
+        function getBinaryToDecimalSteps(binary) {
+            let steps = '<ol>';
+            for (let i = 0; i < binary.length; i++) {
+                const position = binary.length - 1 - i;
+                const digit = binary[i];
+                const power = Math.pow(2, position);
+                const contribution = digit === '1' ? power : 0;
+                steps += `<li>Position ${position}: ${digit} × 2^${position} = ${digit} × ${power} = ${contribution}</li>`;
+            }
+            steps += `<li><strong>Total: ${binaryToDecimal(binary)}</strong></li></ol>`;
+            return steps;
+        }
+
+        function getDecimalToBinarySteps(decimal) {
+            let steps = '<ol>';
+            let num = decimal;
+            let binary = '';
+            let step = 1;
+            
+            while (num > 0) {
+                const remainder = num % 2;
+                const quotient = Math.floor(num / 2);
+                steps += `<li>Step ${step}: ${num} ÷ 2 = ${quotient} remainder ${remainder}</li>`;
+                binary = remainder + binary;
+                num = quotient;
+                step++;
+            }
+            
+            if (binary === '') binary = '0';
+            steps += `<li><strong>Result: ${binary}</strong></li></ol>`;
+            return steps;
+        }
+
+        function clearInput() {
+            document.getElementById('inputNumber').value = '';
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('stepsContainer').style.display = 'none';
+            MultiTools.clearResults();
+        }
+
+        function swapConversion() {
+            const conversionType = document.getElementById('conversionType');
+            if (conversionType.value === 'binary-to-decimal') {
+                conversionType.value = 'decimal-to-binary';
+            } else if (conversionType.value === 'decimal-to-binary') {
+                conversionType.value = 'binary-to-decimal';
+            }
+            convertNumber();
+        }
+
+        function copyResult() {
+            const output = document.getElementById('outputDisplay').textContent;
+            if (output && output !== '-') {
+                navigator.clipboard.writeText(output).then(() => {
+                    MultiTools.showResult('Result copied to clipboard!', output);
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy to clipboard');
+                });
+            }
+        }
+
+        function quickConvert(value) {
+            document.getElementById('inputNumber').value = value;
+            convertNumber();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+            
+            // Auto-convert on input change
+            document.getElementById('inputNumber').addEventListener('input', function() {
+                if (this.value.trim()) {
+                    convertNumber();
+                }
+            });
+            
+            document.getElementById('conversionType').addEventListener('change', function() {
+                if (document.getElementById('inputNumber').value.trim()) {
+                    convertNumber();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

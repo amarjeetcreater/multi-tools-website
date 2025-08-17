@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Converter - Multi-Tools</title>
+    <meta name="description" content="Convert text case (uppercase, lowercase, title case)">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-font"></i> Case Converter</h1>
+                <p>Convert text case (uppercase, lowercase, title case)</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter Text</label>
+                                <textarea class="form-control" id="textInput" rows="8" placeholder="Enter your text here..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Convert to:</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 mb-2 case-btn" data-case="uppercase">
+                                            <i class="fas fa-arrow-up"></i> UPPERCASE
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 mb-2 case-btn" data-case="lowercase">
+                                            <i class="fas fa-arrow-down"></i> lowercase
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 mb-2 case-btn" data-case="titlecase">
+                                            <i class="fas fa-font"></i> Title Case
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary" id="clearBtn">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="copyBtn">
+                                        <i class="fas fa-copy"></i> Copy Result
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Case Types</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li><strong>UPPERCASE:</strong> ALL CAPITAL LETTERS</li>
+                                <li><strong>lowercase:</strong> all small letters</li>
+                                <li><strong>Title Case:</strong> First Letter Of Each Word</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-file-alt"></i> Converted Text</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="resultText" class="form-label">Result</label>
+                            <textarea class="form-control" id="resultText" rows="8" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.querySelectorAll('.case-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const caseType = this.dataset.case;
+                    convertText(caseType);
+                });
+            });
+
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                document.getElementById('textInput').value = '';
+                document.getElementById('resultText').value = '';
+                document.getElementById('resultContainer').style.display = 'none';
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const resultText = document.getElementById('resultText').value;
+                if (resultText) {
+                    MultiTools.copyToClipboard(resultText);
+                }
+            });
+        });
+
+        function convertText(caseType) {
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (!text) {
+                MultiTools.showError('Please enter some text to convert.');
+                return;
+            }
+
+            let convertedText = '';
+            
+            switch (caseType) {
+                case 'uppercase':
+                    convertedText = text.toUpperCase();
+                    break;
+                case 'lowercase':
+                    convertedText = text.toLowerCase();
+                    break;
+                case 'titlecase':
+                    convertedText = toTitleCase(text);
+                    break;
+                default:
+                    convertedText = text;
+            }
+
+            document.getElementById('resultText').value = convertedText;
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function toTitleCase(text) {
+            return text.replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+    </script>
+</body>
+</html> 

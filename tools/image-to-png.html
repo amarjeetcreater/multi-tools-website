@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PNG Converter - Multi-Tools Website</title>
+    <meta name="description" content="Free online image to PNG converter. Convert JPG, JPEG, GIF, BMP, and other formats to PNG with transparency support.">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+        
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <!-- Top Ad -->
+        <div class="ad-space mb-4">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-7389985631571522"
+                data-ad-slot="3374471779"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="row">
+            <!-- Tool Content -->
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-image text-primary"></i> Image to PNG Converter</h1>
+                        <p>Convert your images to PNG format with transparency support. Supports JPG, JPEG, GIF, BMP, and other formats.</p>
+                    </div>
+
+                    <!-- File Upload Area -->
+                    <div class="mb-4">
+                        <div class="file-upload" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                            <div class="text-center">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                <h5>Drop your image here or click to browse</h5>
+                                <p class="text-muted">Supports: JPG, JPEG, GIF, BMP, WEBP, TIFF</p>
+                                <p class="text-muted">Maximum file size: 10MB</p>
+                            </div>
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+
+                    <!-- Conversion Options -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="qualitySelect" class="form-label">PNG Quality:</label>
+                            <select id="qualitySelect" class="form-select">
+                                <option value="1.0">High Quality (100%)</option>
+                                <option value="0.9">Good Quality (90%)</option>
+                                <option value="0.8">Medium Quality (80%)</option>
+                                <option value="0.7">Low Quality (70%)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="resizeSelect" class="form-label">Resize Option:</label>
+                            <select id="resizeSelect" class="form-select">
+                                <option value="none">No Resize</option>
+                                <option value="width">Resize by Width</option>
+                                <option value="height">Resize by Height</option>
+                                <option value="both">Resize by Both</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Resize Options (initially hidden) -->
+                    <div id="resizeOptions" class="row mb-4" style="display: none;">
+                        <div class="col-md-6 mb-3">
+                            <label for="widthInput" class="form-label">Width (px):</label>
+                            <input type="number" id="widthInput" class="form-control" placeholder="Enter width">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="heightInput" class="form-label">Height (px):</label>
+                            <input type="number" id="heightInput" class="form-control" placeholder="Enter height">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-primary w-100" id="convertBtn" onclick="convertImage()" disabled>
+                                <i class="fas fa-exchange-alt"></i> Convert to PNG
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-secondary w-100" onclick="resetTool()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div id="progressContainer" class="mb-4" style="display: none;">
+                        <div class="progress">
+                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <p class="text-center mt-2" id="progressText">Converting...</p>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="results"></div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Ad Space -->
+                <div class="ad-space sidebar mb-4">
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-7389985631571522"
+                        data-ad-slot="1701935776"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+
+                <!-- Related Tools -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tools"></i> Related Tools</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="image-to-jpg.html" class="text-decoration-none">
+                                    <i class="fas fa-file-image text-primary"></i> Image to JPG Converter
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="image-resizer.html" class="text-decoration-none">
+                                    <i class="fas fa-expand-arrows-alt text-primary"></i> Image Resizer
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="image-compressor.html" class="text-decoration-none">
+                                    <i class="fas fa-compress-alt text-primary"></i> Image Compressor
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="image-cropper.html" class="text-decoration-none">
+                                    <i class="fas fa-crop-alt text-primary"></i> Image Cropper
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <!-- Tool-specific JavaScript -->
+    <script>
+        let selectedFile = null;
+        let originalImage = null;
+
+        // File input handling
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+        
+        // Drag and drop functionality
+        const dropZone = document.getElementById('dropZone');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                MultiTools.showError('Please select a valid image file.', 'results');
+                return;
+            }
+
+            // Check file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                MultiTools.showError('File size must be less than 10MB.', 'results');
+                return;
+            }
+
+            selectedFile = file;
+            originalImage = null;
+
+            // Display file info
+            const fileInfo = `
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-file-image"></i> Selected File</h6>
+                    <p class="mb-1"><strong>Name:</strong> ${file.name}</p>
+                    <p class="mb-1"><strong>Size:</strong> ${MultiTools.formatFileSize(file.size)}</p>
+                    <p class="mb-0"><strong>Type:</strong> ${file.type}</p>
+                </div>
+            `;
+            document.getElementById('results').innerHTML = fileInfo;
+
+            // Enable convert button
+            document.getElementById('convertBtn').disabled = false;
+
+            // Load image to get dimensions
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImage = img;
+                    document.getElementById('widthInput').value = img.width;
+                    document.getElementById('heightInput').value = img.height;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function convertImage() {
+            if (!selectedFile) {
+                MultiTools.showError('Please select an image file first.', 'results');
+                return;
+            }
+
+            // Show progress
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = 'Converting...';
+
+            // Simulate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                document.getElementById('progressBar').style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    performConversion();
+                }
+            }, 100);
+        }
+
+        function performConversion() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Get conversion options
+            const quality = parseFloat(document.getElementById('qualitySelect').value);
+            const resizeOption = document.getElementById('resizeSelect').value;
+            const targetWidth = parseInt(document.getElementById('widthInput').value) || originalImage.width;
+            const targetHeight = parseInt(document.getElementById('heightInput').value) || originalImage.height;
+
+            // Set canvas dimensions
+            if (resizeOption === 'width') {
+                canvas.width = targetWidth;
+                canvas.height = (originalImage.height * targetWidth) / originalImage.width;
+            } else if (resizeOption === 'height') {
+                canvas.width = (originalImage.width * targetHeight) / originalImage.height;
+                canvas.height = targetHeight;
+            } else if (resizeOption === 'both') {
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+            } else {
+                canvas.width = originalImage.width;
+                canvas.height = originalImage.height;
+            }
+
+            // Draw image on canvas
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+            // Convert to PNG
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                
+                // Create download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = selectedFile.name.replace(/\.[^/.]+$/, '') + '.png';
+                
+                // Display result
+                const resultHtml = `
+                    <div class="alert alert-success">
+                        <h6><i class="fas fa-check-circle"></i> Conversion Complete!</h6>
+                        <p class="mb-2">Your image has been successfully converted to PNG format.</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <button class="btn btn-success w-100" onclick="downloadConvertedImage()">
+                                    <i class="fas fa-download"></i> Download PNG
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <button class="btn btn-outline-primary w-100" onclick="previewImage()">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="previewContainer" style="display: none;">
+                        <h6>Preview:</h6>
+                        <img src="${url}" class="img-fluid rounded" alt="Converted PNG">
+                    </div>
+                `;
+                
+                document.getElementById('results').innerHTML = resultHtml;
+                document.getElementById('progressContainer').style.display = 'none';
+                
+                // Store blob for download
+                window.convertedBlob = blob;
+                window.convertedUrl = url;
+            }, 'image/png', quality);
+        }
+
+        function downloadConvertedImage() {
+            if (window.convertedBlob) {
+                const url = URL.createObjectURL(window.convertedBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = selectedFile.name.replace(/\.[^/.]+$/, '') + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function previewImage() {
+            const previewContainer = document.getElementById('previewContainer');
+            if (previewContainer.style.display === 'none') {
+                previewContainer.style.display = 'block';
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        function resetTool() {
+            selectedFile = null;
+            originalImage = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('convertBtn').disabled = true;
+            document.getElementById('progressContainer').style.display = 'none';
+            dropZone.innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                    <h5>Drop your image here or click to browse</h5>
+                    <p class="text-muted">Supports: JPG, JPEG, GIF, BMP, WEBP, TIFF</p>
+                    <p class="text-muted">Maximum file size: 10MB</p>
+                </div>
+            `;
+        }
+
+        // Handle resize option changes
+        document.getElementById('resizeSelect').addEventListener('change', function() {
+            const resizeOptions = document.getElementById('resizeOptions');
+            if (this.value === 'none') {
+                resizeOptions.style.display = 'none';
+            } else {
+                resizeOptions.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

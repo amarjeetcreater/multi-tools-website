@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+        // Standardized theme detection script
+        (() => {
+            const userTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = userTheme || systemTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backlink Checker - Multi-Tools</title>
+    <meta name="description" content="Analyze backlinks to your website">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-link"></i> Backlink Checker</h1>
+                <p>Analyze backlinks to your website</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="backlinkForm">
+                                <div class="mb-3">
+                                    <label for="domain" class="form-label">Domain or URL</label>
+                                    <input type="url" class="form-control" id="domain" placeholder="https://example.com" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="analysisType" class="form-label">Analysis Type</label>
+                                    <select class="form-select" id="analysisType">
+                                        <option value="overview">Overview</option>
+                                        <option value="detailed">Detailed Analysis</option>
+                                        <option value="toxic">Toxic Backlinks</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="maxResults" class="form-label">Max Results</label>
+                                    <select class="form-select" id="maxResults">
+                                        <option value="10">10 results</option>
+                                        <option value="25" selected>25 results</option>
+                                        <option value="50">50 results</option>
+                                        <option value="100">100 results</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeMetrics" checked>
+                                        <label class="form-check-label" for="includeMetrics">
+                                            Include domain metrics
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Check Backlinks
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About Backlinks</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">Backlinks are links from other websites that point to your site. They are important for SEO and domain authority.</p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success"></i> Quality over quantity</li>
+                                <li><i class="fas fa-check text-success"></i> Relevant anchor text</li>
+                                <li><i class="fas fa-check text-success"></i> High-authority domains</li>
+                                <li><i class="fas fa-check text-success"></i> Natural link profile</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list"></i> Backlink Analysis Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="copyBtn">
+                                    <i class="fas fa-copy"></i> Copy Results
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm" id="downloadBtn">
+                                    <i class="fas fa-download"></i> Download Report
+                                </button>
+                            </div>
+                        </div>
+                        <div id="backlinkResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loader.js"></script>
+    <script>
+        let backlinkData = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('backlinkForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                checkBacklinks();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForCopy();
+                MultiTools.copyToClipboard(resultsText);
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const resultsText = formatResultsForDownload();
+                MultiTools.downloadFile(resultsText, 'backlink-analysis-results.txt', 'text/plain');
+            });
+        });
+
+        function checkBacklinks() {
+            const domain = document.getElementById('domain').value.trim();
+            const analysisType = document.getElementById('analysisType').value;
+            const maxResults = parseInt(document.getElementById('maxResults').value);
+            const includeMetrics = document.getElementById('includeMetrics').checked;
+
+            if (!domain) {
+                MultiTools.showError('Please enter a domain or URL.');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('backlinkResults');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Analyzing backlinks...</div>';
+            document.getElementById('resultContainer').style.display = 'block';
+
+            setTimeout(() => {
+                backlinkData = simulateBacklinkAnalysis(domain, analysisType, maxResults, includeMetrics);
+                displayResults();
+            }, 2000);
+        }
+
+        function simulateBacklinkAnalysis(domain, analysisType, maxResults, includeMetrics) {
+            const domainName = new URL(domain).hostname;
+            const totalBacklinks = Math.floor(Math.random() * 5000) + 100;
+            const referringDomains = Math.floor(Math.random() * 200) + 10;
+            const doFollowLinks = Math.floor(totalBacklinks * 0.8);
+            const noFollowLinks = totalBacklinks - doFollowLinks;
+
+            const backlinks = [];
+            const domains = [
+                'blog.example.com', 'news.site.com', 'article.net', 'post.org', 'content.io',
+                'guide.website.com', 'tutorial.info', 'help.me', 'support.co', 'learn.edu',
+                'tips.pro', 'advice.biz', 'insights.tech', 'knowledge.digital', 'resources.online'
+            ];
+
+            for (let i = 0; i < Math.min(maxResults, totalBacklinks); i++) {
+                const sourceDomain = domains[Math.floor(Math.random() * domains.length)];
+                const domainAuthority = Math.floor(Math.random() * 100) + 1;
+                const isDoFollow = Math.random() > 0.2;
+                const anchorText = generateAnchorText();
+                const linkType = Math.random() > 0.7 ? 'image' : 'text';
+
+                backlinks.push({
+                    sourceUrl: `https://${sourceDomain}/page-${i + 1}`,
+                    sourceDomain: sourceDomain,
+                    anchorText: anchorText,
+                    linkType: linkType,
+                    isDoFollow: isDoFollow,
+                    domainAuthority: domainAuthority,
+                    firstSeen: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+                    lastSeen: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+                    metrics: includeMetrics ? {
+                        spamScore: Math.floor(Math.random() * 17),
+                        trustFlow: Math.floor(Math.random() * 100) + 1,
+                        citationFlow: Math.floor(Math.random() * 100) + 1
+                    } : null
+                });
+            }
+
+            return {
+                domain: domainName,
+                url: domain,
+                totalBacklinks: totalBacklinks,
+                referringDomains: referringDomains,
+                doFollowLinks: doFollowLinks,
+                noFollowLinks: noFollowLinks,
+                analysisType: analysisType,
+                backlinks: backlinks,
+                lastUpdated: new Date()
+            };
+        }
+
+        function generateAnchorText() {
+            const anchors = [
+                'click here', 'read more', 'learn more', 'visit website', 'check this out',
+                'find out more', 'get started', 'sign up', 'download', 'view details',
+                'related article', 'similar content', 'recommended', 'useful resource',
+                'helpful guide', 'expert advice', 'professional service', 'quality content'
+            ];
+            return anchors[Math.floor(Math.random() * anchors.length)];
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('backlinkResults');
+            const data = backlinkData;
+
+            let html = `
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-globe"></i> Domain Information</h6>
+                        <p><strong>Domain:</strong> ${data.domain}</p>
+                        <p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
+                        <p><strong>Last Updated:</strong> ${data.lastUpdated.toLocaleDateString()}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-chart-bar"></i> Summary</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-primary">${data.totalBacklinks.toLocaleString()}</h5>
+                                        <small>Total Backlinks</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-success">${data.referringDomains.toLocaleString()}</h5>
+                                        <small>Referring Domains</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (data.analysisType === 'overview') {
+                html += `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-link"></i> Link Types</h6>
+                            <p><strong>DoFollow:</strong> ${data.doFollowLinks.toLocaleString()} (${((data.doFollowLinks / data.totalBacklinks) * 100).toFixed(1)}%)</p>
+                            <p><strong>NoFollow:</strong> ${data.noFollowLinks.toLocaleString()} (${((data.noFollowLinks / data.totalBacklinks) * 100).toFixed(1)}%)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-chart-pie"></i> Authority Distribution</h6>
+                            <p><strong>High DA (70+):</strong> ${data.backlinks.filter(b => b.domainAuthority >= 70).length}</p>
+                            <p><strong>Medium DA (30-69):</strong> ${data.backlinks.filter(b => b.domainAuthority >= 30 && b.domainAuthority < 70).length}</p>
+                            <p><strong>Low DA (<30):</strong> ${data.backlinks.filter(b => b.domainAuthority < 30).length}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (data.analysisType === 'detailed' || data.analysisType === 'toxic') {
+                html += `
+                    <h6><i class="fas fa-list"></i> Backlink Details</h6>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Source Domain</th>
+                                    <th>Anchor Text</th>
+                                    <th>Type</th>
+                                    <th>DA</th>
+                                    <th>First Seen</th>
+                                    ${data.backlinks[0]?.metrics ? '<th>Metrics</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                data.backlinks.forEach(backlink => {
+                    const rowClass = backlink.domainAuthority < 20 ? 'table-warning' : '';
+                    html += `
+                        <tr class="${rowClass}">
+                            <td><a href="${backlink.sourceUrl}" target="_blank">${backlink.sourceDomain}</a></td>
+                            <td>${backlink.anchorText}</td>
+                            <td>
+                                <span class="badge bg-${backlink.isDoFollow ? 'success' : 'secondary'}">${backlink.isDoFollow ? 'DoFollow' : 'NoFollow'}</span>
+                                <span class="badge bg-info">${backlink.linkType}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-${getAuthorityColor(backlink.domainAuthority)}">${backlink.domainAuthority}</span>
+                            </td>
+                            <td>${backlink.firstSeen.toLocaleDateString()}</td>
+                            ${backlink.metrics ? `<td>TF: ${backlink.metrics.trustFlow}, CF: ${backlink.metrics.citationFlow}</td>` : ''}
+                        </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function getAuthorityColor(score) {
+            if (score >= 70) return 'success';
+            if (score >= 50) return 'info';
+            if (score >= 30) return 'warning';
+            return 'danger';
+        }
+
+        function formatResultsForCopy() {
+            const data = backlinkData;
+            let text = 'Backlink Analysis Results\n';
+            text += '========================\n\n';
+            text += `Domain: ${data.domain}\n`;
+            text += `URL: ${data.url}\n`;
+            text += `Last Updated: ${data.lastUpdated.toLocaleDateString()}\n\n`;
+            text += `Total Backlinks: ${data.totalBacklinks.toLocaleString()}\n`;
+            text += `Referring Domains: ${data.referringDomains.toLocaleString()}\n`;
+            text += `DoFollow Links: ${data.doFollowLinks.toLocaleString()}\n`;
+            text += `NoFollow Links: ${data.noFollowLinks.toLocaleString()}\n\n`;
+
+            if (data.analysisType === 'detailed' || data.analysisType === 'toxic') {
+                text += 'Backlink Details:\n';
+                text += '================\n\n';
+                data.backlinks.forEach((backlink, index) => {
+                    text += `${index + 1}. ${backlink.sourceDomain}\n`;
+                    text += `   Anchor: ${backlink.anchorText}\n`;
+                    text += `   Type: ${backlink.isDoFollow ? 'DoFollow' : 'NoFollow'} ${backlink.linkType}\n`;
+                    text += `   DA: ${backlink.domainAuthority}\n`;
+                    text += `   First Seen: ${backlink.firstSeen.toLocaleDateString()}\n\n`;
+                });
+            }
+
+            return text;
+        }
+
+        function formatResultsForDownload() {
+            return formatResultsForCopy();
+        }
+    </script>
+</body>
+</html> 

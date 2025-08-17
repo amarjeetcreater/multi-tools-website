@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Address Lookup - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossorigin="anonymous"></script>
+    <style>
+        .ip-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .location-info {
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        .status-online { background-color: #28a745; }
+        .status-offline { background-color: #dc3545; }
+        .status-loading { background-color: #ffc107; }
+        #map {
+            height: 300px;
+            width: 100%;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        .copy-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .copy-tooltip .tooltiptext {
+            visibility: hidden;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -40px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .copy-tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container mt-4">
+        <!-- Top Ad Section -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_AD_SLOT_ID"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="tool-header">
+                    <h1><i class="fas fa-map-marker-alt"></i> IP Address Lookup</h1>
+                    <p>Lookup IP address information, location, and network details</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-search"></i> IP Address Lookup</h5>
+                                
+                                <div class="mb-3">
+                                    <label for="ipInput" class="form-label">IP Address:</label>
+                                    <div class="input-group">
+                                        <input type="text" id="ipInput" class="form-control" placeholder="Enter IP address or leave empty for your IP">
+                                        <button class="btn btn-primary" onclick="lookupIP()">
+                                            <i class="fas fa-search"></i> Lookup
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <button class="btn btn-outline-info" onclick="getMyIP()">
+                                        <i class="fas fa-user"></i> Get My IP
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="clearResults()">
+                                        <i class="fas fa-trash"></i> Clear
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="loadSample()">
+                                        <i class="fas fa-file-text"></i> Load Sample
+                                    </button>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeISP" checked>
+                                        <label class="form-check-label" for="includeISP">
+                                            Include ISP Information
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="includeTimezone" checked>
+                                        <label class="form-check-label" for="includeTimezone">
+                                            Include Timezone Information
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-eye"></i> Lookup Results</h5>
+                                <div id="lookupResults"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="ip-info">
+                                    <h6><i class="fas fa-info-circle"></i> IP Information</h6>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <small>Status:</small><br>
+                                            <span id="statusDisplay">
+                                                <span class="status-indicator status-loading"></span>Ready
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small>Type:</small><br>
+                                            <span id="ipType">-</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small>Version:</small><br>
+                                            <span id="ipVersion">-</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small>Response Time:</small><br>
+                                            <span id="responseTime">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-lightbulb"></i> Lookup Features</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> IP address validation</li>
+                                    <li><i class="fas fa-check text-success"></i> Geographic location lookup</li>
+                                    <li><i class="fas fa-check text-success"></i> ISP and organization info</li>
+                                    <li><i class="fas fa-check text-success"></i> Timezone detection</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Network information</li>
+                                    <li><i class="fas fa-check text-success"></i> Response time measurement</li>
+                                    <li><i class="fas fa-check text-success"></i> Copy results to clipboard</li>
+                                    <li><i class="fas fa-check text-success"></i> Export lookup data</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Ad Section -->
+        <div class="row mt-4 mb-4">
+            <div class="col-12 text-center">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_BOTTOM_AD_SLOT_ID"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // IP Address Lookup functionality
+        async function lookupIP() {
+            const ipInput = document.getElementById('ipInput').value.trim();
+            const results = document.getElementById('lookupResults');
+            const statusDisplay = document.getElementById('statusDisplay');
+            
+            updateStatus('loading', 'Looking up IP...');
+            
+            if (!ipInput) {
+                getMyIP();
+                return;
+            }
+
+            // Validate IP address
+            if (!isValidIP(ipInput)) {
+                updateStatus('offline', 'Invalid IP Address');
+                MultiTools.showError('Please enter a valid IP address.');
+                return;
+            }
+
+            try {
+                const startTime = performance.now();
+                const response = await fetch(`https://ipapi.co/${ipInput}/json/`);
+                const ipInfo = await response.json();
+                const responseTime = Math.round(performance.now() - startTime);
+
+                if (ipInfo.error) {
+                    throw new Error(ipInfo.reason || 'Failed to lookup IP');
+                }
+
+                const formattedInfo = {
+                    ip: ipInfo.ip,
+                    type: ipInfo.version === 'IPv4' ? 'Public' : 'IPv6',
+                    version: ipInfo.version,
+                    country: ipInfo.country_name,
+                    region: ipInfo.region,
+                    city: ipInfo.city,
+                    zip: ipInfo.postal,
+                    timezone: ipInfo.timezone,
+                    isp: ipInfo.org,
+                    org: ipInfo.org,
+                    latitude: ipInfo.latitude,
+                    longitude: ipInfo.longitude,
+                    responseTime: responseTime + 'ms'
+                };
+
+                displayResults(formattedInfo);
+                updateStatus('online', 'Lookup Complete');
+            } catch (error) {
+                console.error('IP Lookup failed:', error);
+                updateStatus('offline', 'Lookup Failed');
+                MultiTools.showError('Failed to lookup IP address. Please try again later.');
+            }
+        }
+
+        async function getMyIP() {
+            updateStatus('loading', 'Getting your IP...');
+            
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                document.getElementById('ipInput').value = data.ip;
+                
+                // Now lookup the IP details
+                await lookupIP();
+            } catch (error) {
+                console.error('Failed to get IP:', error);
+                updateStatus('offline', 'Failed to get IP');
+                MultiTools.showError('Failed to retrieve your IP address. Please try again later.');
+            }
+        }
+
+        function isValidIP(ip) {
+            // IPv4 validation
+            const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            
+            // IPv6 validation
+            const ipv6Regex = /^(?:(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(?::[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(?::[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(?::[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(?::[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:(?:(?::[0-9a-fA-F]{1,4}){1,6})|:(?:(?::[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(?::[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(?:ffff(?::0{1,4}){0,1}:){0,1}(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])|(?:[0-9a-fA-F]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
+            
+            return ipv4Regex.test(ip) || ipv6Regex.test(ip);
+        }
+
+        let map = null;
+        let marker = null;
+
+        function displayResults(ipInfo) {
+            const results = document.getElementById('lookupResults');
+            const includeISP = document.getElementById('includeISP').checked;
+            const includeTimezone = document.getElementById('includeTimezone').checked;
+            
+            let html = `
+                <div class="card">
+                    <div class="card-body">
+                        <h6><i class="fas fa-map-marker-alt"></i> Location Information</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Country:</strong> ${ipInfo.country}</p>
+                                <p><strong>Region:</strong> ${ipInfo.region}</p>
+                                <p><strong>City:</strong> ${ipInfo.city}</p>
+                                <p><strong>ZIP Code:</strong> ${ipInfo.zip}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Latitude:</strong> ${ipInfo.latitude}</p>
+                                <p><strong>Longitude:</strong> ${ipInfo.longitude}</p>
+                                ${includeTimezone ? `<p><strong>Timezone:</strong> ${ipInfo.timezone}</p>` : ''}
+                                <p><strong>Response Time:</strong> ${ipInfo.responseTime}</p>
+                            </div>
+                        </div>
+                        
+                        ${includeISP ? `
+                        <hr>
+                        <h6><i class="fas fa-network-wired"></i> Network Information</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>ISP:</strong> ${ipInfo.isp}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Organization:</strong> ${ipInfo.org}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div id="map"></div>
+
+                        <div class="mt-3">
+                            <div class="copy-tooltip">
+                                <button class="btn btn-outline-primary btn-sm" onclick="copyResults()">
+                                    <i class="fas fa-copy"></i> Copy Results
+                                </button>
+                                <span class="tooltiptext">Copy to clipboard</span>
+                            </div>
+                            <div class="copy-tooltip">
+                                <button class="btn btn-outline-success btn-sm" onclick="downloadResults()">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <span class="tooltiptext">Download as JSON</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            results.innerHTML = html;
+            
+            // Update status indicators
+            document.getElementById('ipType').textContent = ipInfo.type;
+            document.getElementById('ipVersion').textContent = ipInfo.version;
+            document.getElementById('responseTime').textContent = ipInfo.responseTime;
+
+            // Initialize or update map
+            if (ipInfo.latitude && ipInfo.longitude && ipInfo.latitude !== 'N/A' && ipInfo.longitude !== 'N/A') {
+                const lat = parseFloat(ipInfo.latitude);
+                const lng = parseFloat(ipInfo.longitude);
+                
+                if (!map) {
+                    map = L.map('map').setView([lat, lng], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+                } else {
+                    map.setView([lat, lng], 13);
+                }
+
+                if (marker) {
+                    marker.remove();
+                }
+                marker = L.marker([lat, lng]).addTo(map)
+                    .bindPopup(`<b>${ipInfo.ip}</b><br>${ipInfo.city}, ${ipInfo.country}`)
+                    .openPopup();
+            }
+        }
+
+        function updateStatus(status, message) {
+            const statusDisplay = document.getElementById('statusDisplay');
+            const indicator = statusDisplay.querySelector('.status-indicator');
+            
+            indicator.className = `status-indicator status-${status}`;
+            statusDisplay.innerHTML = indicator.outerHTML + message;
+        }
+
+        function isValidIP(ip) {
+            // Simple IP validation
+            const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+            const ipv6Pattern = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+            
+            if (ipv4Pattern.test(ip)) {
+                const parts = ip.split('.');
+                return parts.every(part => parseInt(part) >= 0 && parseInt(part) <= 255);
+            }
+            
+            return ipv6Pattern.test(ip);
+        }
+
+        function clearResults() {
+            document.getElementById('ipInput').value = '';
+            document.getElementById('lookupResults').innerHTML = '';
+            document.getElementById('ipType').textContent = '-';
+            document.getElementById('ipVersion').textContent = '-';
+            document.getElementById('responseTime').textContent = '-';
+            updateStatus('offline', 'Ready');
+        }
+
+        function copyResults() {
+            const ipType = document.getElementById('ipType').textContent;
+            const ipVersion = document.getElementById('ipVersion').textContent;
+            const responseTime = document.getElementById('responseTime').textContent;
+            
+            if (ipType === '-') {
+                MultiTools.showError('No results to copy. Please perform a lookup first.');
+                return;
+            }
+
+            const results = document.querySelectorAll('#lookupResults p');
+            let copyText = 'IP Address Lookup Results\n';
+            copyText += '========================\n';
+            
+            results.forEach(result => {
+                if (result.textContent.trim()) {
+                    copyText += result.textContent.trim() + '\n';
+                }
+            });
+
+            copyText += '\nTechnical Details:\n';
+            copyText += `IP Type: ${ipType}\n`;
+            copyText += `IP Version: ${ipVersion}\n`;
+            copyText += `Response Time: ${responseTime}\n`;
+
+            MultiTools.copyToClipboard(copyText);
+            
+            const tooltip = document.querySelector('.copy-tooltip .tooltiptext');
+            tooltip.textContent = 'Copied!';
+            setTimeout(() => {
+                tooltip.textContent = 'Copy to clipboard';
+            }, 2000);
+        }
+
+        function downloadResults() {
+            const ipType = document.getElementById('ipType').textContent;
+            
+            if (ipType === '-') {
+                MultiTools.showError('No results to download. Please perform a lookup first.');
+                return;
+            }
+
+            const results = {};
+            document.querySelectorAll('#lookupResults p').forEach(result => {
+                const [key, value] = result.textContent.split(':').map(str => str.trim());
+                if (key && value) {
+                    results[key] = value;
+                }
+            });
+
+            results['Technical Details'] = {
+                'IP Type': document.getElementById('ipType').textContent,
+                'IP Version': document.getElementById('ipVersion').textContent,
+                'Response Time': document.getElementById('responseTime').textContent
+            };
+
+            const jsonStr = JSON.stringify(results, null, 2);
+            MultiTools.downloadFile(jsonStr, 'ip_lookup_results.json', 'application/json');
+            
+            const tooltip = document.querySelector('.copy-tooltip:last-child .tooltiptext');
+            tooltip.textContent = 'Downloaded!';
+            setTimeout(() => {
+                tooltip.textContent = 'Download as JSON';
+            }, 2000);
+        }
+
+        function loadSample() {
+            document.getElementById('ipInput').value = '8.8.8.8';
+            lookupIP();
+        }
+
+        // Initialize
+        updateStatus('offline', 'Ready');
+    </script>
+</body>
+</html>

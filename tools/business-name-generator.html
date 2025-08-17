@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Name Generator - Multi-Tools</title>
+    <meta name="description" content="Generate creative business names based on keywords and industry. Find the perfect name for your business.">
+    <meta name="keywords" content="business name generator, company name generator, brand name generator, business naming">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-building"></i> Business Name Generator
+                    </h1>
+                    <p class="tool-description">
+                        Generate creative business names based on keywords and industry. 
+                        Find the perfect name for your business with our intelligent generator.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="keywords" class="form-label">Keywords</label>
+                                        <input type="text" class="form-control" id="keywords" 
+                                               placeholder="Enter keywords (e.g., tech, digital, solutions)">
+                                        <div class="form-text">Separate keywords with commas</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="industry" class="form-label">Industry</label>
+                                        <select class="form-select" id="industry">
+                                            <option value="">Select Industry</option>
+                                            <option value="technology">Technology</option>
+                                            <option value="healthcare">Healthcare</option>
+                                            <option value="finance">Finance</option>
+                                            <option value="education">Education</option>
+                                            <option value="retail">Retail</option>
+                                            <option value="food">Food & Beverage</option>
+                                            <option value="consulting">Consulting</option>
+                                            <option value="creative">Creative & Design</option>
+                                            <option value="real-estate">Real Estate</option>
+                                            <option value="automotive">Automotive</option>
+                                            <option value="fitness">Fitness & Wellness</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="nameStyle" class="form-label">Name Style</label>
+                                        <select class="form-select" id="nameStyle">
+                                            <option value="modern">Modern</option>
+                                            <option value="professional">Professional</option>
+                                            <option value="creative">Creative</option>
+                                            <option value="traditional">Traditional</option>
+                                            <option value="tech">Tech-focused</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="nameCount" class="form-label">Number of Names</label>
+                                        <select class="form-select" id="nameCount">
+                                            <option value="5">5 names</option>
+                                            <option value="10" selected>10 names</option>
+                                            <option value="15">15 names</option>
+                                            <option value="20">20 names</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary" onclick="generateNames()">
+                                    <i class="fas fa-magic"></i> Generate Names
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadSampleData()">
+                                    <i class="fas fa-file-alt"></i> Load Sample
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="clearForm()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Generated Business Names</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="namesOutput"></div>
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadNames()">
+                                        <i class="fas fa-download"></i> Download List
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyNames()">
+                                        <i class="fas fa-copy"></i> Copy Names
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Naming Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Keep it memorable</li>
+                                <li>• Check domain availability</li>
+                                <li>• Avoid trademark conflicts</li>
+                                <li>• Consider scalability</li>
+                                <li>• Test pronunciation</li>
+                                <li>• Think long-term</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Name Types</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Descriptive names</li>
+                                <li>• Abstract names</li>
+                                <li>• Acronyms</li>
+                                <li>• Compound words</li>
+                                <li>• Invented words</li>
+                                <li>• Geographic names</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/loader.js"></script>
+    
+    <script>
+        let generatedNames = [];
+
+        function generateNames() {
+            const keywords = document.getElementById('keywords').value.trim();
+            const industry = document.getElementById('industry').value;
+            const style = document.getElementById('nameStyle').value;
+            const count = parseInt(document.getElementById('nameCount').value);
+
+            if (!keywords && !industry) {
+                MultiTools.showError('Please enter keywords or select an industry');
+                return;
+            }
+
+            generatedNames = createBusinessNames(keywords, industry, style, count);
+            displayNames(generatedNames);
+            document.getElementById('resultContainer').style.display = 'block';
+            MultiTools.showSuccess('Business names generated successfully!');
+        }
+
+        function createBusinessNames(keywords, industry, style, count) {
+            const names = [];
+            const keywordArray = keywords ? keywords.split(',').map(k => k.trim()) : [];
+            
+            // Industry-specific words
+            const industryWords = {
+                'technology': ['tech', 'digital', 'cyber', 'data', 'cloud', 'smart', 'innovate', 'future', 'next', 'hub'],
+                'healthcare': ['health', 'care', 'medical', 'wellness', 'vital', 'life', 'heal', 'care', 'med', 'bio'],
+                'finance': ['finance', 'capital', 'wealth', 'money', 'invest', 'bank', 'trust', 'asset', 'fund', 'wealth'],
+                'education': ['learn', 'teach', 'education', 'academy', 'school', 'institute', 'study', 'knowledge', 'brain', 'mind'],
+                'retail': ['shop', 'store', 'market', 'buy', 'sell', 'trade', 'commerce', 'retail', 'boutique', 'mart'],
+                'food': ['food', 'kitchen', 'chef', 'taste', 'fresh', 'dine', 'cook', 'cuisine', 'bite', 'plate'],
+                'consulting': ['consult', 'advisory', 'expert', 'strategy', 'solution', 'partner', 'guide', 'mentor', 'coach', 'advisor'],
+                'creative': ['creative', 'design', 'art', 'studio', 'craft', 'imagine', 'vision', 'creative', 'art', 'design'],
+                'real-estate': ['realty', 'property', 'home', 'estate', 'land', 'build', 'house', 'property', 'real', 'estate'],
+                'automotive': ['auto', 'car', 'drive', 'motor', 'vehicle', 'wheels', 'road', 'drive', 'auto', 'car'],
+                'fitness': ['fit', 'health', 'gym', 'fitness', 'workout', 'strong', 'active', 'energy', 'fit', 'health']
+            };
+
+            // Style-specific suffixes
+            const styleSuffixes = {
+                'modern': ['Labs', 'Hub', 'Studio', 'Works', 'Co', 'Group', 'Team', 'Solutions', 'Systems', 'Tech'],
+                'professional': ['Corp', 'Inc', 'LLC', 'Partners', 'Associates', 'Consulting', 'Services', 'Enterprises', 'Industries', 'International'],
+                'creative': ['Creative', 'Design', 'Studio', 'Works', 'Craft', 'Art', 'Vision', 'Imagination', 'Studio', 'Creative'],
+                'traditional': ['Company', 'Enterprises', 'Industries', 'Corporation', 'Limited', 'Partners', 'Associates', 'Group', 'Organization', 'Business'],
+                'tech': ['Tech', 'Digital', 'Cyber', 'Data', 'Cloud', 'Smart', 'Innovate', 'Future', 'Next', 'Hub']
+            };
+
+            const industryWordList = industryWords[industry] || [];
+            const suffixList = styleSuffixes[style] || styleSuffixes['modern'];
+
+            // Generate names
+            for (let i = 0; i < count; i++) {
+                let name = '';
+                
+                if (keywordArray.length > 0) {
+                    const keyword = keywordArray[Math.floor(Math.random() * keywordArray.length)];
+                    const suffix = suffixList[Math.floor(Math.random() * suffixList.length)];
+                    name = keyword.charAt(0).toUpperCase() + keyword.slice(1) + ' ' + suffix;
+                } else if (industryWordList.length > 0) {
+                    const word = industryWordList[Math.floor(Math.random() * industryWordList.length)];
+                    const suffix = suffixList[Math.floor(Math.random() * suffixList.length)];
+                    name = word.charAt(0).toUpperCase() + word.slice(1) + ' ' + suffix;
+                } else {
+                    // Generic names
+                    const genericWords = ['Innovate', 'Future', 'Next', 'Smart', 'Digital', 'Creative', 'Professional', 'Global', 'Elite', 'Prime'];
+                    const word = genericWords[Math.floor(Math.random() * genericWords.length)];
+                    const suffix = suffixList[Math.floor(Math.random() * suffixList.length)];
+                    name = word + ' ' + suffix;
+                }
+
+                // Ensure uniqueness
+                if (!names.includes(name)) {
+                    names.push(name);
+                } else {
+                    i--; // Try again
+                }
+            }
+
+            return names;
+        }
+
+        function displayNames(names) {
+            const output = document.getElementById('namesOutput');
+            output.innerHTML = names.map((name, index) => `
+                <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                    <span class="fw-bold">${index + 1}. ${name}</span>
+                    <button class="btn btn-sm btn-outline-primary" onclick="copyName('${name}')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function copyName(name) {
+            navigator.clipboard.writeText(name).then(() => {
+                MultiTools.showSuccess(`"${name}" copied to clipboard!`);
+            }).catch(() => {
+                MultiTools.showError('Failed to copy name');
+            });
+        }
+
+        function loadSampleData() {
+            document.getElementById('keywords').value = 'tech, digital, solutions';
+            document.getElementById('industry').value = 'technology';
+            document.getElementById('nameStyle').value = 'modern';
+            document.getElementById('nameCount').value = '10';
+            generateNames();
+        }
+
+        function clearForm() {
+            document.getElementById('keywords').value = '';
+            document.getElementById('industry').value = '';
+            document.getElementById('nameStyle').value = 'modern';
+            document.getElementById('nameCount').value = '10';
+            document.getElementById('resultContainer').style.display = 'none';
+            generatedNames = [];
+            MultiTools.showSuccess('Form cleared');
+        }
+
+        function downloadNames() {
+            if (generatedNames.length === 0) {
+                MultiTools.showError('No names to download');
+                return;
+            }
+
+            const content = generatedNames.map((name, index) => `${index + 1}. ${name}`).join('\n');
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'business-names.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            MultiTools.showSuccess('Business names downloaded!');
+        }
+
+        function copyNames() {
+            if (generatedNames.length === 0) {
+                MultiTools.showError('No names to copy');
+                return;
+            }
+
+            const content = generatedNames.join('\n');
+            navigator.clipboard.writeText(content).then(() => {
+                MultiTools.showSuccess('All names copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy names');
+            });
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

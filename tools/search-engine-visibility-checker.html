@@ -1,0 +1,11 @@
+<script>
+// Theme detection and application script
+try {
+  const userTheme = localStorage.getItem('theme');
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const theme = userTheme || systemTheme || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+  document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>

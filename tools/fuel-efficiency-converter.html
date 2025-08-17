@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Efficiency Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different fuel efficiency units including MPG, L/100km, km/L, and more. Free online fuel efficiency converter tool.">
+    <meta name="keywords" content="fuel efficiency converter, mpg to l/100km, fuel economy converter, gas mileage converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid tool-page">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-gas-pump"></i> Fuel Efficiency Converter</h1>
+                        <p>Convert between different fuel efficiency units including MPG, L/100km, km/L, and more.</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit">From Unit:</label>
+                                    <select id="fromUnit" class="form-control">
+                                        <option value="mpg_us">US MPG (miles per gallon)</option>
+                                        <option value="mpg_uk">UK MPG (miles per gallon)</option>
+                                        <option value="l_100km">L/100km (liters per 100 km)</option>
+                                        <option value="km_l">km/L (kilometers per liter)</option>
+                                        <option value="gal_100mi">gal/100mi (gallons per 100 miles)</option>
+                                        <option value="mi_gal">mi/gal (miles per gallon)</option>
+                                        <option value="l_km">L/km (liters per kilometer)</option>
+                                        <option value="km_gal">km/gal (kilometers per gallon)</option>
+                                        <option value="mpg_imp">Imperial MPG</option>
+                                        <option value="l_100mi">L/100mi (liters per 100 miles)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit">To Unit:</label>
+                                    <select id="toUnit" class="form-control">
+                                        <option value="l_100km">L/100km (liters per 100 km)</option>
+                                        <option value="mpg_us">US MPG (miles per gallon)</option>
+                                        <option value="mpg_uk">UK MPG (miles per gallon)</option>
+                                        <option value="km_l">km/L (kilometers per liter)</option>
+                                        <option value="gal_100mi">gal/100mi (gallons per 100 miles)</option>
+                                        <option value="mi_gal">mi/gal (miles per gallon)</option>
+                                        <option value="l_km">L/km (liters per kilometer)</option>
+                                        <option value="km_gal">km/gal (kilometers per gallon)</option>
+                                        <option value="mpg_imp">Imperial MPG</option>
+                                        <option value="l_100mi">L/100mi (liters per 100 miles)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="efficiencyValue">Fuel Efficiency Value:</label>
+                            <input type="number" id="efficiencyValue" class="form-control" placeholder="Enter fuel efficiency value" step="any">
+                        </div>
+
+                        <div class="btn-group mt-3" role="group">
+                            <button type="button" class="btn btn-primary" onclick="convertEfficiency()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="swapUnits()">
+                                <i class="fas fa-arrows-alt-h"></i> Swap Units
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="copyResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+
+                        <div id="result" class="result-container mt-4" style="display: none;">
+                            <h4><i class="fas fa-chart-line"></i> Conversion Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="conversionResult"></strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Formula Used:</h5>
+                                    <p id="formula"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Conversion Factor:</h5>
+                                    <p id="factor"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-conversions mt-4">
+                            <h4><i class="fas fa-bolt"></i> Quick Conversions</h4>
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(30, 'mpg_us', 'l_100km')">
+                                        30 MPG → L/100km
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(8, 'l_100km', 'mpg_us')">
+                                        8 L/100km → MPG
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(12, 'km_l', 'mpg_us')">
+                                        12 km/L → MPG
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(25, 'mpg_uk', 'l_100km')">
+                                        25 UK MPG → L/100km
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="efficiency-info mt-4">
+                            <h4><i class="fas fa-info-circle"></i> Fuel Efficiency Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Common Efficiency References:</h5>
+                                    <ul>
+                                        <li><strong>Hybrid Car:</strong> 50-60 MPG (4.7-5.6 L/100km)</li>
+                                        <li><strong>Electric Car:</strong> 100+ MPGe (equivalent)</li>
+                                        <li><strong>Compact Car:</strong> 30-40 MPG (5.9-7.8 L/100km)</li>
+                                        <li><strong>SUV:</strong> 20-30 MPG (7.8-11.8 L/100km)</li>
+                                        <li><strong>Truck:</strong> 15-25 MPG (9.4-15.7 L/100km)</li>
+                                        <li><strong>Motorcycle:</strong> 40-60 MPG (3.9-5.9 L/100km)</li>
+                                        <li><strong>Diesel Car:</strong> 35-45 MPG (5.2-6.7 L/100km)</li>
+                                        <li><strong>Sports Car:</strong> 15-25 MPG (9.4-15.7 L/100km)</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Efficiency Units Explained:</h5>
+                                    <ul>
+                                        <li><strong>MPG:</strong> Miles per gallon (distance per fuel)</li>
+                                        <li><strong>L/100km:</strong> Liters per 100 kilometers (fuel per distance)</li>
+                                        <li><strong>km/L:</strong> Kilometers per liter (distance per fuel)</li>
+                                        <li><strong>US vs UK:</strong> Different gallon sizes (3.785L vs 4.546L)</li>
+                                        <li><strong>Imperial MPG:</strong> UK gallons with imperial miles</li>
+                                        <li><strong>gal/100mi:</strong> Gallons per 100 miles</li>
+                                        <li><strong>L/km:</strong> Liters per kilometer</li>
+                                        <li><strong>km/gal:</strong> Kilometers per gallon</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="efficiency-tips mt-4">
+                            <h4><i class="fas fa-lightbulb"></i> Fuel Efficiency Tips</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Driving Tips:</h5>
+                                    <ul>
+                                        <li><strong>Maintain Speed:</strong> Avoid rapid acceleration and braking</li>
+                                        <li><strong>Proper Tire Pressure:</strong> Check regularly for optimal efficiency</li>
+                                        <li><strong>Remove Weight:</strong> Remove unnecessary items from vehicle</li>
+                                        <li><strong>Use Cruise Control:</strong> Maintain consistent speed on highways</li>
+                                        <li><strong>Avoid Idling:</strong> Turn off engine when stopped for long periods</li>
+                                        <li><strong>Plan Routes:</strong> Avoid traffic and choose efficient paths</li>
+                                        <li><strong>Regular Maintenance:</strong> Keep engine and filters clean</li>
+                                        <li><strong>Use AC Wisely:</strong> AC reduces efficiency by 10-20%</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Vehicle Factors:</h5>
+                                    <ul>
+                                        <li><strong>Engine Size:</strong> Smaller engines generally more efficient</li>
+                                        <li><strong>Aerodynamics:</strong> Streamlined design reduces drag</li>
+                                        <li><strong>Weight:</strong> Lighter vehicles use less fuel</li>
+                                        <li><strong>Transmission:</strong> Automatic vs manual affects efficiency</li>
+                                        <li><strong>Fuel Type:</strong> Different fuels have different energy content</li>
+                                        <li><strong>Age:</strong> Newer vehicles often more efficient</li>
+                                        <li><strong>Technology:</strong> Hybrid and electric options available</li>
+                                        <li><strong>Driving Conditions:</strong> City vs highway affects efficiency</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Fuel efficiency conversion factors and formulas
+        const efficiencyFactors = {
+            'mpg_us': { factor: 1, type: 'distance_per_fuel' },           // US miles per gallon
+            'mpg_uk': { factor: 1.20095, type: 'distance_per_fuel' },      // UK miles per gallon
+            'l_100km': { factor: 1, type: 'fuel_per_distance' },           // liters per 100 km
+            'km_l': { factor: 1, type: 'distance_per_fuel' },              // kilometers per liter
+            'gal_100mi': { factor: 1, type: 'fuel_per_distance' },         // gallons per 100 miles
+            'mi_gal': { factor: 1, type: 'distance_per_fuel' },            // miles per gallon
+            'l_km': { factor: 1, type: 'fuel_per_distance' },              // liters per kilometer
+            'km_gal': { factor: 1, type: 'distance_per_fuel' },            // kilometers per gallon
+            'mpg_imp': { factor: 1.20095, type: 'distance_per_fuel' },     // imperial MPG
+            'l_100mi': { factor: 1, type: 'fuel_per_distance' }            // liters per 100 miles
+        };
+
+        const unitNames = {
+            'mpg_us': 'US Miles per Gallon',
+            'mpg_uk': 'UK Miles per Gallon',
+            'l_100km': 'Liters per 100 km',
+            'km_l': 'Kilometers per Liter',
+            'gal_100mi': 'Gallons per 100 miles',
+            'mi_gal': 'Miles per Gallon',
+            'l_km': 'Liters per Kilometer',
+            'km_gal': 'Kilometers per Gallon',
+            'mpg_imp': 'Imperial Miles per Gallon',
+            'l_100mi': 'Liters per 100 miles'
+        };
+
+        const unitSymbols = {
+            'mpg_us': 'US MPG',
+            'mpg_uk': 'UK MPG',
+            'l_100km': 'L/100km',
+            'km_l': 'km/L',
+            'gal_100mi': 'gal/100mi',
+            'mi_gal': 'mi/gal',
+            'l_km': 'L/km',
+            'km_gal': 'km/gal',
+            'mpg_imp': 'Imp MPG',
+            'l_100mi': 'L/100mi'
+        };
+
+        // Conversion constants
+        const MILES_PER_KM = 0.621371;
+        const KM_PER_MILE = 1.60934;
+        const US_GALLON_LITERS = 3.78541;
+        const UK_GALLON_LITERS = 4.54609;
+
+        function convertEfficiency() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const efficiencyValue = parseFloat(document.getElementById('efficiencyValue').value);
+
+            if (isNaN(efficiencyValue)) {
+                MultiTools.showError('Please enter a valid fuel efficiency value.');
+                return;
+            }
+
+            let result;
+            let formula;
+
+            // Convert to L/100km as intermediate unit
+            let l100km = convertToL100km(efficiencyValue, fromUnit);
+            result = convertFromL100km(l100km, toUnit);
+
+            const fromSymbol = unitSymbols[fromUnit];
+            const toSymbol = unitSymbols[toUnit];
+            const fromName = unitNames[fromUnit];
+            const toName = unitNames[toUnit];
+
+            // Format result with appropriate precision
+            let formattedResult;
+            if (result >= 1000) {
+                formattedResult = result.toFixed(1);
+            } else if (result >= 100) {
+                formattedResult = result.toFixed(2);
+            } else {
+                formattedResult = result.toFixed(3);
+            }
+
+            document.getElementById('conversionResult').innerHTML = 
+                `${efficiencyValue} ${fromSymbol} = ${formattedResult} ${toSymbol}`;
+            
+            document.getElementById('formula').innerHTML = 
+                `Converted via L/100km as intermediate unit`;
+            
+            document.getElementById('factor').innerHTML = 
+                `1 ${fromSymbol} ≈ ${(1 / convertToL100km(1, fromUnit) * convertFromL100km(1, toUnit)).toFixed(4)} ${toSymbol}`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function convertToL100km(value, unit) {
+            switch(unit) {
+                case 'mpg_us':
+                    return 235.214 / value; // 235.214 = 100 * 3.78541 / 1.60934
+                case 'mpg_uk':
+                    return 282.481 / value; // 282.481 = 100 * 4.54609 / 1.60934
+                case 'l_100km':
+                    return value;
+                case 'km_l':
+                    return 100 / value;
+                case 'gal_100mi':
+                    return value * US_GALLON_LITERS * KM_PER_MILE / 100;
+                case 'mi_gal':
+                    return 235.214 / value;
+                case 'l_km':
+                    return value * 100;
+                case 'km_gal':
+                    return 100 / (value * KM_PER_MILE / US_GALLON_LITERS);
+                case 'mpg_imp':
+                    return 282.481 / value;
+                case 'l_100mi':
+                    return value * KM_PER_MILE / 100;
+                default:
+                    return value;
+            }
+        }
+
+        function convertFromL100km(l100km, unit) {
+            switch(unit) {
+                case 'mpg_us':
+                    return 235.214 / l100km;
+                case 'mpg_uk':
+                    return 282.481 / l100km;
+                case 'l_100km':
+                    return l100km;
+                case 'km_l':
+                    return 100 / l100km;
+                case 'gal_100mi':
+                    return l100km * 100 / (US_GALLON_LITERS * KM_PER_MILE);
+                case 'mi_gal':
+                    return 235.214 / l100km;
+                case 'l_km':
+                    return l100km / 100;
+                case 'km_gal':
+                    return (100 / l100km) * KM_PER_MILE / US_GALLON_LITERS;
+                case 'mpg_imp':
+                    return 282.481 / l100km;
+                case 'l_100mi':
+                    return l100km * 100 / KM_PER_MILE;
+                default:
+                    return l100km;
+            }
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            
+            if (document.getElementById('efficiencyValue').value) {
+                convertEfficiency();
+            }
+        }
+
+        function resetConverter() {
+            document.getElementById('efficiencyValue').value = '';
+            document.getElementById('fromUnit').value = 'mpg_us';
+            document.getElementById('toUnit').value = 'l_100km';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function quickConvert(value, from, to) {
+            document.getElementById('efficiencyValue').value = value;
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            convertEfficiency();
+        }
+
+        function copyResult() {
+            const result = document.getElementById('conversionResult').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    MultiTools.showSuccess('Result copied to clipboard!');
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy result.');
+                });
+            }
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

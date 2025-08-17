@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+        // Standardized theme detection script
+        (() => {
+            const userTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = userTheme || systemTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Generator - Multi-Tools</title>
+    <meta name="description" content="Generate barcodes in various formats including Code 128, Code 39, EAN-13, and UPC-A. Free online barcode generator tool.">
+    <meta name="keywords" content="barcode generator, code 128, code 39, ean-13, upc-a, barcode maker, free barcode tool">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <!-- Barcode Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-barcode"></i> Barcode Generator
+                    </h1>
+                    <p class="tool-description">
+                        Generate barcodes in various formats including Code 128, Code 39, EAN-13, and UPC-A. 
+                        Perfect for inventory management, retail, and product identification.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="barcodeForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeText" class="form-label">Barcode Text</label>
+                                            <input type="text" class="form-control" id="barcodeText" 
+                                                   placeholder="Enter text or numbers" required>
+                                            <div class="form-text">Enter the text or numbers you want to encode</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeType" class="form-label">Barcode Type</label>
+                                            <select class="form-select" id="barcodeType">
+                                                <option value="CODE128">Code 128</option>
+                                                <option value="CODE39">Code 39</option>
+                                                <option value="EAN13">EAN-13</option>
+                                                <option value="UPC">UPC-A</option>
+                                                <option value="EAN8">EAN-8</option>
+                                                <option value="ITF14">ITF-14</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeWidth" class="form-label">Width (px)</label>
+                                            <input type="number" class="form-control" id="barcodeWidth" 
+                                                   value="2" min="1" max="10">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeHeight" class="form-label">Height (px)</label>
+                                            <input type="number" class="form-control" id="barcodeHeight" 
+                                                   value="100" min="50" max="300">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeFormat" class="form-label">Output Format</label>
+                                            <select class="form-select" id="barcodeFormat">
+                                                <option value="svg">SVG</option>
+                                                <option value="canvas">Canvas</option>
+                                                <option value="png">PNG</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="showText" class="form-label">Display Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showText" checked>
+                                                <label class="form-check-label" for="showText">
+                                                    Show text below barcode
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-barcode"></i> Generate Barcode
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="clearBarcode()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Generated Barcode</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="barcodeOutput"></div>
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadBarcode()">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-info" onclick="copyBarcode()">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Barcode Types</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Code 128:</strong> Alphanumeric, widely used</li>
+                                <li><strong>Code 39:</strong> Alphanumeric, industrial use</li>
+                                <li><strong>EAN-13:</strong> 13-digit retail products</li>
+                                <li><strong>UPC-A:</strong> 12-digit retail products</li>
+                                <li><strong>EAN-8:</strong> 8-digit small products</li>
+                                <li><strong>ITF-14:</strong> Shipping containers</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Use Code 128 for alphanumeric data</li>
+                                <li>• EAN-13 requires exactly 13 digits</li>
+                                <li>• UPC-A requires exactly 12 digits</li>
+                                <li>• Higher resolution for better scanning</li>
+                                <li>• Test with a barcode scanner app</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/loader.js"></script>
+    
+    <script>
+        let currentBarcode = null;
+
+        document.getElementById('barcodeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateBarcode();
+        });
+
+        function generateBarcode() {
+            const text = document.getElementById('barcodeText').value.trim();
+            const type = document.getElementById('barcodeType').value;
+            const width = parseInt(document.getElementById('barcodeWidth').value);
+            const height = parseInt(document.getElementById('barcodeHeight').value);
+            const showText = document.getElementById('showText').checked;
+
+            if (!text) {
+                MultiTools.showError('Please enter text to generate barcode');
+                return;
+            }
+
+            // Validate input based on barcode type
+            if (!validateBarcodeInput(text, type)) {
+                return;
+            }
+
+            try {
+                const outputDiv = document.getElementById('barcodeOutput');
+                outputDiv.innerHTML = '';
+
+                // Create canvas element
+                const canvas = document.createElement('canvas');
+                outputDiv.appendChild(canvas);
+
+                // Generate barcode
+                JsBarcode(canvas, text, {
+                    format: type,
+                    width: width,
+                    height: height,
+                    displayValue: showText,
+                    fontSize: 16,
+                    margin: 10,
+                    background: "#ffffff",
+                    lineColor: "#000000"
+                });
+
+                currentBarcode = canvas;
+                document.getElementById('resultContainer').style.display = 'block';
+                MultiTools.showSuccess('Barcode generated successfully!');
+
+            } catch (error) {
+                MultiTools.showError('Error generating barcode: ' + error.message);
+            }
+        }
+
+        function validateBarcodeInput(text, type) {
+            switch (type) {
+                case 'EAN13':
+                    if (!/^\d{13}$/.test(text)) {
+                        MultiTools.showError('EAN-13 requires exactly 13 digits');
+                        return false;
+                    }
+                    break;
+                case 'UPC':
+                    if (!/^\d{12}$/.test(text)) {
+                        MultiTools.showError('UPC-A requires exactly 12 digits');
+                        return false;
+                    }
+                    break;
+                case 'EAN8':
+                    if (!/^\d{8}$/.test(text)) {
+                        MultiTools.showError('EAN-8 requires exactly 8 digits');
+                        return false;
+                    }
+                    break;
+                case 'ITF14':
+                    if (!/^\d{14}$/.test(text)) {
+                        MultiTools.showError('ITF-14 requires exactly 14 digits');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        function downloadBarcode() {
+            if (!currentBarcode) {
+                MultiTools.showError('No barcode to download');
+                return;
+            }
+
+            const format = document.getElementById('barcodeFormat').value;
+            const text = document.getElementById('barcodeText').value;
+            
+            if (format === 'svg') {
+                // Convert canvas to SVG
+                const svg = currentBarcode.outerHTML;
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `barcode-${text}.svg`;
+                a.click();
+                URL.revokeObjectURL(url);
+            } else {
+                // Download as PNG
+                currentBarcode.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `barcode-${text}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            }
+            
+            MultiTools.showSuccess('Barcode downloaded successfully!');
+        }
+
+        function copyBarcode() {
+            if (!currentBarcode) {
+                MultiTools.showError('No barcode to copy');
+                return;
+            }
+
+            // Convert canvas to data URL
+            const dataURL = currentBarcode.toDataURL('image/png');
+            
+            // Copy to clipboard (modern browsers)
+            if (navigator.clipboard && navigator.clipboard.write) {
+                fetch(dataURL)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        return navigator.clipboard.write([item]);
+                    })
+                    .then(() => MultiTools.showSuccess('Barcode copied to clipboard!'))
+                    .catch(() => MultiTools.showError('Failed to copy barcode'));
+            } else {
+                MultiTools.showError('Copy to clipboard not supported in this browser');
+            }
+        }
+
+        function clearBarcode() {
+            document.getElementById('barcodeText').value = '';
+            document.getElementById('resultContainer').style.display = 'none';
+            currentBarcode = null;
+            MultiTools.showSuccess('Barcode cleared');
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

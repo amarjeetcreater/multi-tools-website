@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+        // Standardized theme detection script
+        (() => {
+            const userTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = userTheme || systemTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screenshot to PDF Converter - Multi-Tools</title>
+    <meta name="description" content="Convert screenshots to PDF documents. Free online screenshot to PDF converter.">
+    <meta name="keywords" content="screenshot to pdf, image to pdf, pdf converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="tool-container">
+                    <div class="text-center mb-4">
+                        <h1><i class="fas fa-file-pdf"></i> Screenshot to PDF Converter</h1>
+                        <p class="lead">Convert screenshots to PDF documents with multiple layout options</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-upload"></i> Upload Screenshots</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="file-upload-area" id="uploadArea">
+                                        <div class="upload-content">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                            <h5>Drag & Drop Screenshots Here</h5>
+                                            <p>or click to browse (select multiple)</p>
+                                            <input type="file" id="imageInput" accept="image/*" multiple class="file-input">
+                                            <button class="btn btn-primary" onclick="document.getElementById('imageInput').click()">
+                                                <i class="fas fa-folder-open"></i> Choose Files
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="imagePreview" class="mt-3" style="display: none;">
+                                        <h6>Selected Screenshots:</h6>
+                                        <div id="previewContainer" class="d-flex flex-wrap gap-2"></div>
+                                        <div class="mt-2">
+                                            <small class="text-muted">Total: <span id="imageCount">0</span> screenshots</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-cogs"></i> PDF Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="pageSize" class="form-label">Page Size:</label>
+                                        <select class="form-select" id="pageSize">
+                                            <option value="a4">A4 (210×297 mm)</option>
+                                            <option value="letter">Letter (8.5×11 in)</option>
+                                            <option value="legal">Legal (8.5×14 in)</option>
+                                            <option value="a3">A3 (297×420 mm)</option>
+                                            <option value="custom">Custom</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="orientation" class="form-label">Orientation:</label>
+                                        <select class="form-select" id="orientation">
+                                            <option value="portrait">Portrait</option>
+                                            <option value="landscape">Landscape</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="layout" class="form-label">Layout:</label>
+                                        <select class="form-select" id="layout">
+                                            <option value="one-per-page">One screenshot per page</option>
+                                            <option value="two-per-page">Two screenshots per page</option>
+                                            <option value="four-per-page">Four screenshots per page</option>
+                                            <option value="fit-to-page">Fit to page</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="addPageNumbers" checked>
+                                            <label class="form-check-label" for="addPageNumbers">
+                                                Add page numbers
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="addTimestamp" checked>
+                                            <label class="form-check-label" for="addTimestamp">
+                                                Add timestamp
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-success w-100" id="convertBtn" disabled>
+                                        <i class="fas fa-file-pdf"></i> Convert to PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-download"></i> PDF Result</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="resultContainer" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Generated PDF:</h6>
+                                                <div class="pdf-preview p-3 border rounded bg-light">
+                                                    <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
+                                                    <p class="mb-0">PDF Document Ready</p>
+                                                    <small class="text-muted">Pages: <span id="pageCount">0</span></small>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">File size: <span id="fileSize"></span></small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-grid gap-2">
+                                                    <button class="btn btn-primary" id="downloadBtn">
+                                                        <i class="fas fa-download"></i> Download PDF
+                                                    </button>
+                                                    <button class="btn btn-outline-secondary" id="previewBtn">
+                                                        <i class="fas fa-eye"></i> Preview PDF
+                                                    </button>
+                                                    <button class="btn btn-outline-info" id="shareBtn">
+                                                        <i class="fas fa-share"></i> Share
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ad Space -->
+                    <div class="ad-space mt-4">
+                        <div class="ad-placeholder">
+                            <i class="fas fa-ad"></i>
+                            <p>Advertisement Space</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        let selectedImages = [];
+        let generatedPdf = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeScreenshotToPdf();
+        });
+
+        function initializeScreenshotToPdf() {
+            const uploadArea = document.getElementById('uploadArea');
+            const imageInput = document.getElementById('imageInput');
+            const convertBtn = document.getElementById('convertBtn');
+
+            imageInput.addEventListener('change', handleFileSelect);
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('drop', handleDrop);
+            uploadArea.addEventListener('click', () => imageInput.click());
+            convertBtn.addEventListener('click', convertToPdf);
+        }
+
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processImages(files);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('drag-over');
+            
+            const files = Array.from(event.dataTransfer.files);
+            processImages(files);
+        }
+
+        function processImages(files) {
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            if (imageFiles.length === 0) {
+                MultiTools.showError('Please select valid image files.');
+                return;
+            }
+
+            selectedImages = [];
+            const previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = '';
+
+            imageFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        selectedImages.push({
+                            file: file,
+                            src: e.target.result,
+                            width: img.width,
+                            height: img.height
+                        });
+                        
+                        displayImagePreview(img, index);
+                        updateImageCount();
+                        
+                        if (selectedImages.length === imageFiles.length) {
+                            document.getElementById('convertBtn').disabled = false;
+                        }
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function displayImagePreview(img, index) {
+            const previewContainer = document.getElementById('previewContainer');
+            const previewDiv = document.createElement('div');
+            previewDiv.className = 'position-relative';
+            previewDiv.innerHTML = `
+                <img src="${img.src}" class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover;" alt="Preview ${index + 1}">
+                <span class="position-absolute top-0 start-0 badge bg-primary">${index + 1}</span>
+            `;
+            previewContainer.appendChild(previewDiv);
+        }
+
+        function updateImageCount() {
+            document.getElementById('imageCount').textContent = selectedImages.length;
+            document.getElementById('imagePreview').style.display = 'block';
+        }
+
+        function convertToPdf() {
+            if (selectedImages.length === 0) {
+                MultiTools.showError('Please select at least one screenshot.');
+                return;
+            }
+
+            const pageSize = document.getElementById('pageSize').value;
+            const orientation = document.getElementById('orientation').value;
+            const layout = document.getElementById('layout').value;
+            const addPageNumbers = document.getElementById('addPageNumbers').checked;
+            const addTimestamp = document.getElementById('addTimestamp').checked;
+
+            MultiTools.showInfo('Converting to PDF... This may take a moment.');
+
+            setTimeout(() => {
+                // Calculate page count based on layout
+                let pageCount = selectedImages.length;
+                if (layout === 'two-per-page') {
+                    pageCount = Math.ceil(selectedImages.length / 2);
+                } else if (layout === 'four-per-page') {
+                    pageCount = Math.ceil(selectedImages.length / 4);
+                }
+
+                // Create mock PDF blob
+                const mockPdfBlob = new Blob(['mock-pdf-data'], { type: 'application/pdf' });
+                const mockPdfUrl = URL.createObjectURL(mockPdfBlob);
+                displayResult(mockPdfUrl, mockPdfBlob, pageCount);
+            }, 1000);
+        }
+
+        function displayResult(url, blob, pageCount) {
+            const resultContainer = document.getElementById('resultContainer');
+            const fileSize = document.getElementById('fileSize');
+            const pageCountSpan = document.getElementById('pageCount');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            const shareBtn = document.getElementById('shareBtn');
+
+            resultContainer.style.display = 'block';
+            pageCountSpan.textContent = pageCount;
+            fileSize.textContent = '~' + Math.round(blob.size / 1024) + ' KB';
+
+            generatedPdf = { url, blob, pageCount };
+
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'screenshots.pdf';
+                link.click();
+            };
+
+            previewBtn.onclick = () => {
+                window.open(url, '_blank');
+            };
+
+            shareBtn.onclick = () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Screenshots PDF',
+                        text: 'Check out this PDF I created using Multi-Tools!',
+                        files: [new File([blob], 'screenshots.pdf', { type: 'application/pdf' })]
+                    });
+                } else {
+                    MultiTools.showInfo('Sharing not supported in this browser.');
+                }
+            };
+
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html> 

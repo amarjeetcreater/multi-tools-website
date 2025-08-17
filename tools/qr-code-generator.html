@@ -1,0 +1,421 @@
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - Multi-Tools Website</title>
+    <meta name="description" content="Free online QR code generator tool. Create QR codes from text, URLs, and other data.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .qr-container {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-code {
+            max-width: 100%;
+            height: auto;
+        }
+        .color-picker {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    
+    <main class="container-fluid py-4">
+        <!-- QR Code Generator Top Ad -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="YYYYYYYY"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1><i class="fas fa-qrcode text-primary"></i> QR Code Generator</h1>
+                    <p class="text-muted">Generate QR codes from text, URLs, and other data</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-edit"></i> QR Code Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="qrContent" class="form-label">Content:</label>
+                                        <textarea id="qrContent" class="form-control" rows="4" placeholder="Enter text, URL, or data to encode in QR code..."></textarea>
+                                        <div class="mt-2">
+                                            <small class="text-muted">Characters: <span id="charCount">0</span></small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <label for="qrSize" class="form-label">Size:</label>
+                                            <select id="qrSize" class="form-select">
+                                                <option value="128">128x128</option>
+                                                <option value="256" selected>256x256</option>
+                                                <option value="512">512x512</option>
+                                                <option value="1024">1024x1024</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="qrErrorLevel" class="form-label">Error Correction:</label>
+                                            <select id="qrErrorLevel" class="form-select">
+                                                <option value="L">Low (7%)</option>
+                                                <option value="M" selected>Medium (15%)</option>
+                                                <option value="Q">Quartile (25%)</option>
+                                                <option value="H">High (30%)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <label class="form-label">Foreground Color:</label>
+                                            <input type="color" id="foregroundColor" class="color-picker" value="#000000">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">Background Color:</label>
+                                            <input type="color" id="backgroundColor" class="color-picker" value="#FFFFFF">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary" onclick="generateQR()">
+                                            <i class="fas fa-qrcode"></i> Generate QR Code
+                                        </button>
+                                        <button class="btn btn-secondary" onclick="clearQR()">
+                                            <i class="fas fa-trash"></i> Clear
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-eye"></i> Generated QR Code</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="qr-container" id="qrContainer">
+                                        <div class="text-muted">
+                                            <i class="fas fa-qrcode fa-3x mb-3"></i><br>
+                                            Enter content and click "Generate QR Code"
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-primary" onclick="downloadQR()">
+                                            <i class="fas fa-download"></i> Download PNG
+                                        </button>
+                                        <button class="btn btn-outline-secondary" onclick="copyQR()">
+                                            <i class="fas fa-copy"></i> Copy Image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-lightbulb"></i> Quick Templates</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-primary w-100" onclick="setTemplate('url')">
+                                                <i class="fas fa-link"></i> URL
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-success w-100" onclick="setTemplate('email')">
+                                                <i class="fas fa-envelope"></i> Email
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-info w-100" onclick="setTemplate('phone')">
+                                                <i class="fas fa-phone"></i> Phone
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-warning w-100" onclick="setTemplate('wifi')">
+                                                <i class="fas fa-wifi"></i> WiFi
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-danger w-100" onclick="setTemplate('sms')">
+                                                <i class="fas fa-sms"></i> SMS
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-dark w-100" onclick="setTemplate('vcard')">
+                                                <i class="fas fa-address-card"></i> vCard
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-primary w-100" onclick="setTemplate('geo')">
+                                                <i class="fas fa-map-marker-alt"></i> Location
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <button class="btn btn-outline-secondary w-100" onclick="setTemplate('text')">
+                                                <i class="fas fa-font"></i> Text
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="ad-space mb-4">
+                        <!-- QR Code Generator Sidebar Ad -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                             data-ad-slot="YYYYYYYY"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-info-circle"></i> QR Code Tips</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Use higher error correction for smaller QR codes</li>
+                                <li><i class="fas fa-check text-success"></i> Larger sizes work better for printing</li>
+                                <li><i class="fas fa-check text-success"></i> Dark colors on light backgrounds work best</li>
+                                <li><i class="fas fa-check text-success"></i> Test QR codes before using them</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-link"></i> Related Tools</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><a href="hash-generator.html" class="text-decoration-none"><i class="fas fa-hashtag"></i> Hash Generator</a></li>
+                                <li><a href="text-case-converter.html" class="text-decoration-none"><i class="fas fa-font"></i> Text Case Converter</a></li>
+                                <li><a href="color-picker.html" class="text-decoration-none"><i class="fas fa-palette"></i> Color Picker</a></li>
+                                <li><a href="json-formatter.html" class="text-decoration-none"><i class="fas fa-code"></i> JSON Formatter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="footer-placeholder"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        let qrCode = null;
+        
+        // Initialize QR generator
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCharacterCount();
+        });
+        
+        // Update character count on input
+        document.getElementById('qrContent').addEventListener('input', function() {
+            updateCharacterCount();
+        });
+        
+        function updateCharacterCount() {
+            const text = document.getElementById('qrContent').value;
+            document.getElementById('charCount').textContent = text.length;
+        }
+        
+        function generateQR() {
+            const content = document.getElementById('qrContent').value.trim();
+            if (!content) {
+                MultiTools.showError('Please enter content to generate QR code', 'result-container');
+                return;
+            }
+            
+            const size = parseInt(document.getElementById('qrSize').value);
+            const errorLevel = document.getElementById('qrErrorLevel').value;
+            const foregroundColor = document.getElementById('foregroundColor').value;
+            const backgroundColor = document.getElementById('backgroundColor').value;
+            
+            const container = document.getElementById('qrContainer');
+            container.innerHTML = '';
+            
+            // Clear previous QR code
+            if (qrCode) {
+                qrCode.clear();
+            }
+            
+            // Create new QR code
+            qrCode = new QRCode(container, {
+                text: content,
+                width: size,
+                height: size,
+                colorDark: foregroundColor,
+                colorLight: backgroundColor,
+                correctLevel: QRCode.CorrectLevel[errorLevel]
+            });
+            
+            MultiTools.showResult('QR code generated successfully!', 'result-container');
+        }
+        
+        function downloadQR() {
+            const container = document.getElementById('qrContainer');
+            const img = container.querySelector('img');
+            
+            if (!img) {
+                MultiTools.showError('No QR code to download', 'result-container');
+                return;
+            }
+            
+            // Create canvas to download
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            
+            // Draw image on canvas
+            ctx.drawImage(img, 0, 0);
+            
+            // Download
+            const link = document.createElement('a');
+            link.download = 'qr-code.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function copyQR() {
+            const container = document.getElementById('qrContainer');
+            const img = container.querySelector('img');
+            
+            if (!img) {
+                MultiTools.showError('No QR code to copy', 'result-container');
+                return;
+            }
+            
+            // Create canvas to copy
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            
+            // Draw image on canvas
+            ctx.drawImage(img, 0, 0);
+            
+            // Copy to clipboard
+            canvas.toBlob(function(blob) {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(function() {
+                    MultiTools.showResult('QR code copied to clipboard!', 'result-container');
+                }).catch(function() {
+                    MultiTools.showError('Failed to copy QR code', 'result-container');
+                });
+            });
+        }
+        
+        function clearQR() {
+            document.getElementById('qrContent').value = '';
+            document.getElementById('qrContainer').innerHTML = `
+                <div class="text-muted">
+                    <i class="fas fa-qrcode fa-3x mb-3"></i><br>
+                    Enter content and click "Generate QR Code"
+                </div>
+            `;
+            if (qrCode) {
+                qrCode.clear();
+                qrCode = null;
+            }
+            updateCharacterCount();
+        }
+        
+        function setTemplate(type) {
+            const content = document.getElementById('qrContent');
+            
+            switch(type) {
+                case 'url':
+                    content.value = 'https://example.com';
+                    break;
+                case 'email':
+                    content.value = 'mailto:example@email.com?subject=Hello&body=Message';
+                    break;
+                case 'phone':
+                    content.value = 'tel:+1234567890';
+                    break;
+                case 'wifi':
+                    content.value = 'WIFI:T:WPA;S:NetworkName;P:Password;;';
+                    break;
+                case 'sms':
+                    content.value = 'sms:+1234567890:Hello World';
+                    break;
+                case 'vcard':
+                    content.value = 'BEGIN:VCARD\nVERSION:3.0\nFN:John Doe\nORG:Company\nTEL:+1234567890\nEMAIL:john@example.com\nEND:VCARD';
+                    break;
+                case 'geo':
+                    content.value = 'geo:40.7128,-74.0060';
+                    break;
+                case 'text':
+                    content.value = 'Hello World!';
+                    break;
+            }
+            
+            updateCharacterCount();
+            generateQR();
+        }
+    </script>
+</body>
+</html>

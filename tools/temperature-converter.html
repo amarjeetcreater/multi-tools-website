@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter - Multi-Tools Website</title>
+    <meta name="description" content="Free online temperature converter. Convert between Celsius, Fahrenheit, Kelvin, and other temperature scales.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="row">
+            <!-- Tool Content -->
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-thermometer-half text-primary"></i> Temperature Converter</h1>
+                        <p>Convert between Celsius, Fahrenheit, Kelvin, and other temperature scales with precision.</p>
+                    </div>
+
+                    <!-- Conversion Form -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <label for="fromTemp" class="form-label">From Temperature:</label>
+                            <input type="number" id="fromTemp" class="form-control" placeholder="Enter temperature">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="fromScale" class="form-label">From Scale:</label>
+                            <select id="fromScale" class="form-select">
+                                <option value="celsius">Celsius (°C)</option>
+                                <option value="fahrenheit">Fahrenheit (°F)</option>
+                                <option value="kelvin">Kelvin (K)</option>
+                                <option value="rankine">Rankine (°R)</option>
+                                <option value="reaumur">Réaumur (°Ré)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="toScale" class="form-label">To Scale:</label>
+                            <select id="toScale" class="form-select">
+                                <option value="fahrenheit">Fahrenheit (°F)</option>
+                                <option value="celsius">Celsius (°C)</option>
+                                <option value="kelvin">Kelvin (K)</option>
+                                <option value="rankine">Rankine (°R)</option>
+                                <option value="reaumur">Réaumur (°Ré)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Convert Button -->
+                    <div class="mb-4">
+                        <button class="btn btn-primary btn-lg w-100" onclick="convertTemperature()">
+                            <i class="fas fa-exchange-alt"></i> Convert Temperature
+                        </button>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="results"></div>
+
+                    <!-- Quick Conversions -->
+                    <div class="mt-4">
+                        <h5><i class="fas fa-bolt"></i> Quick Conversions</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-outline-primary w-100" onclick="setQuickConversion(0, 'celsius')">
+                                    <i class="fas fa-thermometer-empty"></i> Freezing Point (0°C)
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-outline-success w-100" onclick="setQuickConversion(100, 'celsius')">
+                                    <i class="fas fa-thermometer-full"></i> Boiling Point (100°C)
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-outline-info w-100" onclick="setQuickConversion(37, 'celsius')">
+                                    <i class="fas fa-user"></i> Body Temperature (37°C)
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-outline-warning w-100" onclick="setQuickConversion(25, 'celsius')">
+                                    <i class="fas fa-sun"></i> Room Temperature (25°C)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Ad Space -->
+                <div class="ad-space sidebar mb-4">
+                    <h6><i class="fas fa-ad"></i> Advertisement</h6>
+                    <p class="text-muted mb-0">Perfect place for Google AdSense</p>
+                </div>
+
+                <!-- Temperature Reference -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-info-circle"></i> Temperature Reference</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Scale</th>
+                                    <th>Freezing</th>
+                                    <th>Boiling</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Celsius</td>
+                                    <td>0°C</td>
+                                    <td>100°C</td>
+                                </tr>
+                                <tr>
+                                    <td>Fahrenheit</td>
+                                    <td>32°F</td>
+                                    <td>212°F</td>
+                                </tr>
+                                <tr>
+                                    <td>Kelvin</td>
+                                    <td>273.15K</td>
+                                    <td>373.15K</td>
+                                </tr>
+                                <tr>
+                                    <td>Rankine</td>
+                                    <td>491.67°R</td>
+                                    <td>671.67°R</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Related Tools -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tools"></i> Related Tools</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="length-converter.html" class="text-decoration-none">
+                                    <i class="fas fa-ruler text-primary"></i> Length Converter
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="weight-converter.html" class="text-decoration-none">
+                                    <i class="fas fa-weight-hanging text-primary"></i> Weight Converter
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="speed-converter.html" class="text-decoration-none">
+                                    <i class="fas fa-tachometer-alt text-primary"></i> Speed Converter
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="volume-converter.html" class="text-decoration-none">
+                                    <i class="fas fa-cube text-primary"></i> Volume Converter
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <!-- Tool-specific JavaScript -->
+    <script>
+        function convertTemperature() {
+            const fromTemp = parseFloat(document.getElementById('fromTemp').value);
+            const fromScale = document.getElementById('fromScale').value;
+            const toScale = document.getElementById('toScale').value;
+            
+            if (isNaN(fromTemp)) {
+                MultiTools.showError('Please enter a valid temperature.', 'results');
+                return;
+            }
+            
+            // Convert to Celsius first
+            let celsius = convertToCelsius(fromTemp, fromScale);
+            
+            // Convert from Celsius to target scale
+            const result = convertFromCelsius(celsius, toScale);
+            
+            const resultHtml = `
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle"></i> Temperature Conversion</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>From:</strong> ${fromTemp} ${getScaleSymbol(fromScale)}</p>
+                            <p><strong>To:</strong> ${result.toFixed(2)} ${getScaleSymbol(toScale)}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Formula:</strong> ${getConversionFormula(fromScale, toScale)}</p>
+                            <p><strong>In Celsius:</strong> ${celsius.toFixed(2)}°C</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('results').innerHTML = resultHtml;
+        }
+
+        function convertToCelsius(temp, scale) {
+            switch(scale) {
+                case 'celsius':
+                    return temp;
+                case 'fahrenheit':
+                    return (temp - 32) * 5/9;
+                case 'kelvin':
+                    return temp - 273.15;
+                case 'rankine':
+                    return (temp - 491.67) * 5/9;
+                case 'reaumur':
+                    return temp * 5/4;
+                default:
+                    return temp;
+            }
+        }
+
+        function convertFromCelsius(celsius, scale) {
+            switch(scale) {
+                case 'celsius':
+                    return celsius;
+                case 'fahrenheit':
+                    return celsius * 9/5 + 32;
+                case 'kelvin':
+                    return celsius + 273.15;
+                case 'rankine':
+                    return celsius * 9/5 + 491.67;
+                case 'reaumur':
+                    return celsius * 4/5;
+                default:
+                    return celsius;
+            }
+        }
+
+        function getScaleSymbol(scale) {
+            switch(scale) {
+                case 'celsius': return '°C';
+                case 'fahrenheit': return '°F';
+                case 'kelvin': return 'K';
+                case 'rankine': return '°R';
+                case 'reaumur': return '°Ré';
+                default: return '';
+            }
+        }
+
+        function getConversionFormula(fromScale, toScale) {
+            const formulas = {
+                'celsius-fahrenheit': '°F = °C × 9/5 + 32',
+                'fahrenheit-celsius': '°C = (°F - 32) × 5/9',
+                'celsius-kelvin': 'K = °C + 273.15',
+                'kelvin-celsius': '°C = K - 273.15',
+                'fahrenheit-kelvin': 'K = (°F - 32) × 5/9 + 273.15',
+                'kelvin-fahrenheit': '°F = (K - 273.15) × 9/5 + 32'
+            };
+            
+            const key = `${fromScale}-${toScale}`;
+            return formulas[key] || 'Multi-step conversion via Celsius';
+        }
+
+        function setQuickConversion(temp, scale) {
+            document.getElementById('fromTemp').value = temp;
+            document.getElementById('fromScale').value = scale;
+            
+            // Set a different target scale
+            const targetScales = ['celsius', 'fahrenheit', 'kelvin', 'rankine', 'reaumur'];
+            const currentScale = scale;
+            const targetScale = targetScales.find(s => s !== currentScale);
+            document.getElementById('toScale').value = targetScale;
+            
+            convertTemperature();
+        }
+
+        // Auto-convert on input change
+        document.getElementById('fromTemp').addEventListener('input', function() {
+            if (this.value.trim()) {
+                setTimeout(convertTemperature, 500);
+            } else {
+                document.getElementById('results').innerHTML = '';
+            }
+        });
+
+        // Auto-convert on scale change
+        document.getElementById('fromScale').addEventListener('change', function() {
+            if (document.getElementById('fromTemp').value.trim()) {
+                convertTemperature();
+            }
+        });
+
+        document.getElementById('toScale').addEventListener('change', function() {
+            if (document.getElementById('fromTemp').value.trim()) {
+                convertTemperature();
+            }
+        });
+    </script>
+
+    <script>
+(function() {
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') return t;
+    } catch(e) {}
+    return 'light';
+  }
+  document.documentElement.setAttribute('data-theme', getTheme());
+})();
+</script>
+</body>
+</html>

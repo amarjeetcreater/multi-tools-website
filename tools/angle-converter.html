@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+        // Standardized theme detection script
+        (() => {
+            const userTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = userTheme || systemTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+        </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different angle units including degrees, radians, gradians, and more. Free online angle converter tool.">
+    <meta name="keywords" content="angle converter, degrees to radians, radians to degrees, angle units, angular converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid tool-page">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-compass"></i> Angle Converter</h1>
+                        <p>Convert between different angle units including degrees, radians, gradians, and more.</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit">From Unit:</label>
+                                    <select id="fromUnit" class="form-control">
+                                        <option value="degrees">Degrees (°)</option>
+                                        <option value="radians">Radians (rad)</option>
+                                        <option value="gradians">Gradians (grad)</option>
+                                        <option value="arcminutes">Arcminutes (')</option>
+                                        <option value="arcseconds">Arcseconds (")</option>
+                                        <option value="turns">Turns (rev)</option>
+                                        <option value="quadrants">Quadrants</option>
+                                        <option value="sextants">Sextants</option>
+                                        <option value="octants">Octants</option>
+                                        <option value="signs">Signs</option>
+                                        <option value="binary_degrees">Binary Degrees</option>
+                                        <option value="points">Points</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit">To Unit:</label>
+                                    <select id="toUnit" class="form-control">
+                                        <option value="radians">Radians (rad)</option>
+                                        <option value="degrees">Degrees (°)</option>
+                                        <option value="gradians">Gradians (grad)</option>
+                                        <option value="arcminutes">Arcminutes (')</option>
+                                        <option value="arcseconds">Arcseconds (")</option>
+                                        <option value="turns">Turns (rev)</option>
+                                        <option value="quadrants">Quadrants</option>
+                                        <option value="sextants">Sextants</option>
+                                        <option value="octants">Octants</option>
+                                        <option value="signs">Signs</option>
+                                        <option value="binary_degrees">Binary Degrees</option>
+                                        <option value="points">Points</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="angleValue">Angle Value:</label>
+                            <input type="number" id="angleValue" class="form-control" placeholder="Enter angle value" step="any">
+                        </div>
+
+                        <div class="btn-group mt-3" role="group">
+                            <button type="button" class="btn btn-primary" onclick="convertAngle()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="swapUnits()">
+                                <i class="fas fa-arrows-alt-h"></i> Swap Units
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="copyResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+
+                        <div id="result" class="result-container mt-4" style="display: none;">
+                            <h4><i class="fas fa-chart-line"></i> Conversion Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="conversionResult"></strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Formula Used:</h5>
+                                    <p id="formula"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Conversion Factor:</h5>
+                                    <p id="factor"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-conversions mt-4">
+                            <h4><i class="fas fa-bolt"></i> Quick Conversions</h4>
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(180, 'degrees', 'radians')">
+                                        180° → rad
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(3.14159, 'radians', 'degrees')">
+                                        π rad → °
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(90, 'degrees', 'gradians')">
+                                        90° → grad
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'turns', 'degrees')">
+                                        1 turn → °
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="angle-info mt-4">
+                            <h4><i class="fas fa-info-circle"></i> Angle Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Common Angle References:</h5>
+                                    <ul>
+                                        <li><strong>Full Circle:</strong> 360° (2π rad, 400 grad)</li>
+                                        <li><strong>Half Circle:</strong> 180° (π rad, 200 grad)</li>
+                                        <li><strong>Quarter Circle:</strong> 90° (π/2 rad, 100 grad)</li>
+                                        <li><strong>Right Angle:</strong> 90° (π/2 rad)</li>
+                                        <li><strong>Straight Angle:</strong> 180° (π rad)</li>
+                                        <li><strong>Acute Angle:</strong> < 90° (< π/2 rad)</li>
+                                        <li><strong>Obtuse Angle:</strong> 90°-180° (π/2-π rad)</li>
+                                        <li><strong>Reflex Angle:</strong> 180°-360° (π-2π rad)</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Angle Units Explained:</h5>
+                                    <ul>
+                                        <li><strong>Degrees:</strong> Most common unit (360° = full circle)</li>
+                                        <li><strong>Radians:</strong> SI unit (2π rad = full circle)</li>
+                                        <li><strong>Gradians:</strong> Metric unit (400 grad = full circle)</li>
+                                        <li><strong>Arcminutes:</strong> 1/60 of a degree (60' = 1°)</li>
+                                        <li><strong>Arcseconds:</strong> 1/60 of arcminute (3600" = 1°)</li>
+                                        <li><strong>Turns:</strong> Complete rotations (1 turn = 360°)</li>
+                                        <li><strong>Quadrants:</strong> Quarter circles (4 quadrants = full circle)</li>
+                                        <li><strong>Binary Degrees:</strong> 256 binary degrees = full circle</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="angle-applications mt-4">
+                            <h4><i class="fas fa-cogs"></i> Angle Applications</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Mathematical Applications:</h5>
+                                    <ul>
+                                        <li><strong>Trigonometry:</strong> Sine, cosine, tangent functions</li>
+                                        <li><strong>Geometry:</strong> Polygon angles, circle measurements</li>
+                                        <li><strong>Calculus:</strong> Derivatives, integrals with angles</li>
+                                        <li><strong>Physics:</strong> Rotational motion, wave functions</li>
+                                        <li><strong>Engineering:</strong> Structural design, mechanical systems</li>
+                                        <li><strong>Navigation:</strong> Compass bearings, GPS coordinates</li>
+                                        <li><strong>Astronomy:</strong> Celestial coordinates, star positions</li>
+                                        <li><strong>Computer Graphics:</strong> 3D rotations, animations</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Practical Uses:</h5>
+                                    <ul>
+                                        <li><strong>Construction:</strong> Building angles, roof pitches</li>
+                                        <li><strong>Surveying:</strong> Land measurements, property boundaries</li>
+                                        <li><strong>Machining:</strong> Tool angles, cutting operations</li>
+                                        <li><strong>Photography:</strong> Camera angles, lens field of view</li>
+                                        <li><strong>Sports:</strong> Golf swings, basketball shots</li>
+                                        <li><strong>Art:</strong> Perspective drawing, composition</li>
+                                        <li><strong>Medicine:</strong> Joint angles, range of motion</li>
+                                        <li><strong>Robotics:</strong> Joint rotations, arm movements</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/loader.js"></script>
+    
+    <script>
+        // Angle conversion factors (to degrees as base unit)
+        const angleFactors = {
+            'degrees': 1,                    // degrees (base unit)
+            'radians': 180 / Math.PI,        // radians to degrees
+            'gradians': 0.9,                 // gradians to degrees
+            'arcminutes': 1/60,              // arcminutes to degrees
+            'arcseconds': 1/3600,            // arcseconds to degrees
+            'turns': 360,                    // turns to degrees
+            'quadrants': 90,                 // quadrants to degrees
+            'sextants': 60,                  // sextants to degrees
+            'octants': 45,                   // octants to degrees
+            'signs': 30,                     // signs to degrees
+            'binary_degrees': 360/256,       // binary degrees to degrees
+            'points': 11.25                  // points to degrees
+        };
+
+        const unitNames = {
+            'degrees': 'Degrees',
+            'radians': 'Radians',
+            'gradians': 'Gradians',
+            'arcminutes': 'Arcminutes',
+            'arcseconds': 'Arcseconds',
+            'turns': 'Turns',
+            'quadrants': 'Quadrants',
+            'sextants': 'Sextants',
+            'octants': 'Octants',
+            'signs': 'Signs',
+            'binary_degrees': 'Binary Degrees',
+            'points': 'Points'
+        };
+
+        const unitSymbols = {
+            'degrees': '°',
+            'radians': 'rad',
+            'gradians': 'grad',
+            'arcminutes': "'",
+            'arcseconds': '"',
+            'turns': 'turn',
+            'quadrants': 'quad',
+            'sextants': 'sext',
+            'octants': 'oct',
+            'signs': 'sign',
+            'binary_degrees': 'bdeg',
+            'points': 'pt'
+        };
+
+        function convertAngle() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const angleValue = parseFloat(document.getElementById('angleValue').value);
+
+            if (isNaN(angleValue)) {
+                MultiTools.showError('Please enter a valid angle value.');
+                return;
+            }
+
+            // Convert to base unit (degrees) first
+            const baseValue = angleValue * angleFactors[fromUnit];
+            
+            // Convert from base unit to target unit
+            const result = baseValue / angleFactors[toUnit];
+
+            const fromSymbol = unitSymbols[fromUnit];
+            const toSymbol = unitSymbols[toUnit];
+            const fromName = unitNames[fromUnit];
+            const toName = unitNames[toUnit];
+
+            // Format result with appropriate precision
+            let formattedResult;
+            if (result >= 1000) {
+                formattedResult = result.toFixed(2);
+            } else if (result >= 100) {
+                formattedResult = result.toFixed(3);
+            } else {
+                formattedResult = result.toFixed(6);
+            }
+
+            document.getElementById('conversionResult').innerHTML = 
+                `${angleValue} ${fromSymbol} = ${formattedResult} ${toSymbol}`;
+            
+            document.getElementById('formula').innerHTML = 
+                `${fromName} × ${angleFactors[fromUnit]} ÷ ${angleFactors[toUnit]} = ${toName}`;
+            
+            const conversionFactor = angleFactors[fromUnit] / angleFactors[toUnit];
+            let formattedFactor;
+            if (conversionFactor >= 1000) {
+                formattedFactor = conversionFactor.toFixed(2);
+            } else if (conversionFactor >= 100) {
+                formattedFactor = conversionFactor.toFixed(3);
+            } else {
+                formattedFactor = conversionFactor.toFixed(6);
+            }
+            
+            document.getElementById('factor').innerHTML = 
+                `1 ${fromSymbol} = ${formattedFactor} ${toSymbol}`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            
+            if (document.getElementById('angleValue').value) {
+                convertAngle();
+            }
+        }
+
+        function resetConverter() {
+            document.getElementById('angleValue').value = '';
+            document.getElementById('fromUnit').value = 'degrees';
+            document.getElementById('toUnit').value = 'radians';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function quickConvert(value, from, to) {
+            document.getElementById('angleValue').value = value;
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            convertAngle();
+        }
+
+        function copyResult() {
+            const result = document.getElementById('conversionResult').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    MultiTools.showSuccess('Result copied to clipboard!');
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy result.');
+                });
+            }
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

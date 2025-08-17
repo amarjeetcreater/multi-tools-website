@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text - Multi-Tools</title>
+    <meta name="description" content="Convert speech to text using voice recognition">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-microphone"></i> Speech-to-Text</h1>
+                <p>Convert speech to text using voice recognition</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="languageSelect" class="form-label">Language</label>
+                                <select class="form-select" id="languageSelect">
+                                    <option value="en-US">English (US)</option>
+                                    <option value="en-GB">English (UK)</option>
+                                    <option value="es-ES">Spanish</option>
+                                    <option value="fr-FR">French</option>
+                                    <option value="de-DE">German</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="continuousMode">
+                                    <label class="form-check-label" for="continuousMode">
+                                        Continuous recognition mode
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary" id="startBtn">
+                                        <i class="fas fa-microphone"></i> Start Recording
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="stopBtn" disabled>
+                                        <i class="fas fa-stop"></i> Stop Recording
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="clearBtn">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="resultText" class="form-label">Transcribed Text</label>
+                                <textarea class="form-control" id="resultText" rows="8" placeholder="Transcribed text will appear here..." readonly></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary" id="copyBtn">
+                                        <i class="fas fa-copy"></i> Copy Text
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success" id="downloadBtn">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About Speech-to-Text</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">This tool converts speech to text using:</p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success"></i> Voice recognition</li>
+                                <li><i class="fas fa-check text-success"></i> Multiple languages</li>
+                                <li><i class="fas fa-check text-success"></i> Real-time transcription</li>
+                                <li><i class="fas fa-check text-success"></i> Continuous mode</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-bar"></i> Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="statusDisplay">
+                                <p class="text-muted">Ready to record</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        let recognition = null;
+        let isRecording = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            // Check if speech recognition is supported
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                document.getElementById('startBtn').disabled = true;
+                updateStatus('Speech recognition is not supported in your browser.', 'danger');
+                return;
+            }
+
+            // Initialize speech recognition
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            
+            setupRecognition();
+
+            document.getElementById('startBtn').addEventListener('click', function() {
+                startRecording();
+            });
+
+            document.getElementById('stopBtn').addEventListener('click', function() {
+                stopRecording();
+            });
+
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                clearText();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const text = document.getElementById('resultText').value;
+                if (text) {
+                    MultiTools.copyToClipboard(text);
+                }
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const text = document.getElementById('resultText').value;
+                if (text) {
+                    MultiTools.downloadFile(text, 'speech-to-text.txt', 'text/plain');
+                }
+            });
+        });
+
+        function setupRecognition() {
+            recognition.continuous = document.getElementById('continuousMode').checked;
+            recognition.interimResults = true;
+            recognition.lang = document.getElementById('languageSelect').value;
+
+            recognition.onstart = function() {
+                isRecording = true;
+                updateButtons();
+                updateStatus('Recording... Speak now!', 'success');
+            };
+
+            recognition.onresult = function(event) {
+                let finalTranscript = '';
+                let interimTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                const resultText = document.getElementById('resultText');
+                resultText.value = finalTranscript + interimTranscript;
+            };
+
+            recognition.onerror = function(event) {
+                isRecording = false;
+                updateButtons();
+                updateStatus('Error: ' + event.error, 'danger');
+            };
+
+            recognition.onend = function() {
+                isRecording = false;
+                updateButtons();
+                updateStatus('Recording stopped.', 'info');
+            };
+        }
+
+        function startRecording() {
+            if (!recognition) {
+                MultiTools.showError('Speech recognition is not supported.');
+                return;
+            }
+
+            try {
+                recognition.start();
+            } catch (error) {
+                updateStatus('Error starting recognition: ' + error.message, 'danger');
+            }
+        }
+
+        function stopRecording() {
+            if (recognition && isRecording) {
+                recognition.stop();
+            }
+        }
+
+        function clearText() {
+            document.getElementById('resultText').value = '';
+            updateStatus('Text cleared.', 'info');
+        }
+
+        function updateButtons() {
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            startBtn.disabled = isRecording;
+            stopBtn.disabled = !isRecording;
+        }
+
+        function updateStatus(message, type) {
+            const statusDisplay = document.getElementById('statusDisplay');
+            const alertClass = `alert alert-${type} alert-sm`;
+            
+            statusDisplay.innerHTML = `
+                <div class="${alertClass}">
+                    <small><i class="fas fa-microphone"></i> ${message}</small>
+                </div>
+            `;
+        }
+
+        // Update recognition settings when options change
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            if (recognition) {
+                recognition.lang = this.value;
+            }
+        });
+
+        document.getElementById('continuousMode').addEventListener('change', function() {
+            if (recognition) {
+                recognition.continuous = this.checked;
+            }
+        });
+    </script>
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

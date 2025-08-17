@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder - Multi-Tools</title>
+    <meta name="description" content="Create professional resumes online with customizable templates and sections. Build your perfect resume in minutes.">
+    <meta name="keywords" content="resume builder, cv maker, professional resume, resume template, job application, career">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-file-alt"></i> Resume Builder
+                    </h1>
+                    <p class="tool-description">
+                        Create professional resumes online with customizable templates and sections. 
+                        Build your perfect resume in minutes with our easy-to-use builder.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="resumeForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="fullName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullName" 
+                                                   placeholder="Enter your full name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" 
+                                                   placeholder="your.email@example.com" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" id="phone" 
+                                                   placeholder="+1 (555) 123-4567">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="location" class="form-label">Location</label>
+                                            <input type="text" class="form-control" id="location" 
+                                                   placeholder="City, State">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="summary" class="form-label">Professional Summary</label>
+                                    <textarea class="form-control" id="summary" rows="3" 
+                                              placeholder="Brief overview of your professional background and key strengths"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="experience" class="form-label">Work Experience</label>
+                                    <textarea class="form-control" id="experience" rows="6" 
+                                              placeholder="List your work experience with company names, positions, dates, and key achievements"></textarea>
+                                    <div class="form-text">Format: Company Name | Position | Dates | Key achievements</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="education" class="form-label">Education</label>
+                                    <textarea class="form-control" id="education" rows="4" 
+                                              placeholder="List your educational background with degrees, institutions, and graduation dates"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="skills" class="form-label">Skills</label>
+                                    <textarea class="form-control" id="skills" rows="3" 
+                                              placeholder="List your key skills and competencies"></textarea>
+                                    <div class="form-text">Separate skills with commas</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="template" class="form-label">Template Style</label>
+                                    <select class="form-select" id="template">
+                                        <option value="professional">Professional</option>
+                                        <option value="modern">Modern</option>
+                                        <option value="creative">Creative</option>
+                                        <option value="minimal">Minimal</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-magic"></i> Generate Resume
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSampleData()">
+                                        <i class="fas fa-file-alt"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="clearResume()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="resultContainer" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Generated Resume</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="resumeOutput"></div>
+                                <div class="mt-3">
+                                    <button class="btn btn-success" onclick="downloadResume()">
+                                        <i class="fas fa-download"></i> Download PDF
+                                    </button>
+                                    <button class="btn btn-info" onclick="printResume()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                    <button class="btn btn-warning" onclick="copyResume()">
+                                        <i class="fas fa-copy"></i> Copy Text
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Resume Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Keep it concise (1-2 pages)</li>
+                                <li>• Use action verbs</li>
+                                <li>• Quantify achievements</li>
+                                <li>• Tailor to job description</li>
+                                <li>• Proofread carefully</li>
+                                <li>• Use consistent formatting</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Key Sections</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Contact Information</li>
+                                <li>• Professional Summary</li>
+                                <li>• Work Experience</li>
+                                <li>• Education</li>
+                                <li>• Skills</li>
+                                <li>• Certifications (optional)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-ad"></i> Ad Space</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="ad-placeholder">
+                                <p class="text-muted text-center">Advertisement</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        document.getElementById('resumeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateResume();
+        });
+
+        function generateResume() {
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const location = document.getElementById('location').value;
+            const summary = document.getElementById('summary').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const skills = document.getElementById('skills').value;
+            const template = document.getElementById('template').value;
+
+            if (!fullName || !email) {
+                MultiTools.showError('Please fill in at least your name and email');
+                return;
+            }
+
+            const resumeHTML = createResumeHTML({
+                fullName, email, phone, location, summary, experience, education, skills, template
+            });
+
+            document.getElementById('resumeOutput').innerHTML = resumeHTML;
+            document.getElementById('resultContainer').style.display = 'block';
+            MultiTools.showSuccess('Resume generated successfully!');
+        }
+
+        function createResumeHTML(data) {
+            const templateStyles = {
+                professional: 'border-left: 4px solid #007bff;',
+                modern: 'border-left: 4px solid #28a745;',
+                creative: 'border-left: 4px solid #ffc107;',
+                minimal: 'border-left: 4px solid #6c757d;'
+            };
+
+            const style = templateStyles[data.template] || templateStyles.professional;
+
+            return `
+                <div class="resume-container" style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; line-height: 1.6;">
+                    <div class="resume-header" style="text-align: center; margin-bottom: 30px; ${style} padding-left: 20px;">
+                        <h1 style="color: #333; margin-bottom: 10px; font-size: 2.5em;">${data.fullName}</h1>
+                        <div style="color: #666; font-size: 1.1em;">
+                            ${data.email ? `<div>${data.email}</div>` : ''}
+                            ${data.phone ? `<div>${data.phone}</div>` : ''}
+                            ${data.location ? `<div>${data.location}</div>` : ''}
+                        </div>
+                    </div>
+
+                    ${data.summary ? `
+                        <div class="resume-section" style="margin-bottom: 25px;">
+                            <h2 style="color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-bottom: 15px;">Professional Summary</h2>
+                            <p style="text-align: justify; margin: 0;">${data.summary}</p>
+                        </div>
+                    ` : ''}
+
+                    ${data.experience ? `
+                        <div class="resume-section" style="margin-bottom: 25px;">
+                            <h2 style="color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-bottom: 15px;">Work Experience</h2>
+                            <div style="white-space: pre-line;">${data.experience}</div>
+                        </div>
+                    ` : ''}
+
+                    ${data.education ? `
+                        <div class="resume-section" style="margin-bottom: 25px;">
+                            <h2 style="color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-bottom: 15px;">Education</h2>
+                            <div style="white-space: pre-line;">${data.education}</div>
+                        </div>
+                    ` : ''}
+
+                    ${data.skills ? `
+                        <div class="resume-section" style="margin-bottom: 25px;">
+                            <h2 style="color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-bottom: 15px;">Skills</h2>
+                            <p style="margin: 0;">${data.skills}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function loadSampleData() {
+            document.getElementById('fullName').value = 'John Doe';
+            document.getElementById('email').value = 'john.doe@email.com';
+            document.getElementById('phone').value = '+1 (555) 123-4567';
+            document.getElementById('location').value = 'New York, NY';
+            document.getElementById('summary').value = 'Experienced software developer with 5+ years of expertise in web development, specializing in JavaScript, React, and Node.js. Proven track record of delivering high-quality applications and leading development teams.';
+            document.getElementById('experience').value = 'Senior Developer | TechCorp | 2020-Present\n• Led development of 3 major web applications\n• Mentored 5 junior developers\n• Improved application performance by 40%\n\nDeveloper | StartupXYZ | 2018-2020\n• Built responsive web applications\n• Collaborated with cross-functional teams\n• Implemented CI/CD pipelines';
+            document.getElementById('education').value = 'Bachelor of Science in Computer Science\nUniversity of Technology | 2018\n\nRelevant Coursework: Data Structures, Algorithms, Web Development';
+            document.getElementById('skills').value = 'JavaScript, React, Node.js, Python, SQL, Git, AWS, Docker, Agile, REST APIs';
+            document.getElementById('template').value = 'professional';
+            
+            MultiTools.showSuccess('Sample data loaded!');
+        }
+
+        function clearResume() {
+            document.getElementById('resumeForm').reset();
+            document.getElementById('resultContainer').style.display = 'none';
+            MultiTools.showSuccess('Resume form cleared');
+        }
+
+        function downloadResume() {
+            const resumeContent = document.getElementById('resumeOutput').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Resume - ${document.getElementById('fullName').value}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            @media print { body { margin: 0; } }
+                        </style>
+                    </head>
+                    <body>${resumeContent}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function printResume() {
+            window.print();
+        }
+
+        function copyResume() {
+            const resumeText = extractResumeText();
+            navigator.clipboard.writeText(resumeText).then(() => {
+                MultiTools.showSuccess('Resume text copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy resume text');
+            });
+        }
+
+        function extractResumeText() {
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const location = document.getElementById('location').value;
+            const summary = document.getElementById('summary').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const skills = document.getElementById('skills').value;
+
+            return `${fullName}
+${email}${phone ? '\n' + phone : ''}${location ? '\n' + location : ''}
+
+${summary ? 'PROFESSIONAL SUMMARY\n' + summary + '\n' : ''}
+${experience ? 'WORK EXPERIENCE\n' + experience + '\n' : ''}
+${education ? 'EDUCATION\n' + education + '\n' : ''}
+${skills ? 'SKILLS\n' + skills : ''}`;
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

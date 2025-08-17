@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTACCESS Redirect Generator - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+    <style>
+        .redirect-output {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            min-height: 200px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .redirect-type {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .redirect-example {
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .ad-space {
+            margin: 2rem 0;
+        }
+        .ad-banner {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ad-placeholder {
+            color: #6c757d;
+        }
+        .ad-placeholder i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .ad-placeholder p {
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+        .ad-placeholder small {
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="tool-header">
+                    <h1><i class="fas fa-route"></i> HTACCESS Redirect Generator</h1>
+                    <p>Generate .htaccess redirect rules for various scenarios and URL patterns</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-cog"></i> Redirect Configuration</h5>
+                                
+                                <div class="mb-3">
+                                    <label for="redirectType" class="form-label">Redirect Type:</label>
+                                    <select id="redirectType" class="form-select" onchange="updateForm()">
+                                        <option value="301">301 (Permanent Redirect)</option>
+                                        <option value="302">302 (Temporary Redirect)</option>
+                                        <option value="307">307 (Temporary Redirect - Preserve Method)</option>
+                                        <option value="308">308 (Permanent Redirect - Preserve Method)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="sourceUrl" class="form-label">Source URL/Pattern:</label>
+                                    <input type="text" id="sourceUrl" class="form-control" placeholder="e.g., /old-page or /old-folder/*">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="targetUrl" class="form-label">Target URL:</label>
+                                    <input type="text" id="targetUrl" class="form-control" placeholder="e.g., /new-page or https://example.com">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="redirectCondition" class="form-label">Additional Conditions:</label>
+                                    <select id="redirectCondition" class="form-select">
+                                        <option value="none">No additional conditions</option>
+                                        <option value="www">Redirect www to non-www</option>
+                                        <option value="nonwww">Redirect non-www to www</option>
+                                        <option value="https">Force HTTPS</option>
+                                        <option value="trailing-slash">Remove trailing slash</option>
+                                        <option value="add-trailing-slash">Add trailing slash</option>
+                                    </select>
+                                </div>
+
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="generateRedirect()">
+                                        <i class="fas fa-magic"></i> Generate Redirect
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="clearForm()">
+                                        <i class="fas fa-trash"></i> Clear
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-eye"></i> Generated .htaccess Rules</h5>
+                                <div id="redirectOutput" class="redirect-output"></div>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-primary" onclick="copyOutput()">
+                                        <i class="fas fa-copy"></i> Copy Rules
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="downloadOutput()">
+                                        <i class="fas fa-download"></i> Download .htaccess
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="redirect-type">
+                                    <h6><i class="fas fa-info-circle"></i> Redirect Types</h6>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <small><strong>301:</strong></small><br>
+                                            <span>Permanent redirect, SEO friendly</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small><strong>302:</strong></small><br>
+                                            <span>Temporary redirect, no SEO value</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small><strong>307:</strong></small><br>
+                                            <span>Temporary, preserves HTTP method</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <small><strong>308:</strong></small><br>
+                                            <span>Permanent, preserves HTTP method</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Space -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="ad-space">
+                    <div class="ad-banner">
+                        <div class="ad-placeholder">
+                            <i class="fas fa-ad"></i>
+                            <p>Advertisement Space</p>
+                            <small>Perfect for Google AdSense</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-lightbulb"></i> Common Redirect Scenarios</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Page redirects (old URL to new URL)</li>
+                                    <li><i class="fas fa-check text-success"></i> Domain redirects (www to non-www)</li>
+                                    <li><i class="fas fa-check text-success"></i> HTTPS enforcement</li>
+                                    <li><i class="fas fa-check text-success"></i> Trailing slash management</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Subdirectory redirects</li>
+                                    <li><i class="fas fa-check text-success"></i> Query parameter redirects</li>
+                                    <li><i class="fas fa-check text-success"></i> IP address redirects</li>
+                                    <li><i class="fas fa-check text-success"></i> Custom redirect rules</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // HTACCESS Redirect Generator functionality
+        function generateRedirect() {
+            const redirectType = document.getElementById('redirectType').value;
+            const sourceUrl = document.getElementById('sourceUrl').value.trim();
+            const targetUrl = document.getElementById('targetUrl').value.trim();
+            const condition = document.getElementById('redirectCondition').value;
+            const output = document.getElementById('redirectOutput');
+            
+            if (!sourceUrl || !targetUrl) {
+                MultiTools.showError('Please enter both source and target URLs.');
+                return;
+            }
+
+            try {
+                const rules = generateRedirectRules(redirectType, sourceUrl, targetUrl, condition);
+                output.textContent = rules;
+            } catch (error) {
+                MultiTools.showError('Error generating redirect rules: ' + error.message);
+            }
+        }
+
+        function generateRedirectRules(type, source, target, condition) {
+            let rules = '';
+            
+            // Add condition-based rules first
+            if (condition !== 'none') {
+                rules += generateConditionRules(condition) + '\n\n';
+            }
+            
+            // Add main redirect rule
+            rules += generateMainRedirectRule(type, source, target);
+            
+            return rules;
+        }
+
+        function generateConditionRules(condition) {
+            switch (condition) {
+                case 'www':
+                    return `# Redirect www to non-www
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]`;
+                
+                case 'nonwww':
+                    return `# Redirect non-www to www
+RewriteEngine On
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]`;
+                
+                case 'https':
+                    return `# Force HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]`;
+                
+                case 'trailing-slash':
+                    return `# Remove trailing slash
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [R=301,L]`;
+                
+                case 'add-trailing-slash':
+                    return `# Add trailing slash
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*)$ $1/ [R=301,L]`;
+                
+                default:
+                    return '';
+            }
+        }
+
+        function generateMainRedirectRule(type, source, target) {
+            const redirectCode = type;
+            
+            // Handle different source patterns
+            if (source.includes('*')) {
+                // Wildcard redirect
+                const pattern = source.replace('*', '(.*)');
+                return `# Redirect with wildcard
+RewriteEngine On
+RewriteRule ^${pattern}$ ${target} [R=${redirectCode},L]`;
+            } else if (source.startsWith('/') && source.endsWith('/')) {
+                // Directory redirect
+                return `# Directory redirect
+RewriteEngine On
+RewriteRule ^${source}$ ${target} [R=${redirectCode},L]`;
+            } else {
+                // Simple page redirect
+                return `# Page redirect
+RewriteEngine On
+RewriteRule ^${source}$ ${target} [R=${redirectCode},L]`;
+            }
+        }
+
+        function updateForm() {
+            const redirectType = document.getElementById('redirectType').value;
+            const conditionSelect = document.getElementById('redirectCondition');
+            
+            // Update available conditions based on redirect type
+            if (redirectType === '301' || redirectType === '308') {
+                // Enable all conditions for permanent redirects
+                Array.from(conditionSelect.options).forEach(option => {
+                    option.disabled = false;
+                });
+            } else {
+                // Disable some conditions for temporary redirects
+                Array.from(conditionSelect.options).forEach(option => {
+                    if (option.value === 'www' || option.value === 'nonwww') {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
+                });
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('sourceUrl').value = '';
+            document.getElementById('targetUrl').value = '';
+            document.getElementById('redirectCondition').value = 'none';
+            document.getElementById('redirectOutput').textContent = '';
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('redirectOutput').textContent;
+            if (output.trim()) {
+                MultiTools.copyToClipboard(output);
+            } else {
+                MultiTools.showError('No output to copy. Please generate redirect rules first.');
+            }
+        }
+
+        function downloadOutput() {
+            const output = document.getElementById('redirectOutput').textContent;
+            if (output.trim()) {
+                MultiTools.downloadFile(output, '.htaccess', 'text/plain');
+            } else {
+                MultiTools.showError('No output to download. Please generate redirect rules first.');
+            }
+        }
+
+        function loadSample() {
+            document.getElementById('redirectType').value = '301';
+            document.getElementById('sourceUrl').value = '/old-page';
+            document.getElementById('targetUrl').value = '/new-page';
+            document.getElementById('redirectCondition').value = 'https';
+            updateForm();
+            generateRedirect();
+        }
+
+        // Initialize form
+        updateForm();
+    </script>
+</body>
+</html> 

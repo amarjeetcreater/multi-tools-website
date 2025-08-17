@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate percentages, find percentages of numbers, and perform percentage increase/decrease calculations with our free online percentage calculator.">
+    <meta name="keywords" content="percentage calculator, percentage increase, percentage decrease, percentage of number, online calculator">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- AdSense Ad Unit 1 -->
+    <div class="container mt-3">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-percentage"></i> Percentage Calculator</h1>
+                <p>Calculate percentages, find percentages of numbers, and perform percentage increase/decrease calculations.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="percentageTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab">Basic Percentage</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="increase-tab" data-bs-toggle="tab" data-bs-target="#increase" type="button" role="tab">Percentage Increase/Decrease</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="of-tab" data-bs-toggle="tab" data-bs-target="#of" type="button" role="tab">Percentage Of</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="percentageTabContent">
+                                <!-- Basic Percentage Tab -->
+                                <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="part" class="form-label">Part</label>
+                                                <input type="number" class="form-control" id="part" placeholder="Enter part value">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="whole" class="form-label">Whole</label>
+                                                <input type="number" class="form-control" id="whole" placeholder="Enter whole value">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateBasicPercentage()">
+                                        <i class="fas fa-calculator"></i> Calculate Percentage
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetBasic()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Percentage Increase/Decrease Tab -->
+                                <div class="tab-pane fade" id="increase" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="originalValue" class="form-label">Original Value</label>
+                                                <input type="number" class="form-control" id="originalValue" placeholder="Enter original value">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="newValue" class="form-label">New Value</label>
+                                                <input type="number" class="form-control" id="newValue" placeholder="Enter new value">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculatePercentageChange()">
+                                        <i class="fas fa-calculator"></i> Calculate Change
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetIncrease()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Percentage Of Tab -->
+                                <div class="tab-pane fade" id="of" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="percentage" class="form-label">Percentage</label>
+                                                <input type="number" class="form-control" id="percentage" placeholder="Enter percentage">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="baseNumber" class="form-label">Base Number</label>
+                                                <input type="number" class="form-control" id="baseNumber" placeholder="Enter base number">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculatePercentageOf()">
+                                        <i class="fas fa-calculator"></i> Calculate
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetOf()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="result" class="mt-4"></div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Percentage Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Basic Formula:</strong> (Part ÷ Whole) × 100</li>
+                                <li><strong>Increase:</strong> ((New - Original) ÷ Original) × 100</li>
+                                <li><strong>Decrease:</strong> ((Original - New) ÷ Original) × 100</li>
+                                <li><strong>Percentage Of:</strong> (Percentage ÷ 100) × Base Number</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Common Percentages</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small>10% = 0.1</small><br>
+                                    <small>25% = 0.25</small><br>
+                                    <small>50% = 0.5</small><br>
+                                    <small>75% = 0.75</small>
+                                </div>
+                                <div class="col-6">
+                                    <small>20% = 0.2</small><br>
+                                    <small>33.33% = 0.333</small><br>
+                                    <small>66.67% = 0.667</small><br>
+                                    <small>100% = 1.0</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AdSense Ad Unit 2 -->
+    <div class="container mb-4">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+
+    <script>
+        function calculateBasicPercentage() {
+            const part = parseFloat(document.getElementById('part').value);
+            const whole = parseFloat(document.getElementById('whole').value);
+
+            if (isNaN(part) || isNaN(whole) || whole === 0) {
+                MultiTools.showError('Please enter valid numbers. Whole cannot be zero.');
+                return;
+            }
+
+            const percentage = (part / whole) * 100;
+            const formula = `(${part} ÷ ${whole}) × 100 = ${percentage.toFixed(2)}%`;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-percentage"></i> Result</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary">${percentage.toFixed(2)}%</h4>
+                                <p class="mb-2"><strong>Formula:</strong> ${formula}</p>
+                                <p class="mb-0"><strong>Part:</strong> ${part}</p>
+                                <p class="mb-0"><strong>Whole:</strong> ${whole}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" role="progressbar" style="width: ${Math.min(percentage, 100)}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">Visual representation</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('${percentage.toFixed(2)}%')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function calculatePercentageChange() {
+            const original = parseFloat(document.getElementById('originalValue').value);
+            const newValue = parseFloat(document.getElementById('newValue').value);
+
+            if (isNaN(original) || isNaN(newValue)) {
+                MultiTools.showError('Please enter valid numbers.');
+                return;
+            }
+
+            const change = newValue - original;
+            const percentageChange = (change / original) * 100;
+            const isIncrease = change > 0;
+            const formula = `((${newValue} - ${original}) ÷ ${original}) × 100 = ${percentageChange.toFixed(2)}%`;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Percentage Change</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="${isIncrease ? 'text-success' : 'text-danger'}">${percentageChange.toFixed(2)}% ${isIncrease ? 'Increase' : 'Decrease'}</h4>
+                                <p class="mb-2"><strong>Formula:</strong> ${formula}</p>
+                                <p class="mb-0"><strong>Original Value:</strong> ${original}</p>
+                                <p class="mb-0"><strong>New Value:</strong> ${newValue}</p>
+                                <p class="mb-0"><strong>Absolute Change:</strong> ${change.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-arrow-${isIncrease ? 'up text-success' : 'down text-danger'} fa-2x me-2"></i>
+                                    <div>
+                                        <small class="text-muted">${isIncrease ? 'Increase' : 'Decrease'}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('${percentageChange.toFixed(2)}% ${isIncrease ? 'Increase' : 'Decrease'}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function calculatePercentageOf() {
+            const percentage = parseFloat(document.getElementById('percentage').value);
+            const baseNumber = parseFloat(document.getElementById('baseNumber').value);
+
+            if (isNaN(percentage) || isNaN(baseNumber)) {
+                MultiTools.showError('Please enter valid numbers.');
+                return;
+            }
+
+            const result = (percentage / 100) * baseNumber;
+            const formula = `(${percentage} ÷ 100) × ${baseNumber} = ${result.toFixed(2)}`;
+
+            const resultHtml = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calculator"></i> Percentage Of</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary">${result.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Formula:</strong> ${formula}</p>
+                                <p class="mb-0"><strong>Percentage:</strong> ${percentage}%</p>
+                                <p class="mb-0"><strong>Base Number:</strong> ${baseNumber}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" role="progressbar" style="width: ${Math.min(percentage, 100)}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">${percentage}% of ${baseNumber}</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('${result.toFixed(2)}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = resultHtml;
+        }
+
+        function resetBasic() {
+            document.getElementById('part').value = '';
+            document.getElementById('whole').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function resetIncrease() {
+            document.getElementById('originalValue').value = '';
+            document.getElementById('newValue').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function resetOf() {
+            document.getElementById('percentage').value = '';
+            document.getElementById('baseNumber').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

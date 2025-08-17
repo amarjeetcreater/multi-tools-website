@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different pressure units including pascals, bars, PSI, atmospheres, and more. Free online pressure converter tool.">
+    <meta name="keywords" content="pressure converter, pascals to psi, bar to atm, pressure units, force converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid tool-page">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-compress-arrows-alt"></i> Pressure Converter</h1>
+                        <p>Convert between different pressure units including pascals, bars, PSI, atmospheres, and more.</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit">From Unit:</label>
+                                    <select id="fromUnit" class="form-control">
+                                        <option value="pascals">Pascals (Pa)</option>
+                                        <option value="kilopascals">Kilopascals (kPa)</option>
+                                        <option value="megapascals">Megapascals (MPa)</option>
+                                        <option value="bars">Bars (bar)</option>
+                                        <option value="millibars">Millibars (mbar)</option>
+                                        <option value="atmospheres">Atmospheres (atm)</option>
+                                        <option value="psi">Pounds per Square Inch (PSI)</option>
+                                        <option value="kgf_cm2">Kilogram-force per cm² (kgf/cm²)</option>
+                                        <option value="kgf_m2">Kilogram-force per m² (kgf/m²)</option>
+                                        <option value="torr">Torr (torr)</option>
+                                        <option value="mmhg">Millimeters of Mercury (mmHg)</option>
+                                        <option value="inhg">Inches of Mercury (inHg)</option>
+                                        <option value="inh2o">Inches of Water (inH₂O)</option>
+                                        <option value="mmh2o">Millimeters of Water (mmH₂O)</option>
+                                        <option value="dynes_cm2">Dynes per cm² (dyn/cm²)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit">To Unit:</label>
+                                    <select id="toUnit" class="form-control">
+                                        <option value="psi">Pounds per Square Inch (PSI)</option>
+                                        <option value="pascals">Pascals (Pa)</option>
+                                        <option value="kilopascals">Kilopascals (kPa)</option>
+                                        <option value="megapascals">Megapascals (MPa)</option>
+                                        <option value="bars">Bars (bar)</option>
+                                        <option value="millibars">Millibars (mbar)</option>
+                                        <option value="atmospheres">Atmospheres (atm)</option>
+                                        <option value="kgf_cm2">Kilogram-force per cm² (kgf/cm²)</option>
+                                        <option value="kgf_m2">Kilogram-force per m² (kgf/m²)</option>
+                                        <option value="torr">Torr (torr)</option>
+                                        <option value="mmhg">Millimeters of Mercury (mmHg)</option>
+                                        <option value="inhg">Inches of Mercury (inHg)</option>
+                                        <option value="inh2o">Inches of Water (inH₂O)</option>
+                                        <option value="mmh2o">Millimeters of Water (mmH₂O)</option>
+                                        <option value="dynes_cm2">Dynes per cm² (dyn/cm²)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="pressureValue">Pressure Value:</label>
+                            <input type="number" id="pressureValue" class="form-control" placeholder="Enter pressure value" step="any">
+                        </div>
+
+                        <div class="btn-group mt-3" role="group">
+                            <button type="button" class="btn btn-primary" onclick="convertPressure()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="swapUnits()">
+                                <i class="fas fa-arrows-alt-h"></i> Swap Units
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="copyResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+
+                        <div id="result" class="result-container mt-4" style="display: none;">
+                            <h4><i class="fas fa-chart-line"></i> Conversion Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="conversionResult"></strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Formula Used:</h5>
+                                    <p id="formula"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Conversion Factor:</h5>
+                                    <p id="factor"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-conversions mt-4">
+                            <h4><i class="fas fa-bolt"></i> Quick Conversions</h4>
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(101325, 'pascals', 'atmospheres')">
+                                        101325 Pa → atm
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'atmospheres', 'psi')">
+                                        1 atm → PSI
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'bars', 'pascals')">
+                                        1 bar → Pa
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(760, 'mmhg', 'atmospheres')">
+                                        760 mmHg → atm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pressure-info mt-4">
+                            <h4><i class="fas fa-info-circle"></i> Pressure Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Common Pressure References:</h5>
+                                    <ul>
+                                        <li><strong>Atmospheric Pressure:</strong> 101,325 Pa (1 atm)</li>
+                                        <li><strong>Car Tire:</strong> 30-35 PSI (207-241 kPa)</li>
+                                        <li><strong>Bicycle Tire:</strong> 60-120 PSI (414-828 kPa)</li>
+                                        <li><strong>Scuba Tank:</strong> 3,000 PSI (20.7 MPa)</li>
+                                        <li><strong>Hydraulic System:</strong> 2,000-4,000 PSI (14-28 MPa)</li>
+                                        <li><strong>Blood Pressure:</strong> 120/80 mmHg</li>
+                                        <li><strong>Vacuum Cleaner:</strong> 20-30 inHg</li>
+                                        <li><strong>Deep Ocean:</strong> 1,000+ atm</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Pressure Units Explained:</h5>
+                                    <ul>
+                                        <li><strong>Pascal:</strong> SI unit (1 Pa = 1 N/m²)</li>
+                                        <li><strong>Bar:</strong> Metric unit (1 bar = 100,000 Pa)</li>
+                                        <li><strong>PSI:</strong> Imperial unit (1 PSI = 6,895 Pa)</li>
+                                        <li><strong>Atmosphere:</strong> Standard atmospheric pressure</li>
+                                        <li><strong>Torr:</strong> Based on mercury column (1 torr = 133.3 Pa)</li>
+                                        <li><strong>mmHg:</strong> Millimeters of mercury</li>
+                                        <li><strong>kgf/cm²:</strong> Kilogram-force per square centimeter</li>
+                                        <li><strong>Dyne/cm²:</strong> CGS unit (1 dyn/cm² = 0.1 Pa)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pressure-types mt-4">
+                            <h4><i class="fas fa-cogs"></i> Pressure Types</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Types of Pressure:</h5>
+                                    <ul>
+                                        <li><strong>Absolute Pressure:</strong> Total pressure including atmospheric</li>
+                                        <li><strong>Gauge Pressure:</strong> Pressure relative to atmospheric</li>
+                                        <li><strong>Differential Pressure:</strong> Difference between two pressures</li>
+                                        <li><strong>Vacuum Pressure:</strong> Pressure below atmospheric</li>
+                                        <li><strong>Hydrostatic Pressure:</strong> Pressure due to fluid weight</li>
+                                        <li><strong>Dynamic Pressure:</strong> Pressure due to fluid motion</li>
+                                        <li><strong>Static Pressure:</strong> Pressure in stationary fluid</li>
+                                        <li><strong>Stagnation Pressure:</strong> Total pressure in moving fluid</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Pressure Applications:</h5>
+                                    <ul>
+                                        <li><strong>Weather:</strong> Barometric pressure for forecasting</li>
+                                        <li><strong>Automotive:</strong> Tire pressure, engine oil pressure</li>
+                                        <li><strong>Medical:</strong> Blood pressure, respiratory pressure</li>
+                                        <li><strong>Industrial:</strong> Hydraulic systems, pneumatic tools</li>
+                                        <li><strong>Aviation:</strong> Cabin pressure, altitude measurement</li>
+                                        <li><strong>Diving:</strong> Water pressure at different depths</li>
+                                        <li><strong>Manufacturing:</strong> Process pressure, quality control</li>
+                                        <li><strong>Research:</strong> Laboratory pressure measurements</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        // Pressure conversion factors (to pascals as base unit)
+        const pressureFactors = {
+            'pascals': 1,                    // pascals (base unit)
+            'kilopascals': 1000,             // kilopascals
+            'megapascals': 1000000,          // megapascals
+            'bars': 100000,                  // bars
+            'millibars': 100,                // millibars
+            'atmospheres': 101325,           // atmospheres
+            'psi': 6894.76,                  // pounds per square inch
+            'kgf_cm2': 98066.5,             // kilogram-force per cm²
+            'kgf_m2': 9.80665,              // kilogram-force per m²
+            'torr': 133.322,                 // torr
+            'mmhg': 133.322,                 // millimeters of mercury
+            'inhg': 3386.39,                 // inches of mercury
+            'inh2o': 249.089,                // inches of water
+            'mmh2o': 9.80665,                // millimeters of water
+            'dynes_cm2': 0.1                 // dynes per cm²
+        };
+
+        const unitNames = {
+            'pascals': 'Pascals',
+            'kilopascals': 'Kilopascals',
+            'megapascals': 'Megapascals',
+            'bars': 'Bars',
+            'millibars': 'Millibars',
+            'atmospheres': 'Atmospheres',
+            'psi': 'Pounds per Square Inch',
+            'kgf_cm2': 'Kilogram-force per cm²',
+            'kgf_m2': 'Kilogram-force per m²',
+            'torr': 'Torr',
+            'mmhg': 'Millimeters of Mercury',
+            'inhg': 'Inches of Mercury',
+            'inh2o': 'Inches of Water',
+            'mmh2o': 'Millimeters of Water',
+            'dynes_cm2': 'Dynes per cm²'
+        };
+
+        const unitSymbols = {
+            'pascals': 'Pa',
+            'kilopascals': 'kPa',
+            'megapascals': 'MPa',
+            'bars': 'bar',
+            'millibars': 'mbar',
+            'atmospheres': 'atm',
+            'psi': 'PSI',
+            'kgf_cm2': 'kgf/cm²',
+            'kgf_m2': 'kgf/m²',
+            'torr': 'torr',
+            'mmhg': 'mmHg',
+            'inhg': 'inHg',
+            'inh2o': 'inH₂O',
+            'mmh2o': 'mmH₂O',
+            'dynes_cm2': 'dyn/cm²'
+        };
+
+        function convertPressure() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const pressureValue = parseFloat(document.getElementById('pressureValue').value);
+
+            if (isNaN(pressureValue)) {
+                MultiTools.showError('Please enter a valid pressure value.');
+                return;
+            }
+
+            // Convert to base unit (pascals) first
+            const baseValue = pressureValue * pressureFactors[fromUnit];
+            
+            // Convert from base unit to target unit
+            const result = baseValue / pressureFactors[toUnit];
+
+            const fromSymbol = unitSymbols[fromUnit];
+            const toSymbol = unitSymbols[toUnit];
+            const fromName = unitNames[fromUnit];
+            const toName = unitNames[toUnit];
+
+            // Format result with appropriate precision
+            let formattedResult;
+            if (result >= 1000000) {
+                formattedResult = result.toExponential(3);
+            } else if (result >= 1000) {
+                formattedResult = result.toFixed(2);
+            } else {
+                formattedResult = result.toFixed(6);
+            }
+
+            document.getElementById('conversionResult').innerHTML = 
+                `${pressureValue} ${fromSymbol} = ${formattedResult} ${toSymbol}`;
+            
+            document.getElementById('formula').innerHTML = 
+                `${fromName} × ${pressureFactors[fromUnit]} ÷ ${pressureFactors[toUnit]} = ${toName}`;
+            
+            const conversionFactor = pressureFactors[fromUnit] / pressureFactors[toUnit];
+            let formattedFactor;
+            if (conversionFactor >= 1000000) {
+                formattedFactor = conversionFactor.toExponential(3);
+            } else if (conversionFactor >= 1000) {
+                formattedFactor = conversionFactor.toFixed(2);
+            } else {
+                formattedFactor = conversionFactor.toFixed(6);
+            }
+            
+            document.getElementById('factor').innerHTML = 
+                `1 ${fromSymbol} = ${formattedFactor} ${toSymbol}`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            
+            if (document.getElementById('pressureValue').value) {
+                convertPressure();
+            }
+        }
+
+        function resetConverter() {
+            document.getElementById('pressureValue').value = '';
+            document.getElementById('fromUnit').value = 'pascals';
+            document.getElementById('toUnit').value = 'psi';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function quickConvert(value, from, to) {
+            document.getElementById('pressureValue').value = value;
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            convertPressure();
+        }
+
+        function copyResult() {
+            const result = document.getElementById('conversionResult').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    MultiTools.showSuccess('Result copied to clipboard!');
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy result.');
+                });
+            }
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+</body>
+</html> 

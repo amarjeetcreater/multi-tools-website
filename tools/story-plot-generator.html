@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Plot Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container my-4">
+        <h1 class="text-center mb-4">Story Plot Generator</h1>
+        <div class="ad-section">
+            <!-- Ad Space -->
+            <p>Advertisement</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Story Plot Generator Functionality</h5>
+                <p class="card-text">Generate unique story plots by selecting different elements.</p>
+                <div class="mb-3">
+                    <label for="genreSelect" class="form-label">Genre:</label>
+                    <select class="form-select" id="genreSelect">
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Thriller">Thriller</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="characterSelect" class="form-label">Main Character:</label>
+                    <select class="form-select" id="characterSelect">
+                        <option value="a brave knight">a brave knight</option>
+                        <option value="a curious scientist">a curious scientist</option>
+                        <option value="a cunning detective">a cunning detective</option>
+                        <option value="a hopeless romantic">a hopeless romantic</option>
+                        <option value="a haunted artist">a haunted artist</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="settingSelect" class="form-label">Setting:</label>
+                    <select class="form-select" id="settingSelect">
+                        <option value="a mystical forest">a mystical forest</option>
+                        <option value="a futuristic city">a futuristic city</option>
+                        <option value="an old mansion">an old mansion</option>
+                        <option value="a cozy cafe">a cozy cafe</option>
+                        <option value="a desolate island">a desolate island</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="generatePlotBtn">Generate Plot</button>
+                <div class="mt-4">
+                    <h6>Generated Plot:</h6>
+                    <p id="generatedPlot" class="alert alert-info"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/loadComponents.js"></script>
+    <script>
+        // JavaScript for Story Plot Generator tool
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Story Plot Generator loaded.');
+
+            const genreSelect = document.getElementById('genreSelect');
+            const characterSelect = document.getElementById('characterSelect');
+            const settingSelect = document.getElementById('settingSelect');
+            const generatePlotBtn = document.getElementById('generatePlotBtn');
+            const generatedPlot = document.getElementById('generatedPlot');
+
+            const plots = {
+                'Fantasy': [
+                    'On a quest to retrieve a lost artifact, {character} must navigate through {setting} and face ancient evils.',
+                    'A prophecy foretells that {character} will unite the warring factions of {setting} against a common enemy.',
+                    'Hidden magic awakens within {character} in {setting}, forcing them to confront a destiny they never imagined.'
+                ],
+                'Sci-Fi': [
+                    'In a dystopian future, {character} discovers a secret that could dismantle the oppressive regime of {setting}.',
+                    'A deep space mission goes awry, leaving {character} stranded on a desolate planet in {setting} with an unknown alien threat.',
+                    'Time travel experiments in {setting} lead {character} to an alternate reality where their actions have dire consequences.'
+                ],
+                'Mystery': [
+                    'A perplexing crime in {setting} leads {character} down a rabbit hole of deception and betrayal.',
+                    'The disappearance of a prominent figure in {setting} forces {character} to uncover long-buried secrets.',
+                    'In a classic whodunit, {character} must unmask a killer among a group of eccentric suspects in {setting}.'
+                ],
+                'Romance': [
+                    'Two unlikely souls, {character} and their rival, find love amidst the chaos of {setting}.',
+                    'A chance encounter in {setting} sparks an undeniable connection between {character} and a mysterious stranger.',
+                    'After years apart, {character} returns to {setting} and rekindles an old flame, but past wounds resurface.'
+                ],
+                'Thriller': [
+                    'Hunted by a relentless adversary, {character} must escape {setting} before a deadly conspiracy is exposed.',
+                    'A psychological game unfolds as {character} is trapped in {setting} with a cunning psychopath.',
+                    'The clock is ticking as {character} races against time to prevent a catastrophic event in {setting}.'
+                ]
+            };
+
+            generatePlotBtn.addEventListener('click', function() {
+                const selectedGenre = genreSelect.value;
+                const selectedCharacter = characterSelect.value;
+                const selectedSetting = settingSelect.value;
+
+                const genrePlots = plots[selectedGenre];
+                if (genrePlots && genrePlots.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * genrePlots.length);
+                    let plot = genrePlots[randomIndex];
+                    plot = plot.replace('{character}', selectedCharacter);
+                    plot = plot.replace('{setting}', selectedSetting);
+                    generatedPlot.textContent = plot;
+                } else {
+                    generatedPlot.textContent = 'No plot available for the selected genre.';
+                }
+            });
+        });
+    </script>
+    <script>
+        (function() {
+          function getTheme() {
+            try {
+              var t = localStorage.getItem('theme');
+              if (t === 'dark' || t === 'light') return t;
+            } catch(e) {}
+            return 'light';
+          }
+          document.documentElement.setAttribute('data-theme', getTheme());
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Text Generator - Multi-Tools</title>
+    <meta name="description" content="Generate fancy text with special characters">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-magic"></i> Fancy Text Generator</h1>
+                <p>Generate fancy text with special characters</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="inputText" class="form-label">Enter Text</label>
+                                <textarea class="form-control" id="inputText" rows="4" placeholder="Enter your text here..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Fancy Styles</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="d-grid gap-2">
+                                            <button type="button" class="btn btn-outline-primary style-btn" data-style="bold">
+                                                <strong>Bold Text</strong>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary style-btn" data-style="italic">
+                                                <em>Italic Text</em>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary style-btn" data-style="underline">
+                                                <u>Underlined Text</u>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary style-btn" data-style="strikethrough">
+                                                <s>Strikethrough Text</s>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-grid gap-2">
+                                            <button type="button" class="btn btn-outline-success style-btn" data-style="bubble">
+                                                ⓑⓤⓑⓑⓛⓔ ⓣⓔⓧⓣ
+                                            </button>
+                                            <button type="button" class="btn btn-outline-success style-btn" data-style="double">
+                                                𝕕𝕠𝕦𝕓𝕝𝕖 𝕥𝕖𝕩𝕥
+                                            </button>
+                                            <button type="button" class="btn btn-outline-success style-btn" data-style="script">
+                                                𝓼𝓬𝓻𝓲𝓹𝓽 𝓽𝓮𝔁𝓽
+                                            </button>
+                                            <button type="button" class="btn btn-outline-success style-btn" data-style="gothic">
+                                                𝔤𝔬𝔱𝔥𝔦𝔠 𝔱𝔢𝔵𝔱
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary" id="clearBtn">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="copyBtn">
+                                        <i class="fas fa-copy"></i> Copy Result
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="outputText" class="form-label">Fancy Text Result</label>
+                                <textarea class="form-control" id="outputText" rows="4" placeholder="Fancy text will appear here..." readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> About Fancy Text</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small">This tool converts text to fancy styles using:</p>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-check text-success"></i> Unicode characters</li>
+                                <li><i class="fas fa-check text-success"></i> Special fonts</li>
+                                <li><i class="fas fa-check text-success"></i> Decorative styles</li>
+                                <li><i class="fas fa-check text-success"></i> Multiple variations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Quick Examples</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <small><strong>Bold:</strong> <strong>Hello World</strong></small>
+                            </div>
+                            <div class="mb-2">
+                                <small><strong>Bubble:</strong> ⓗⓔⓛⓛⓞ ⓦⓞⓡⓛⓓ</small>
+                            </div>
+                            <div class="mb-2">
+                                <small><strong>Double:</strong> 𝕙𝕖𝕝𝕝𝕠 𝕨𝕠𝕣𝕝𝕕</small>
+                            </div>
+                            <div class="mb-2">
+                                <small><strong>Script:</strong> 𝓱𝓮𝓵𝓵𝓸 𝔀𝓸𝓻𝓵𝓭</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const fancyStyles = {
+            bold: {
+                a: '𝗮', b: '𝗯', c: '𝗰', d: '𝗱', e: '𝗲', f: '𝗳', g: '𝗴', h: '𝗵', i: '𝗶', j: '𝗷', k: '𝗸', l: '𝗹', m: '𝗺',
+                n: '𝗻', o: '𝗼', p: '𝗽', q: '𝗾', r: '𝗿', s: '𝘀', t: '𝘁', u: '𝘂', v: '𝘃', w: '𝘄', x: '𝘅', y: '𝘆', z: '𝘇',
+                A: '𝗔', B: '𝗕', C: '𝗖', D: '𝗗', E: '𝗘', F: '𝗙', G: '𝗚', H: '𝗛', I: '𝗜', J: '𝗝', K: '𝗞', L: '𝗟', M: '𝗠',
+                N: '𝗡', O: '𝗢', P: '𝗣', Q: '𝗤', R: '𝗥', S: '𝗦', T: '𝗧', U: '𝗨', V: '𝗩', W: '𝗪', X: '𝗫', Y: '𝗬', Z: '𝗭'
+            },
+            italic: {
+                a: '𝘢', b: '𝘣', c: '𝘤', d: '𝘥', e: '𝘦', f: '𝘧', g: '𝘨', h: '𝘩', i: '𝘪', j: '𝘫', k: '𝘬', l: '𝘭', m: '𝘮',
+                n: '𝘯', o: '𝘰', p: '𝘱', q: '𝘲', r: '𝘳', s: '𝘴', t: '𝘵', u: '𝘶', v: '𝘷', w: '𝘸', x: '𝘹', y: '𝘺', z: '𝘻',
+                A: '𝘈', B: '𝘉', C: '𝘊', D: '𝘋', E: '𝘌', F: '𝘍', G: '𝘎', H: '𝘏', I: '𝘐', J: '𝘑', K: '𝘒', L: '𝘓', M: '𝘔',
+                N: '𝘕', O: '𝘖', P: '𝘗', Q: '𝘘', R: '𝘙', S: '𝘚', T: '𝘛', U: '𝘜', V: '𝘝', W: '𝘞', X: '𝘟', Y: '𝘠', Z: '𝘡'
+            },
+            bubble: {
+                a: 'ⓐ', b: 'ⓑ', c: 'ⓒ', d: 'ⓓ', e: 'ⓔ', f: 'ⓕ', g: 'ⓖ', h: 'ⓗ', i: 'ⓘ', j: 'ⓙ', k: 'ⓚ', l: 'ⓛ', m: 'ⓜ',
+                n: 'ⓝ', o: 'ⓞ', p: 'ⓟ', q: 'ⓠ', r: 'ⓡ', s: 'ⓢ', t: 'ⓣ', u: 'ⓤ', v: 'ⓥ', w: 'ⓦ', x: 'ⓧ', y: 'ⓨ', z: 'ⓩ',
+                A: 'Ⓐ', B: 'Ⓑ', C: 'Ⓒ', D: 'Ⓓ', E: 'Ⓔ', F: 'Ⓕ', G: 'Ⓖ', H: 'Ⓗ', I: 'Ⓘ', J: 'Ⓙ', K: 'Ⓚ', L: 'Ⓛ', M: 'Ⓜ',
+                N: 'Ⓝ', O: 'Ⓞ', P: 'Ⓟ', Q: 'Ⓠ', R: 'Ⓡ', S: 'Ⓢ', T: 'Ⓣ', U: 'Ⓤ', V: 'Ⓥ', W: 'Ⓦ', X: 'Ⓧ', Y: 'Ⓨ', Z: 'Ⓩ'
+            },
+            double: {
+                a: '𝕒', b: '𝕓', c: '𝕔', d: '𝕕', e: '𝕖', f: '𝕗', g: '𝕘', h: '𝕙', i: '𝕚', j: '𝕛', k: '𝕜', l: '𝕝', m: '𝕞',
+                n: '𝕟', o: '𝕠', p: '𝕡', q: '𝕢', r: '𝕣', s: '𝕤', t: '𝕥', u: '𝕦', v: '𝕧', w: '𝕨', x: '𝕩', y: '𝕪', z: '𝕫',
+                A: '𝔸', B: '𝔹', C: 'ℂ', D: '𝔻', E: '𝔼', F: '𝔽', G: '𝔾', H: 'ℍ', I: '𝕀', J: '𝕁', K: '𝕂', L: '𝕃', M: '𝕄',
+                N: 'ℕ', O: '𝕆', P: 'ℙ', Q: 'ℚ', R: 'ℝ', S: '𝕊', T: '𝕋', U: '𝕌', V: '𝕍', W: '𝕎', X: '𝕏', Y: '𝕐', Z: 'ℤ'
+            },
+            script: {
+                a: '𝓪', b: '𝓫', c: '𝓬', d: '𝓭', e: '𝓮', f: '𝓯', g: '𝓰', h: '𝓱', i: '𝓲', j: '𝓳', k: '𝓴', l: '𝓵', m: '𝓶',
+                n: '𝓷', o: '𝓸', p: '𝓹', q: '𝓺', r: '𝓻', s: '𝓼', t: '𝓽', u: '𝓾', v: '𝓿', w: '𝔀', x: '𝔁', y: '𝔂', z: '𝔃',
+                A: '𝓐', B: '𝓑', C: '𝓒', D: '𝓓', E: '𝓔', F: '𝓕', G: '𝓖', H: '𝓗', I: '𝓘', J: '𝓙', K: '𝓚', L: '𝓛', M: '𝓜',
+                N: '𝓝', O: '𝓞', P: '𝓟', Q: '𝓠', R: '𝓡', S: '𝓢', T: '𝓣', U: '𝓤', V: '𝓥', W: '𝓦', X: '𝓧', Y: '𝓨', Z: '𝓩'
+            },
+            gothic: {
+                a: '𝔞', b: '𝔟', c: '𝔠', d: '𝔡', e: '𝔢', f: '𝔣', g: '𝔤', h: '𝔥', i: '𝔦', j: '𝔧', k: '𝔨', l: '𝔩', m: '𝔪',
+                n: '𝔫', o: '𝔬', p: '𝔭', q: '𝔮', r: '𝔯', s: '𝔰', t: '𝔱', u: '𝔲', v: '𝔳', w: '𝔴', x: '𝔵', y: '𝔶', z: '𝔷',
+                A: '𝔄', B: '𝔅', C: 'ℭ', D: '𝔇', E: '𝔈', F: '𝔉', G: '𝔊', H: 'ℌ', I: 'ℑ', J: '𝔍', K: '𝔎', L: '𝔏', M: '𝔐',
+                N: '𝔑', O: '𝔒', P: '𝔓', Q: '𝔔', R: 'ℜ', S: '𝔖', T: '𝔗', U: '𝔘', V: '𝔙', W: '𝔚', X: '𝔛', Y: '𝔜', Z: 'ℨ'
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+
+            document.querySelectorAll('.style-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const style = this.dataset.style;
+                    convertToFancy(style);
+                });
+            });
+
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                clearText();
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const text = document.getElementById('outputText').value;
+                if (text) {
+                    MultiTools.copyToClipboard(text);
+                }
+            });
+        });
+
+        function convertToFancy(style) {
+            const input = document.getElementById('inputText').value.trim();
+            
+            if (!input) {
+                MultiTools.showError('Please enter some text to convert.');
+                return;
+            }
+
+            let result = '';
+            
+            if (style === 'bold') {
+                result = `<strong>${input}</strong>`;
+            } else if (style === 'italic') {
+                result = `<em>${input}</em>`;
+            } else if (style === 'underline') {
+                result = `<u>${input}</u>`;
+            } else if (style === 'strikethrough') {
+                result = `<s>${input}</s>`;
+            } else {
+                // Use fancy character mapping
+                const charMap = fancyStyles[style];
+                if (charMap) {
+                    result = input.split('').map(char => {
+                        return charMap[char] || char;
+                    }).join('');
+                } else {
+                    result = input;
+                }
+            }
+
+            document.getElementById('outputText').value = result;
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+        }
+
+        (function() {
+          function getTheme() {
+            try {
+              var t = localStorage.getItem('theme');
+              if (t === 'dark' || t === 'light') return t;
+            } catch(e) {}
+            return 'light';
+          }
+          document.documentElement.setAttribute('data-theme', getTheme());
+        })();
+    </script>
+</body>
+</html>

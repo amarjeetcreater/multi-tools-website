@@ -1,0 +1,384 @@
+<script>
+// Theme detection and application script
+try {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = userTheme || systemTheme || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+} catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markup Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate markup percentages, selling prices, and profit margins with our free online markup calculator. Perfect for business and retail pricing.">
+    <meta name="keywords" content="markup calculator, profit margin calculator, selling price calculator, business calculator, retail pricing">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-chart-line"></i> Markup Calculator</h1>
+                <p>Calculate markup percentages, selling prices, and profit margins for business and retail scenarios.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="markupTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="markup-tab" data-bs-toggle="tab" data-bs-target="#markup" type="button" role="tab">Markup Percentage</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="margin-tab" data-bs-toggle="tab" data-bs-target="#margin" type="button" role="tab">Profit Margin</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="reverse-tab" data-bs-toggle="tab" data-bs-target="#reverse" type="button" role="tab">Reverse Calculation</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="markupTabContent">
+                                <!-- Markup Percentage Tab -->
+                                <div class="tab-pane fade show active" id="markup" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="costPrice" class="form-label">Cost Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="costPrice" placeholder="Enter cost price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="markupPercent" class="form-label">Markup Percentage</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="markupPercent" placeholder="Enter markup %" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateMarkup()">
+                                        <i class="fas fa-calculator"></i> Calculate Selling Price
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetMarkup()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Profit Margin Tab -->
+                                <div class="tab-pane fade" id="margin" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="costPriceMargin" class="form-label">Cost Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="costPriceMargin" placeholder="Enter cost price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="profitMargin" class="form-label">Profit Margin</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="profitMargin" placeholder="Enter profit margin %" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateMargin()">
+                                        <i class="fas fa-calculator"></i> Calculate Selling Price
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetMargin()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+
+                                <!-- Reverse Calculation Tab -->
+                                <div class="tab-pane fade" id="reverse" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="sellingPrice" class="form-label">Selling Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="sellingPrice" placeholder="Enter selling price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="costPriceReverse" class="form-label">Cost Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="costPriceReverse" placeholder="Enter cost price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateReverse()">
+                                        <i class="fas fa-calculator"></i> Calculate Markup & Margin
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetReverse()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="result" class="mt-4"></div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Markup vs Margin</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Markup:</strong> (Selling Price - Cost) ÷ Cost × 100</li>
+                                <li><strong>Margin:</strong> (Selling Price - Cost) ÷ Selling Price × 100</li>
+                                <li><strong>Key Difference:</strong> Markup is based on cost, margin is based on selling price</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Common Markups</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small>25% markup = 20% margin</small><br>
+                                    <small>50% markup = 33.3% margin</small><br>
+                                    <small>100% markup = 50% margin</small><br>
+                                    <small>200% markup = 66.7% margin</small>
+                                </div>
+                                <div class="col-6">
+                                    <small>33.3% markup = 25% margin</small><br>
+                                    <small>66.7% markup = 40% margin</small><br>
+                                    <small>150% markup = 60% margin</small><br>
+                                    <small>300% markup = 75% margin</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5><i class="fas fa-briefcase"></i> Business Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled small">
+                                <li>• Consider overhead costs when setting markup</li>
+                                <li>• Research competitor pricing strategies</li>
+                                <li>• Factor in seasonality and demand</li>
+                                <li>• Monitor profit margins regularly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+
+    <script>
+        function calculateMarkup() {
+            const costPrice = parseFloat(document.getElementById('costPrice').value);
+            const markupPercent = parseFloat(document.getElementById('markupPercent').value);
+
+            if (isNaN(costPrice) || isNaN(markupPercent) || markupPercent < 0) {
+                MultiTools.showError('Please enter valid numbers. Markup percentage must be positive.');
+                return;
+            }
+
+            const markupAmount = (costPrice * markupPercent) / 100;
+            const sellingPrice = costPrice + markupAmount;
+            const profit = sellingPrice - costPrice;
+            const profitMargin = (profit / sellingPrice) * 100;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Markup Calculation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-success">$${sellingPrice.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Selling Price</strong></p>
+                                <p class="mb-0"><strong>Cost Price:</strong> $${costPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Markup:</strong> ${markupPercent}%</p>
+                                <p class="mb-0"><strong>Markup Amount:</strong> $${markupAmount.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-success">
+                                    <h6><i class="fas fa-dollar-sign"></i> Profit</h6>
+                                    <h4 class="text-success mb-0">$${profit.toFixed(2)}</h4>
+                                    <small>Profit Margin: ${profitMargin.toFixed(2)}%</small>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${profitMargin}%" aria-valuenow="${profitMargin}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">${profitMargin.toFixed(2)}% profit margin</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('Selling Price: $${sellingPrice.toFixed(2)}, Profit: $${profit.toFixed(2)}')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function calculateMargin() {
+            const costPrice = parseFloat(document.getElementById('costPriceMargin').value);
+            const profitMargin = parseFloat(document.getElementById('profitMargin').value);
+
+            if (isNaN(costPrice) || isNaN(profitMargin) || profitMargin < 0 || profitMargin >= 100) {
+                MultiTools.showError('Please enter valid numbers. Profit margin must be between 0 and 100.');
+                return;
+            }
+
+            const sellingPrice = costPrice / (1 - profitMargin / 100);
+            const profit = sellingPrice - costPrice;
+            const markupPercent = (profit / costPrice) * 100;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-percentage"></i> Profit Margin Calculation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-success">$${sellingPrice.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Selling Price</strong></p>
+                                <p class="mb-0"><strong>Cost Price:</strong> $${costPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Profit Margin:</strong> ${profitMargin}%</p>
+                                <p class="mb-0"><strong>Profit:</strong> $${profit.toFixed(2)}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-info">
+                                    <h6><i class="fas fa-chart-line"></i> Markup</h6>
+                                    <h4 class="text-info mb-0">${markupPercent.toFixed(2)}%</h4>
+                                    <small>Required markup for ${profitMargin}% margin</small>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: ${profitMargin}%" aria-valuenow="${profitMargin}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">${profitMargin}% profit margin</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('Selling Price: $${sellingPrice.toFixed(2)}, Markup: ${markupPercent.toFixed(2)}%')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function calculateReverse() {
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
+            const costPrice = parseFloat(document.getElementById('costPriceReverse').value);
+
+            if (isNaN(sellingPrice) || isNaN(costPrice) || costPrice >= sellingPrice) {
+                MultiTools.showError('Please enter valid numbers. Cost price must be less than selling price.');
+                return;
+            }
+
+            const profit = sellingPrice - costPrice;
+            const markupPercent = (profit / costPrice) * 100;
+            const profitMargin = (profit / sellingPrice) * 100;
+
+            const result = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calculator"></i> Reverse Calculation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary">$${profit.toFixed(2)}</h4>
+                                <p class="mb-2"><strong>Profit</strong></p>
+                                <p class="mb-0"><strong>Selling Price:</strong> $${sellingPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Cost Price:</strong> $${costPrice.toFixed(2)}</p>
+                                <p class="mb-0"><strong>Markup:</strong> ${markupPercent.toFixed(2)}%</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-success">
+                                    <h6><i class="fas fa-percentage"></i> Profit Margin</h6>
+                                    <h4 class="text-success mb-0">${profitMargin.toFixed(2)}%</h4>
+                                </div>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${profitMargin}%" aria-valuenow="${profitMargin}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-muted">${profitMargin.toFixed(2)}% profit margin</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" onclick="MultiTools.copyToClipboard('Profit: $${profit.toFixed(2)}, Markup: ${markupPercent.toFixed(2)}%, Margin: ${profitMargin.toFixed(2)}%')">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function resetMarkup() {
+            document.getElementById('costPrice').value = '';
+            document.getElementById('markupPercent').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function resetMargin() {
+            document.getElementById('costPriceMargin').value = '';
+            document.getElementById('profitMargin').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function resetReverse() {
+            document.getElementById('sellingPrice').value = '';
+            document.getElementById('costPriceReverse').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator - Multi-Tools</title>
+    <meta name="description" content="Calculate mortgage payments, interest, and amortization. Free online mortgage calculator for home loans and refinancing.">
+    <meta name="keywords" content="mortgage calculator, home loan calculator, mortgage payment calculator, refinance calculator, amortization">
+    
+        <!-- Bootstrap CSS -->
+        <script>
+        (function() {
+            function getTheme() {
+                try {
+                    var t = localStorage.getItem('theme');
+                    if (t === 'dark' || t === 'light') return t;
+                } catch(e) {}
+                return 'light';
+            }
+            document.documentElement.setAttribute('data-theme', getTheme());
+        })();
+        </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <!-- Top Ad Section -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_AD_SLOT_ID"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-home"></i> Mortgage Calculator
+                    </h1>
+                    <p class="tool-description">
+                        Calculate mortgage payments, interest, and create amortization schedules. Compare different loan terms and down payment scenarios.
+                    </p>
+
+                    <!-- Tool Tabs -->
+                    <ul class="nav nav-tabs" id="mortgageTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab">
+                                <i class="fas fa-dollar-sign"></i> Payment Calculator
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="affordability-tab" data-bs-toggle="tab" data-bs-target="#affordability" type="button" role="tab">
+                                <i class="fas fa-calculator"></i> Affordability Calculator
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="refinance-tab" data-bs-toggle="tab" data-bs-target="#refinance" type="button" role="tab">
+                                <i class="fas fa-exchange-alt"></i> Refinance Calculator
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content mt-3" id="mortgageTabContent">
+                        <!-- Payment Calculator Tab -->
+                        <div class="tab-pane fade show active" id="payment" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="homePrice" class="form-label">Home Price</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="homePrice" placeholder="Enter home price" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="downPayment" class="form-label">Down Payment</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="downPayment" placeholder="Enter down payment" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="loanAmount" class="form-label">Loan Amount</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="loanAmount" placeholder="Enter loan amount" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interestRate" class="form-label">Interest Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="interestRate" placeholder="Enter interest rate" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="loanTerm" class="form-label">Loan Term</label>
+                                                <select class="form-select" id="loanTerm">
+                                                    <option value="30">30 Years</option>
+                                                    <option value="20">20 Years</option>
+                                                    <option value="15">15 Years</option>
+                                                    <option value="10">10 Years</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="propertyTax" class="form-label">Annual Property Tax</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="propertyTax" placeholder="Enter property tax" step="0.01" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="insurance" class="form-label">Annual Insurance</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="insurance" placeholder="Enter insurance" step="0.01" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="pmi" class="form-label">PMI (if applicable)</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="pmi" placeholder="Enter PMI" step="0.01" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateMortgage()">
+                                        <i class="fas fa-calculator"></i> Calculate Payment
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetMortgage()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Mortgage Results -->
+                            <div id="mortgageResults" class="mt-4" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><i class="fas fa-chart-pie"></i> Mortgage Payment Summary</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Principal & Interest:</span>
+                                                    <span class="result-value" id="principalInterest"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Property Tax:</span>
+                                                    <span class="result-value" id="monthlyTax"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Insurance:</span>
+                                                    <span class="result-value" id="monthlyInsurance"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">PMI:</span>
+                                                    <span class="result-value" id="monthlyPmi"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Monthly Payment:</span>
+                                                    <span class="result-value" id="totalPayment"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Interest Paid:</span>
+                                                    <span class="result-value" id="totalInterest"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Down Payment %:</span>
+                                                    <span class="result-value" id="downPaymentPercent"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Loan-to-Value Ratio:</span>
+                                                    <span class="result-value" id="ltvRatio"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Affordability Calculator Tab -->
+                        <div class="tab-pane fade" id="affordability" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="annualIncome" class="form-label">Annual Income</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="annualIncome" placeholder="Enter annual income" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="monthlyDebt" class="form-label">Monthly Debt Payments</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="monthlyDebt" placeholder="Enter monthly debt" step="0.01" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="downPaymentAfford" class="form-label">Down Payment</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="downPaymentAfford" placeholder="Enter down payment" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interestRateAfford" class="form-label">Interest Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="interestRateAfford" placeholder="Enter interest rate" step="0.01" value="6.5">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="loanTermAfford" class="form-label">Loan Term</label>
+                                                <select class="form-select" id="loanTermAfford">
+                                                    <option value="30">30 Years</option>
+                                                    <option value="20">20 Years</option>
+                                                    <option value="15">15 Years</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="propertyTaxRate" class="form-label">Property Tax Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="propertyTaxRate" placeholder="Enter tax rate" step="0.01" value="1.2">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateAffordability()">
+                                        <i class="fas fa-calculator"></i> Calculate Affordability
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetAffordability()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Affordability Results -->
+                            <div id="affordabilityResults" class="mt-4" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><i class="fas fa-home"></i> Home Affordability Analysis</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Maximum Home Price:</span>
+                                                    <span class="result-value" id="maxHomePrice"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Maximum Loan Amount:</span>
+                                                    <span class="result-value" id="maxLoanAmount"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Monthly Payment:</span>
+                                                    <span class="result-value" id="affordabilityPayment"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Debt-to-Income Ratio:</span>
+                                                    <span class="result-value" id="dtiRatio"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Front-End Ratio:</span>
+                                                    <span class="result-value" id="frontEndRatio"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Back-End Ratio:</span>
+                                                    <span class="result-value" id="backEndRatio"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Refinance Calculator Tab -->
+                        <div class="tab-pane fade" id="refinance" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="mb-3">Current Mortgage</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="currentBalance" class="form-label">Current Balance</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="currentBalance" placeholder="Enter current balance" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="currentRate" class="form-label">Current Interest Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="currentRate" placeholder="Enter current rate" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="currentPayment" class="form-label">Current Payment</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="currentPayment" placeholder="Enter current payment" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="remainingTerm" class="form-label">Remaining Term (Years)</label>
+                                                <input type="number" class="form-control" id="remainingTerm" placeholder="Enter remaining term">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h6 class="mb-3 mt-4">New Mortgage</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="newRate" class="form-label">New Interest Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="newRate" placeholder="Enter new rate" step="0.01">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="newTerm" class="form-label">New Loan Term</label>
+                                                <select class="form-select" id="newTerm">
+                                                    <option value="30">30 Years</option>
+                                                    <option value="20">20 Years</option>
+                                                    <option value="15">15 Years</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="closingCosts" class="form-label">Closing Costs</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="closingCosts" placeholder="Enter closing costs" step="0.01" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="cashOut" class="form-label">Cash Out Amount</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="cashOut" placeholder="Enter cash out" step="0.01" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateRefinance()">
+                                        <i class="fas fa-calculator"></i> Calculate Refinance
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetRefinance()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Refinance Results -->
+                            <div id="refinanceResults" class="mt-4" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><i class="fas fa-exchange-alt"></i> Refinance Analysis</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">New Monthly Payment:</span>
+                                                    <span class="result-value" id="newPayment"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Monthly Savings:</span>
+                                                    <span class="result-value" id="monthlySavings"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Interest Savings:</span>
+                                                    <span class="result-value" id="interestSavings"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Break-Even Time:</span>
+                                                    <span class="result-value" id="breakEvenTime"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">New Loan Amount:</span>
+                                                    <span class="result-value" id="newLoanAmount"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Savings:</span>
+                                                    <span class="result-value" id="totalSavings"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Mortgage Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Aim for 20% down payment to avoid PMI</li>
+                                <li><i class="fas fa-check text-success"></i> Keep DTI ratio under 43%</li>
+                                <li><i class="fas fa-check text-success"></i> Compare multiple lenders</li>
+                                <li><i class="fas fa-check text-success"></i> Consider closing costs</li>
+                                <li><i class="fas fa-check text-success"></i> Factor in property taxes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-calculator"></i> Mortgage Rules</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6>28/36 Rule</h6>
+                                <p class="small">28% of income for housing, 36% for total debt.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>20% Down Payment</h6>
+                                <p class="small">Avoid PMI with 20% down payment.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>3-6 Month Emergency Fund</h6>
+                                <p class="small">Maintain emergency fund before buying.</p>
+                            </div>
+                            <div>
+                                <h6>2-5% Closing Costs</h6>
+                                <p class="small">Budget 2-5% of home price for closing costs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-line"></i> Mortgage Types</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6>Fixed-Rate Mortgage</h6>
+                                <p class="small">Interest rate remains constant throughout the loan term.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Adjustable-Rate Mortgage</h6>
+                                <p class="small">Interest rate can change periodically based on market conditions.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>FHA Loans</h6>
+                                <p class="small">Government-backed loans with lower down payment requirements.</p>
+                            </div>
+                            <div>
+                                <h6>VA Loans</h6>
+                                <p class="small">Veterans Affairs loans with favorable terms for eligible borrowers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Ad Section -->
+        <div class="row mt-4 mb-4">
+            <div class="col-12 text-center">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_BOTTOM_AD_SLOT_ID"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+
+    <script>
+        function calculateMortgage() {
+            const homePrice = parseFloat(document.getElementById('homePrice').value);
+            const downPayment = parseFloat(document.getElementById('downPayment').value);
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const loanTerm = parseInt(document.getElementById('loanTerm').value);
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const pmi = parseFloat(document.getElementById('pmi').value) || 0;
+
+            if (!loanAmount || !interestRate || !loanTerm) {
+                MultiTools.showError('Please fill in all required fields.');
+                return;
+            }
+
+            const monthlyRate = interestRate / 100 / 12;
+            const numPayments = loanTerm * 12;
+
+            // Calculate monthly payment
+            const monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                                 (Math.pow(1 + monthlyRate, numPayments) - 1);
+
+            const totalAmount = monthlyPayment * numPayments;
+            const totalInterest = totalAmount - loanAmount;
+
+            // Calculate monthly costs
+            const monthlyTax = propertyTax / 12;
+            const monthlyInsurance = insurance / 12;
+            const totalMonthlyPayment = monthlyPayment + monthlyTax + monthlyInsurance + pmi;
+
+            // Calculate percentages
+            const downPaymentPercent = homePrice ? ((downPayment / homePrice) * 100).toFixed(2) : '0.00';
+            const ltvRatio = homePrice ? ((loanAmount / homePrice) * 100).toFixed(2) : '0.00';
+
+            // Display results
+            document.getElementById('principalInterest').textContent = `$${monthlyPayment.toFixed(2)}`;
+            document.getElementById('monthlyTax').textContent = `$${monthlyTax.toFixed(2)}`;
+            document.getElementById('monthlyInsurance').textContent = `$${monthlyInsurance.toFixed(2)}`;
+            document.getElementById('monthlyPmi').textContent = `$${pmi.toFixed(2)}`;
+            document.getElementById('totalPayment').textContent = `$${totalMonthlyPayment.toFixed(2)}`;
+            document.getElementById('totalInterest').textContent = `$${totalInterest.toFixed(2)}`;
+            document.getElementById('downPaymentPercent').textContent = `${downPaymentPercent}%`;
+            document.getElementById('ltvRatio').textContent = `${ltvRatio}%`;
+
+            document.getElementById('mortgageResults').style.display = 'block';
+        }
+
+        function calculateAffordability() {
+            const annualIncome = parseFloat(document.getElementById('annualIncome').value);
+            const monthlyDebt = parseFloat(document.getElementById('monthlyDebt').value) || 0;
+            const downPayment = parseFloat(document.getElementById('downPaymentAfford').value);
+            const interestRate = parseFloat(document.getElementById('interestRateAfford').value);
+            const loanTerm = parseInt(document.getElementById('loanTermAfford').value);
+            const propertyTaxRate = parseFloat(document.getElementById('propertyTaxRate').value);
+
+            if (!annualIncome || !downPayment || !interestRate) {
+                MultiTools.showError('Please fill in all required fields.');
+                return;
+            }
+
+            const monthlyIncome = annualIncome / 12;
+            const monthlyRate = interestRate / 100 / 12;
+            const numPayments = loanTerm * 12;
+
+            // Calculate maximum monthly payment (28% of income)
+            const maxMonthlyPayment = monthlyIncome * 0.28;
+
+            // Calculate maximum loan amount
+            const maxLoanAmount = maxMonthlyPayment * ((Math.pow(1 + monthlyRate, numPayments) - 1) / 
+                               (monthlyRate * Math.pow(1 + monthlyRate, numPayments)));
+
+            const maxHomePrice = maxLoanAmount + downPayment;
+
+            // Calculate ratios
+            const dtiRatio = ((maxMonthlyPayment / monthlyIncome) * 100).toFixed(1);
+            const frontEndRatio = ((maxMonthlyPayment / monthlyIncome) * 100).toFixed(1);
+            const backEndRatio = (((maxMonthlyPayment + monthlyDebt) / monthlyIncome) * 100).toFixed(1);
+
+            // Calculate property tax
+            const annualPropertyTax = maxHomePrice * (propertyTaxRate / 100);
+            const monthlyPropertyTax = annualPropertyTax / 12;
+
+            // Adjust for property tax and insurance
+            const adjustedMaxPayment = maxMonthlyPayment - monthlyPropertyTax - (maxHomePrice * 0.005 / 12); // Assume 0.5% insurance
+            const adjustedMaxLoan = adjustedMaxPayment * ((Math.pow(1 + monthlyRate, numPayments) - 1) / 
+                               (monthlyRate * Math.pow(1 + monthlyRate, numPayments)));
+            const adjustedMaxHomePrice = adjustedMaxLoan + downPayment;
+
+            // Display results
+            document.getElementById('maxHomePrice').textContent = `$${adjustedMaxHomePrice.toFixed(2)}`;
+            document.getElementById('maxLoanAmount').textContent = `$${adjustedMaxLoan.toFixed(2)}`;
+            document.getElementById('affordabilityPayment').textContent = `$${adjustedMaxPayment.toFixed(2)}`;
+            document.getElementById('dtiRatio').textContent = `${dtiRatio}%`;
+            document.getElementById('frontEndRatio').textContent = `${frontEndRatio}%`;
+            document.getElementById('backEndRatio').textContent = `${backEndRatio}%`;
+
+            document.getElementById('affordabilityResults').style.display = 'block';
+        }
+
+        function calculateRefinance() {
+            const currentBalance = parseFloat(document.getElementById('currentBalance').value);
+            const currentRate = parseFloat(document.getElementById('currentRate').value);
+            const currentPayment = parseFloat(document.getElementById('currentPayment').value);
+            const remainingTerm = parseFloat(document.getElementById('remainingTerm').value);
+            const newRate = parseFloat(document.getElementById('newRate').value);
+            const newTerm = parseInt(document.getElementById('newTerm').value);
+            const closingCosts = parseFloat(document.getElementById('closingCosts').value) || 0;
+            const cashOut = parseFloat(document.getElementById('cashOut').value) || 0;
+
+            if (!currentBalance || !currentRate || !currentPayment || !remainingTerm || !newRate || !newTerm) {
+                MultiTools.showError('Please fill in all required fields.');
+                return;
+            }
+
+            const newLoanAmount = currentBalance + closingCosts + cashOut;
+            const monthlyNewRate = newRate / 100 / 12;
+            const numNewPayments = newTerm * 12;
+
+            // Calculate new payment
+            const newPayment = newLoanAmount * (monthlyNewRate * Math.pow(1 + monthlyNewRate, numNewPayments)) / 
+                              (Math.pow(1 + monthlyNewRate, numNewPayments) - 1);
+
+            const monthlySavings = currentPayment - newPayment;
+            const breakEvenMonths = closingCosts / monthlySavings;
+
+            // Calculate interest savings (simplified)
+            const currentTotalInterest = (currentPayment * remainingTerm * 12) - currentBalance;
+            const newTotalInterest = (newPayment * newTerm * 12) - newLoanAmount;
+            const interestSavings = currentTotalInterest - newTotalInterest;
+
+            const totalSavings = (monthlySavings * newTerm * 12) - closingCosts;
+
+            // Display results
+            document.getElementById('newPayment').textContent = `$${newPayment.toFixed(2)}`;
+            document.getElementById('monthlySavings').textContent = `$${monthlySavings.toFixed(2)}`;
+            document.getElementById('interestSavings').textContent = `$${interestSavings.toFixed(2)}`;
+            document.getElementById('breakEvenTime').textContent = `${breakEvenMonths.toFixed(1)} months`;
+            document.getElementById('newLoanAmount').textContent = `$${newLoanAmount.toFixed(2)}`;
+            document.getElementById('totalSavings').textContent = `$${totalSavings.toFixed(2)}`;
+
+            document.getElementById('refinanceResults').style.display = 'block';
+        }
+
+        function resetMortgage() {
+            document.getElementById('homePrice').value = '';
+            document.getElementById('downPayment').value = '';
+            document.getElementById('loanAmount').value = '';
+            document.getElementById('interestRate').value = '';
+            document.getElementById('loanTerm').value = '30';
+            document.getElementById('propertyTax').value = '0';
+            document.getElementById('insurance').value = '0';
+            document.getElementById('pmi').value = '0';
+            document.getElementById('mortgageResults').style.display = 'none';
+        }
+
+        function resetAffordability() {
+            document.getElementById('annualIncome').value = '';
+            document.getElementById('monthlyDebt').value = '0';
+            document.getElementById('downPaymentAfford').value = '';
+            document.getElementById('interestRateAfford').value = '6.5';
+            document.getElementById('loanTermAfford').value = '30';
+            document.getElementById('propertyTaxRate').value = '1.2';
+            document.getElementById('affordabilityResults').style.display = 'none';
+        }
+
+        function resetRefinance() {
+            document.getElementById('currentBalance').value = '';
+            document.getElementById('currentRate').value = '';
+            document.getElementById('currentPayment').value = '';
+            document.getElementById('remainingTerm').value = '';
+            document.getElementById('newRate').value = '';
+            document.getElementById('newTerm').value = '30';
+            document.getElementById('closingCosts').value = '0';
+            document.getElementById('cashOut').value = '0';
+            document.getElementById('refinanceResults').style.display = 'none';
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeader();
+            loadFooter();
+        });
+    </script>
+</body>
+</html>

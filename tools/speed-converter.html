@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Converter - Multi-Tools</title>
+    <meta name="description" content="Convert between different speed units including km/h, mph, m/s, knots, and more. Free online speed converter tool.">
+    <meta name="keywords" content="speed converter, km/h to mph, mph to km/h, speed units, velocity converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid tool-page">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-tachometer-alt"></i> Speed Converter</h1>
+                        <p>Convert between different speed units including kilometers per hour, miles per hour, meters per second, knots, and more.</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit">From Unit:</label>
+                                    <select id="fromUnit" class="form-control">
+                                        <option value="kmh">Kilometers per Hour (km/h)</option>
+                                        <option value="mph">Miles per Hour (mph)</option>
+                                        <option value="ms">Meters per Second (m/s)</option>
+                                        <option value="knots">Knots (kn)</option>
+                                        <option value="fps">Feet per Second (ft/s)</option>
+                                        <option value="mach">Mach (M)</option>
+                                        <option value="lightspeed">Speed of Light (c)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit">To Unit:</label>
+                                    <select id="toUnit" class="form-control">
+                                        <option value="mph">Miles per Hour (mph)</option>
+                                        <option value="kmh">Kilometers per Hour (km/h)</option>
+                                        <option value="ms">Meters per Second (m/s)</option>
+                                        <option value="knots">Knots (kn)</option>
+                                        <option value="fps">Feet per Second (ft/s)</option>
+                                        <option value="mach">Mach (M)</option>
+                                        <option value="lightspeed">Speed of Light (c)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="speedValue">Speed Value:</label>
+                            <input type="number" id="speedValue" class="form-control" placeholder="Enter speed value" step="any">
+                        </div>
+
+                        <div class="btn-group mt-3" role="group">
+                            <button type="button" class="btn btn-primary" onclick="convertSpeed()">
+                                <i class="fas fa-exchange-alt"></i> Convert
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="swapUnits()">
+                                <i class="fas fa-arrows-alt-h"></i> Swap Units
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetConverter()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="copyResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+
+                        <div id="result" class="result-container mt-4" style="display: none;">
+                            <h4><i class="fas fa-chart-line"></i> Conversion Result</h4>
+                            <div class="alert alert-success">
+                                <strong id="conversionResult"></strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Formula Used:</h5>
+                                    <p id="formula"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Conversion Factor:</h5>
+                                    <p id="factor"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-conversions mt-4">
+                            <h4><i class="fas fa-bolt"></i> Quick Conversions</h4>
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(60, 'kmh', 'mph')">
+                                        60 km/h → mph
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(100, 'kmh', 'mph')">
+                                        100 km/h → mph
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(30, 'ms', 'kmh')">
+                                        30 m/s → km/h
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="quickConvert(1, 'mach', 'kmh')">
+                                        1 Mach → km/h
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="speed-info mt-4">
+                            <h4><i class="fas fa-info-circle"></i> Speed Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Common Speed References:</h5>
+                                    <ul>
+                                        <li><strong>Walking:</strong> 5 km/h (3 mph)</li>
+                                        <li><strong>Running:</strong> 12 km/h (7.5 mph)</li>
+                                        <li><strong>City Driving:</strong> 50 km/h (31 mph)</li>
+                                        <li><strong>Highway Speed:</strong> 120 km/h (75 mph)</li>
+                                        <li><strong>Commercial Aircraft:</strong> 900 km/h (560 mph)</li>
+                                        <li><strong>Speed of Sound:</strong> 1,235 km/h (767 mph)</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Speed Units Explained:</h5>
+                                    <ul>
+                                        <li><strong>km/h:</strong> Kilometers per hour - metric speed unit</li>
+                                        <li><strong>mph:</strong> Miles per hour - imperial speed unit</li>
+                                        <li><strong>m/s:</strong> Meters per second - SI speed unit</li>
+                                        <li><strong>knots:</strong> Nautical miles per hour - maritime/aviation</li>
+                                        <li><strong>Mach:</strong> Speed relative to speed of sound</li>
+                                        <li><strong>Speed of Light:</strong> 299,792,458 m/s</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        // Speed conversion factors (to m/s as base unit)
+        const speedFactors = {
+            'ms': 1,           // meters per second (base unit)
+            'kmh': 0.277778,   // kilometers per hour
+            'mph': 0.44704,    // miles per hour
+            'knots': 0.514444, // knots
+            'fps': 0.3048,     // feet per second
+            'mach': 343,       // Mach (speed of sound at sea level)
+            'lightspeed': 299792458 // speed of light
+        };
+
+        const unitNames = {
+            'ms': 'Meters per Second',
+            'kmh': 'Kilometers per Hour',
+            'mph': 'Miles per Hour',
+            'knots': 'Knots',
+            'fps': 'Feet per Second',
+            'mach': 'Mach',
+            'lightspeed': 'Speed of Light'
+        };
+
+        const unitSymbols = {
+            'ms': 'm/s',
+            'kmh': 'km/h',
+            'mph': 'mph',
+            'knots': 'kn',
+            'fps': 'ft/s',
+            'mach': 'M',
+            'lightspeed': 'c'
+        };
+
+        function convertSpeed() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const speedValue = parseFloat(document.getElementById('speedValue').value);
+
+            if (isNaN(speedValue)) {
+                MultiTools.showError('Please enter a valid speed value.');
+                return;
+            }
+
+            // Convert to base unit (m/s) first
+            const baseValue = speedValue * speedFactors[fromUnit];
+            
+            // Convert from base unit to target unit
+            const result = baseValue / speedFactors[toUnit];
+
+            const fromSymbol = unitSymbols[fromUnit];
+            const toSymbol = unitSymbols[toUnit];
+            const fromName = unitNames[fromUnit];
+            const toName = unitNames[toUnit];
+
+            document.getElementById('conversionResult').innerHTML = 
+                `${speedValue} ${fromSymbol} = ${result.toFixed(6)} ${toSymbol}`;
+            
+            document.getElementById('formula').innerHTML = 
+                `${fromName} × ${speedFactors[fromUnit]} ÷ ${speedFactors[toUnit]} = ${toName}`;
+            
+            document.getElementById('factor').innerHTML = 
+                `1 ${fromSymbol} = ${(speedFactors[fromUnit] / speedFactors[toUnit]).toFixed(6)} ${toSymbol}`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            
+            if (document.getElementById('speedValue').value) {
+                convertSpeed();
+            }
+        }
+
+        function resetConverter() {
+            document.getElementById('speedValue').value = '';
+            document.getElementById('fromUnit').value = 'kmh';
+            document.getElementById('toUnit').value = 'mph';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function quickConvert(value, from, to) {
+            document.getElementById('speedValue').value = value;
+            document.getElementById('fromUnit').value = from;
+            document.getElementById('toUnit').value = to;
+            convertSpeed();
+        }
+
+        function copyResult() {
+            const result = document.getElementById('conversionResult').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    MultiTools.showSuccess('Result copied to clipboard!');
+                }).catch(() => {
+                    MultiTools.showError('Failed to copy result.');
+                });
+            }
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+    </script>
+
+    <script>
+    (function() {
+      function getTheme() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') return t;
+        } catch(e) {}
+        return 'light';
+      }
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+    </script>
+</body>
+</html>

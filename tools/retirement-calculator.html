@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Calculator - Multi-Tools</title>
+    <meta name="description" content="Plan your retirement with our comprehensive calculator. Calculate retirement savings, required contributions, and retirement income needs.">
+    <meta name="keywords" content="retirement calculator, retirement planning, 401k calculator, IRA calculator, retirement savings">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-piggy-bank"></i> Retirement Calculator
+                    </h1>
+                    <p class="tool-description">
+                        Plan your retirement with our comprehensive calculator. Calculate retirement savings, required contributions, and retirement income needs.
+                    </p>
+
+                    <!-- Tool Tabs -->
+                    <ul class="nav nav-tabs" id="retirementTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="savings-tab" data-bs-toggle="tab" data-bs-target="#savings" type="button" role="tab">
+                                <i class="fas fa-chart-line"></i> Savings Calculator
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button" role="tab">
+                                <i class="fas fa-dollar-sign"></i> Income Calculator
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="withdrawal-tab" data-bs-toggle="tab" data-bs-target="#withdrawal" type="button" role="tab">
+                                <i class="fas fa-hand-holding-usd"></i> Withdrawal Calculator
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content mt-3" id="retirementTabContent">
+                        <!-- Savings Calculator Tab -->
+                        <div class="tab-pane fade show active" id="savings" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="currentAge" class="form-label">Current Age</label>
+                                                <input type="number" class="form-control" id="currentAge" placeholder="Enter current age">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="retirementAge" class="form-label">Retirement Age</label>
+                                                <input type="number" class="form-control" id="retirementAge" placeholder="Enter retirement age">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="currentSavings" class="form-label">Current Savings</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="currentSavings" placeholder="Enter current savings" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="monthlyContribution" class="form-label">Monthly Contribution</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="monthlyContribution" placeholder="Enter monthly contribution" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="annualReturn" class="form-label">Annual Return Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="annualReturn" placeholder="Enter annual return" step="0.01" value="7">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="inflationRate" class="form-label">Inflation Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="inflationRate" placeholder="Enter inflation rate" step="0.01" value="3">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateSavings()">
+                                        <i class="fas fa-calculator"></i> Calculate Savings
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetSavings()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Savings Results -->
+                            <div id="savingsResults" class="mt-4" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><i class="fas fa-chart-pie"></i> Retirement Savings Summary</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Savings at Retirement:</span>
+                                                    <span class="result-value" id="totalSavings"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Contributions Made:</span>
+                                                    <span class="result-value" id="totalContributions"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Investment Growth:</span>
+                                                    <span class="result-value" id="investmentGrowth"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Years to Retirement:</span>
+                                                    <span class="result-value" id="yearsToRetirement"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Monthly Contribution Needed:</span>
+                                                    <span class="result-value" id="monthlyNeeded"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Inflation-Adjusted Value:</span>
+                                                    <span class="result-value" id="inflationAdjusted"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Income Calculator Tab -->
+                        <div class="tab-pane fade" id="income" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="retirementSavings" class="form-label">Retirement Savings</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="retirementSavings" placeholder="Enter retirement savings" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="retirementAgeIncome" class="form-label">Retirement Age</label>
+                                                <input type="number" class="form-control" id="retirementAgeIncome" placeholder="Enter retirement age">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lifeExpectancy" class="form-label">Life Expectancy</label>
+                                                <input type="number" class="form-control" id="lifeExpectancy" placeholder="Enter life expectancy" value="85">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="withdrawalRate" class="form-label">Annual Withdrawal Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="withdrawalRate" placeholder="Enter withdrawal rate" step="0.01" value="4">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="socialSecurity" class="form-label">Monthly Social Security</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="socialSecurity" placeholder="Enter social security" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="otherIncome" class="form-label">Other Monthly Income</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="otherIncome" placeholder="Enter other income" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateIncome()">
+                                        <i class="fas fa-calculator"></i> Calculate Income
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetIncome()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Income Results -->
+                            <div id="incomeResults" class="mt-4" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><i class="fas fa-dollar-sign"></i> Retirement Income Analysis</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Annual Withdrawal:</span>
+                                                    <span class="result-value" id="annualWithdrawal"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Monthly Withdrawal:</span>
+                                                    <span class="result-value" id="monthlyWithdrawal"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Monthly Income:</span>
+                                                    <span class="result-value" id="totalMonthlyIncome"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Years of Income:</span>
+                                                    <span class="result-value" id="yearsOfIncome"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Savings Depletion Age:</span>
+                                                    <span class="result-value" id="depletionAge"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Remaining at Life Expectancy:</span>
+                                                    <span class="result-value" id="remainingAtLife"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Withdrawal Calculator Tab -->
+                        <div class="tab-pane fade" id="withdrawal" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="withdrawalSavings" class="form-label">Current Savings</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="withdrawalSavings" placeholder="Enter current savings" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="monthlyWithdrawalAmount" class="form-label">Monthly Withdrawal</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="monthlyWithdrawalAmount" placeholder="Enter monthly withdrawal" step="0.01">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="withdrawalReturn" class="form-label">Annual Return Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="withdrawalReturn" placeholder="Enter return rate" step="0.01" value="5">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="withdrawalInflation" class="form-label">Inflation Rate</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="withdrawalInflation" placeholder="Enter inflation rate" step="0.01" value="3">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateWithdrawal()">
+                                        <i class="fas fa-calculator"></i> Calculate Withdrawal
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetWithdrawal()">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Withdrawal Results -->
+                            <div id="withdrawalResults" class="mt-4" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><i class="fas fa-chart-line"></i> Withdrawal Analysis</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Years Until Depletion:</span>
+                                                    <span class="result-value" id="yearsUntilDepletion"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Total Withdrawals:</span>
+                                                    <span class="result-value" id="totalWithdrawals"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Investment Growth:</span>
+                                                    <span class="result-value" id="withdrawalGrowth"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="result-item">
+                                                    <span class="result-label">Safe Withdrawal Rate:</span>
+                                                    <span class="result-value" id="safeWithdrawalRate"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Inflation-Adjusted Withdrawal:</span>
+                                                    <span class="result-value" id="inflationAdjustedWithdrawal"></span>
+                                                </div>
+                                                <div class="result-item">
+                                                    <span class="result-label">Remaining Balance:</span>
+                                                    <span class="result-value" id="remainingBalance"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Retirement Planning Tips</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Start saving early for compound growth</li>
+                                <li><i class="fas fa-check text-success"></i> Aim for 15% of income in retirement</li>
+                                <li><i class="fas fa-check text-success"></i> Consider 4% withdrawal rule</li>
+                                <li><i class="fas fa-check text-success"></i> Factor in healthcare costs</li>
+                                <li><i class="fas fa-check text-success"></i> Plan for inflation impact</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-calculator"></i> Retirement Rules</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6>4% Rule</h6>
+                                <p class="small">Withdraw 4% of your portfolio annually, adjusted for inflation.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>25x Rule</h6>
+                                <p class="small">Save 25 times your annual expenses for retirement.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>80% Rule</h6>
+                                <p class="small">Plan to need 80% of your pre-retirement income.</p>
+                            </div>
+                            <div>
+                                <h6>10% Rule</h6>
+                                <p class="small">Save at least 10% of your income for retirement.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-line"></i> Retirement Accounts</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6>401(k)</h6>
+                                <p class="small">Employer-sponsored retirement plan with tax advantages.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>IRA</h6>
+                                <p class="small">Individual Retirement Account with tax benefits.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Roth IRA</h6>
+                                <p class="small">Tax-free withdrawals in retirement, after-tax contributions.</p>
+                            </div>
+                            <div>
+                                <h6>Social Security</h6>
+                                <p class="small">Government retirement benefit based on work history.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script src="../js/main.js"></script>
+
+    <script>
+        function calculateSavings() {
+            const currentAge = parseInt(document.getElementById('currentAge').value);
+            const retirementAge = parseInt(document.getElementById('retirementAge').value);
+            const currentSavings = parseFloat(document.getElementById('currentSavings').value) || 0;
+            const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const annualReturn = parseFloat(document.getElementById('annualReturn').value);
+            const inflationRate = parseFloat(document.getElementById('inflationRate').value);
+
+            if (!currentAge || !retirementAge || !annualReturn || !inflationRate) {
+                MultiTools.showError('Please fill in all required fields.');
+                return;
+            }
+
+            if (retirementAge <= currentAge) {
+                MultiTools.showError('Retirement age must be greater than current age.');
+                return;
+            }
+
+            const yearsToRetirement = retirementAge - currentAge;
+            const monthlyReturn = annualReturn / 100 / 12;
+            const monthsToRetirement = yearsToRetirement * 12;
+
+            // Calculate future value of current savings
+            const futureValueOfSavings = currentSavings * Math.pow(1 + annualReturn / 100, yearsToRetirement);
+
+            // Calculate future value of monthly contributions
+            const futureValueOfContributions = monthlyContribution * 
+                ((Math.pow(1 + monthlyReturn, monthsToRetirement) - 1) / monthlyReturn);
+
+            const totalSavings = futureValueOfSavings + futureValueOfContributions;
+            const totalContributions = currentSavings + (monthlyContribution * monthsToRetirement);
+            const investmentGrowth = totalSavings - totalContributions;
+
+            // Calculate inflation-adjusted value
+            const inflationAdjusted = totalSavings / Math.pow(1 + inflationRate / 100, yearsToRetirement);
+
+            // Calculate monthly contribution needed for $1M (example)
+            const targetAmount = 1000000;
+            const monthlyNeeded = (targetAmount - futureValueOfSavings) / 
+                ((Math.pow(1 + monthlyReturn, monthsToRetirement) - 1) / monthlyReturn);
+
+            // Display results
+            document.getElementById('totalSavings').textContent = `$${totalSavings.toFixed(2)}`;
+            document.getElementById('totalContributions').textContent = `$${totalContributions.toFixed(2)}`;
+            document.getElementById('investmentGrowth').textContent = `$${investmentGrowth.toFixed(2)}`;
+            document.getElementById('yearsToRetirement').textContent = yearsToRetirement;
+            document.getElementById('monthlyNeeded').textContent = `$${Math.max(0, monthlyNeeded).toFixed(2)}`;
+            document.getElementById('inflationAdjusted').textContent = `$${inflationAdjusted.toFixed(2)}`;
+
+            document.getElementById('savingsResults').style.display = 'block';
+        }
+
+        function calculateIncome() {
+            const retirementSavings = parseFloat(document.getElementById('retirementSavings').value);
+            const retirementAge = parseInt(document.getElementById('retirementAgeIncome').value);
+            const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+            const withdrawalRate = parseFloat(document.getElementById('withdrawalRate').value);
+            const socialSecurity = parseFloat(document.getElementById('socialSecurity').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+
+            if (!retirementSavings || !retirementAge || !lifeExpectancy || !withdrawalRate) {
+                MultiTools.showError('Please fill in all required fields.');
+                return;
+            }
+
+            const annualWithdrawal = retirementSavings * (withdrawalRate / 100);
+            const monthlyWithdrawal = annualWithdrawal / 12;
+            const totalMonthlyIncome = monthlyWithdrawal + socialSecurity + otherIncome;
+            const yearsOfIncome = lifeExpectancy - retirementAge;
+
+            // Calculate depletion age (simplified)
+            const monthlyReturn = 5 / 100 / 12; // Assume 5% return
+            const depletionAge = calculateDepletionAge(retirementSavings, monthlyWithdrawal, monthlyReturn, retirementAge);
+
+            // Calculate remaining at life expectancy
+            const remainingAtLife = calculateRemainingAtLife(retirementSavings, monthlyWithdrawal, monthlyReturn, yearsOfIncome);
+
+            // Display results
+            document.getElementById('annualWithdrawal').textContent = `$${annualWithdrawal.toFixed(2)}`;
+            document.getElementById('monthlyWithdrawal').textContent = `$${monthlyWithdrawal.toFixed(2)}`;
+            document.getElementById('totalMonthlyIncome').textContent = `$${totalMonthlyIncome.toFixed(2)}`;
+            document.getElementById('yearsOfIncome').textContent = yearsOfIncome;
+            document.getElementById('depletionAge').textContent = depletionAge;
+            document.getElementById('remainingAtLife').textContent = `$${remainingAtLife.toFixed(2)}`;
+
+            document.getElementById('incomeResults').style.display = 'block';
+        }
+
+        function calculateWithdrawal() {
+            const currentSavings = parseFloat(document.getElementById('withdrawalSavings').value);
+            const monthlyWithdrawal = parseFloat(document.getElementById('monthlyWithdrawalAmount').value);
+            const annualReturn = parseFloat(document.getElementById('withdrawalReturn').value);
+            const inflationRate = parseFloat(document.getElementById('withdrawalInflation').value);
+
+            if (!currentSavings || !monthlyWithdrawal || !annualReturn || !inflationRate) {
+                MultiTools.showError('Please fill in all required fields.');
+                return;
+            }
+
+            const monthlyReturn = annualReturn / 100 / 12;
+            const monthlyInflation = inflationRate / 100 / 12;
+
+            // Calculate years until depletion
+            const yearsUntilDepletion = calculateYearsUntilDepletion(currentSavings, monthlyWithdrawal, monthlyReturn);
+
+            // Calculate total withdrawals
+            const totalWithdrawals = monthlyWithdrawal * (yearsUntilDepletion * 12);
+
+            // Calculate investment growth
+            const investmentGrowth = calculateInvestmentGrowth(currentSavings, monthlyWithdrawal, monthlyReturn, yearsUntilDepletion);
+
+            // Calculate safe withdrawal rate
+            const safeWithdrawalRate = (monthlyWithdrawal * 12 / currentSavings) * 100;
+
+            // Calculate inflation-adjusted withdrawal
+            const inflationAdjustedWithdrawal = monthlyWithdrawal * Math.pow(1 + monthlyInflation, yearsUntilDepletion * 12);
+
+            // Calculate remaining balance
+            const remainingBalance = Math.max(0, currentSavings - totalWithdrawals + investmentGrowth);
+
+            // Display results
+            document.getElementById('yearsUntilDepletion').textContent = yearsUntilDepletion.toFixed(1);
+            document.getElementById('totalWithdrawals').textContent = `$${totalWithdrawals.toFixed(2)}`;
+            document.getElementById('withdrawalGrowth').textContent = `$${investmentGrowth.toFixed(2)}`;
+            document.getElementById('safeWithdrawalRate').textContent = `${safeWithdrawalRate.toFixed(2)}%`;
+            document.getElementById('inflationAdjustedWithdrawal').textContent = `$${inflationAdjustedWithdrawal.toFixed(2)}`;
+            document.getElementById('remainingBalance').textContent = `$${remainingBalance.toFixed(2)}`;
+
+            document.getElementById('withdrawalResults').style.display = 'block';
+        }
+
+        function calculateDepletionAge(savings, monthlyWithdrawal, monthlyReturn, retirementAge) {
+            let balance = savings;
+            let age = retirementAge;
+            
+            while (balance > 0 && age < 120) {
+                balance = balance * (1 + monthlyReturn) - monthlyWithdrawal;
+                age += 1/12; // Add one month
+            }
+            
+            return Math.floor(age);
+        }
+
+        function calculateRemainingAtLife(savings, monthlyWithdrawal, monthlyReturn, years) {
+            let balance = savings;
+            
+            for (let i = 0; i < years * 12; i++) {
+                balance = balance * (1 + monthlyReturn) - monthlyWithdrawal;
+                if (balance < 0) break;
+            }
+            
+            return Math.max(0, balance);
+        }
+
+        function calculateYearsUntilDepletion(savings, monthlyWithdrawal, monthlyReturn) {
+            if (monthlyWithdrawal >= savings * monthlyReturn) {
+                return savings / monthlyWithdrawal / 12;
+            }
+            
+            return Math.log(monthlyWithdrawal / (monthlyWithdrawal - savings * monthlyReturn)) / Math.log(1 + monthlyReturn) / 12;
+        }
+
+        function calculateInvestmentGrowth(savings, monthlyWithdrawal, monthlyReturn, years) {
+            let balance = savings;
+            let totalGrowth = 0;
+            
+            for (let i = 0; i < years * 12; i++) {
+                const growth = balance * monthlyReturn;
+                totalGrowth += growth;
+                balance = balance * (1 + monthlyReturn) - monthlyWithdrawal;
+                if (balance < 0) break;
+            }
+            
+            return totalGrowth;
+        }
+
+        function resetSavings() {
+            document.getElementById('currentAge').value = '';
+            document.getElementById('retirementAge').value = '';
+            document.getElementById('currentSavings').value = '';
+            document.getElementById('monthlyContribution').value = '';
+            document.getElementById('annualReturn').value = '7';
+            document.getElementById('inflationRate').value = '3';
+            document.getElementById('savingsResults').style.display = 'none';
+        }
+
+        function resetIncome() {
+            document.getElementById('retirementSavings').value = '';
+            document.getElementById('retirementAgeIncome').value = '';
+            document.getElementById('lifeExpectancy').value = '85';
+            document.getElementById('withdrawalRate').value = '4';
+            document.getElementById('socialSecurity').value = '';
+            document.getElementById('otherIncome').value = '';
+            document.getElementById('incomeResults').style.display = 'none';
+        }
+
+        function resetWithdrawal() {
+            document.getElementById('withdrawalSavings').value = '';
+            document.getElementById('monthlyWithdrawalAmount').value = '';
+            document.getElementById('withdrawalReturn').value = '5';
+            document.getElementById('withdrawalInflation').value = '3';
+            document.getElementById('withdrawalResults').style.display = 'none';
+        }
+
+        // Initialize tool
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeader();
+            loadFooter();
+        });
+    </script>
+</body>
+</html> 

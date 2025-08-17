@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder/Decoder - Multi-Tools</title>
+    <meta name="description" content="Encode and decode URLs and special characters. Convert text to URL-safe format and vice versa.">
+    <meta name="keywords" content="url encoder, url decoder, url encoding, percent encoding, uri encoding">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-4">
+        <!-- Top Ad Unit -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7389985631571522"
+             data-ad-slot="3374471779"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="tool-container">
+                    <h1 class="tool-title">
+                        <i class="fas fa-link"></i> URL Encoder/Decoder
+                    </h1>
+                    <p class="tool-description">
+                        Encode and decode URLs and special characters. Convert text to URL-safe format 
+                        and vice versa for web development and data transmission.
+                    </p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="urlTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="encode-tab" data-bs-toggle="tab" 
+                                            data-bs-target="#encode" type="button" role="tab">
+                                        <i class="fas fa-lock"></i> Encode
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="decode-tab" data-bs-toggle="tab" 
+                                            data-bs-target="#decode" type="button" role="tab">
+                                        <i class="fas fa-unlock"></i> Decode
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="urlTabContent">
+                                <div class="tab-pane fade show active" id="encode" role="tabpanel">
+                                    <div class="mt-3">
+                                        <div class="mb-3">
+                                            <label for="encodeInput" class="form-label">Text to Encode</label>
+                                            <textarea class="form-control" id="encodeInput" rows="6" 
+                                                      placeholder="Enter text to encode for URL..."></textarea>
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <button class="btn btn-primary" onclick="encodeURL()">
+                                                <i class="fas fa-lock"></i> Encode
+                                            </button>
+                                            <button class="btn btn-secondary" onclick="loadEncodeSample()">
+                                                <i class="fas fa-file-alt"></i> Sample
+                                            </button>
+                                            <button class="btn btn-outline-secondary" onclick="clearEncode()">
+                                                <i class="fas fa-eraser"></i> Clear
+                                            </button>
+                                        </div>
+                                        <div id="encodeResult" class="mt-3" style="display: none;">
+                                            <label class="form-label">Encoded Result</label>
+                                            <div class="input-group">
+                                                <textarea class="form-control" id="encodeOutput" rows="4" readonly></textarea>
+                                                <button class="btn btn-outline-secondary" onclick="copyEncodeResult()">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="decode" role="tabpanel">
+                                    <div class="mt-3">
+                                        <div class="mb-3">
+                                            <label for="decodeInput" class="form-label">Text to Decode</label>
+                                            <textarea class="form-control" id="decodeInput" rows="6" 
+                                                      placeholder="Enter encoded text to decode..."></textarea>
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <button class="btn btn-primary" onclick="decodeURL()">
+                                                <i class="fas fa-unlock"></i> Decode
+                                            </button>
+                                            <button class="btn btn-secondary" onclick="loadDecodeSample()">
+                                                <i class="fas fa-file-alt"></i> Sample
+                                            </button>
+                                            <button class="btn btn-outline-secondary" onclick="clearDecode()">
+                                                <i class="fas fa-eraser"></i> Clear
+                                            </button>
+                                        </div>
+                                        <div id="decodeResult" class="mt-3" style="display: none;">
+                                            <label class="form-label">Decoded Result</label>
+                                            <div class="input-group">
+                                                <textarea class="form-control" id="decodeOutput" rows="4" readonly></textarea>
+                                                <button class="btn btn-outline-secondary" onclick="copyDecodeResult()">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> URL Encoding</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Spaces become %20</li>
+                                <li>• Special chars get encoded</li>
+                                <li>• Safe for URLs and APIs</li>
+                                <li>• Used in web development</li>
+                                <li>• RFC 3986 standard</li>
+                                <li>• Preserves data integrity</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-lightbulb"></i> Common Uses</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>• Query parameters</li>
+                                <li>• File paths</li>
+                                <li>• API endpoints</li>
+                                <li>• Email links</li>
+                                <li>• Data transmission</li>
+                                <li>• Web forms</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-7389985631571522"
+                                 data-ad-slot="1701935776"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    
+    <script>
+        function encodeURL() {
+            const input = document.getElementById('encodeInput').value;
+            if (!input.trim()) {
+                MultiTools.showError('Please enter text to encode');
+                return;
+            }
+
+            try {
+                const encoded = encodeURIComponent(input);
+                document.getElementById('encodeOutput').value = encoded;
+                document.getElementById('encodeResult').style.display = 'block';
+                MultiTools.showSuccess('Text encoded successfully!');
+            } catch (error) {
+                MultiTools.showError('Error encoding text: ' + error.message);
+            }
+        }
+
+        function decodeURL() {
+            const input = document.getElementById('decodeInput').value;
+            if (!input.trim()) {
+                MultiTools.showError('Please enter text to decode');
+                return;
+            }
+
+            try {
+                const decoded = decodeURIComponent(input);
+                document.getElementById('decodeOutput').value = decoded;
+                document.getElementById('decodeResult').style.display = 'block';
+                MultiTools.showSuccess('Text decoded successfully!');
+            } catch (error) {
+                MultiTools.showError('Error decoding text: ' + error.message);
+            }
+        }
+
+        function loadEncodeSample() {
+            document.getElementById('encodeInput').value = 'Hello World! This is a test with special characters: &, ?, =, +';
+            encodeURL();
+        }
+
+        function loadDecodeSample() {
+            document.getElementById('decodeInput').value = 'Hello%20World!%20This%20is%20a%20test%20with%20special%20characters:%20%26,%20%3F,%20%3D,%20%2B';
+            decodeURL();
+        }
+
+        function clearEncode() {
+            document.getElementById('encodeInput').value = '';
+            document.getElementById('encodeResult').style.display = 'none';
+            MultiTools.showSuccess('Encode form cleared');
+        }
+
+        function clearDecode() {
+            document.getElementById('decodeInput').value = '';
+            document.getElementById('decodeResult').style.display = 'none';
+            MultiTools.showSuccess('Decode form cleared');
+        }
+
+        function copyEncodeResult() {
+            const result = document.getElementById('encodeOutput').value;
+            navigator.clipboard.writeText(result).then(() => {
+                MultiTools.showSuccess('Encoded text copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy encoded text');
+            });
+        }
+
+        function copyDecodeResult() {
+            const result = document.getElementById('decodeOutput').value;
+            navigator.clipboard.writeText(result).then(() => {
+                MultiTools.showSuccess('Decoded text copied to clipboard!');
+            }).catch(() => {
+                MultiTools.showError('Failed to copy decoded text');
+            });
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            MultiTools.loadHeader();
+            MultiTools.loadFooter();
+        });
+
+        (function() {
+          function getTheme() {
+            try {
+              var t = localStorage.getItem('theme');
+              if (t === 'dark' || t === 'light') return t;
+            } catch(e) {}
+            return 'light';
+          }
+          document.documentElement.setAttribute('data-theme', getTheme());
+        })();
+    </script>
+</body>
+</html>
